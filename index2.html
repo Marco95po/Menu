@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portada de Disco Musical</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .disco-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            perspective: 1000px;
+            margin-bottom: 30px;
+        }
+
+        .disco {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
+            animation: rotate 5s linear forwards; /* Cambiado a forwards para que se ejecute solo una vez */
+        }
+
+        .portada {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .titulo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .artista {
+            font-size: 18px;
+            margin-bottom: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .año {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .vinilo {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            background: radial-gradient(circle, #333 30%, #111 70%);
+            transform: rotateY(180deg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+        }
+
+        .portada-vinilo {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            filter: sepia(50%) brightness(70%) contrast(120%);
+            z-index: 1;
+        }
+
+        .centro-vinilo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid #ccc;
+            z-index: 3;
+            position: relative;
+        }
+
+        .lineas-vinilo {
+            position: absolute;
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            z-index: 2;
+        }
+
+        .particulas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particula {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: float 5s infinite ease-in-out;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 1; }
+            50% { transform: translateY(-20px) translateX(10px); opacity: 0.5; }
+        }
+
+        .info {
+            position: absolute;
+            bottom: -60px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* Botón moderno en naranja */
+        .modern-btn {
+            background: linear-gradient(135deg, #FF8C00, #FF6347);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(255, 99, 71, 0.4);
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modern-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 99, 71, 0.6);
+        }
+
+        .modern-btn:active {
+            transform: translateY(1px);
+        }
+
+        .modern-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .modern-btn:hover::before {
+            left: 100%;
+        }
+
+        .modern-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="disco-container">
+        <div class="disco">
+            <div class="portada" style="background-image: url('https://i.postimg.cc/Bnq284qP/Picsart-25-06-02-22-29-48-466.jpg')">
+                <div class="titulo">Sain NT</div>
+                <div class="artista">Artista</div>
+                <div class="año">2025</div>
+            </div>
+            <div class="vinilo">
+                <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/Bnq284qP/Picsart-25-06-02-22-29-48-466.jpg')"></div>
+                <div class="lineas-vinilo"></div>
+                <div class="centro-vinilo"></div>
+            </div>
+        </div>
+    </div>
+
+    <button class="modern-btn" id="musicBtn">
+        Quiero escuchar el disco
+    </button>
+
+    <div class="particulas" id="particulas"></div>
+
+    <script>
+        // Crear partículas dinámicas
+        const particulas = document.getElementById('particulas');
+        const colores = ['#ff4e50', '#f9d423', '#e74c3c', '#3498db', '#2ecc71'];
+        
+        for (let i = 0; i < 20; i++) {
+            const particula = document.createElement('div');
+            particula.classList.add('particula');
+            
+            // Tamaño aleatorio entre 2px y 6px
+            const size = Math.random() * 4 + 2;
+            particula.style.width = `${size}px`;
+            particula.style.height = `${size}px`;
+            
+            // Posición aleatoria
+            particula.style.left = `${Math.random() * 100}%`;
+            particula.style.top = `${Math.random() * 100}%`;
+            
+            // Color aleatorio
+            particula.style.background = colores[Math.floor(Math.random() * colores.length)];
+            
+            // Animación con delay aleatorio
+            particula.style.animationDelay = `${Math.random() * 5}s`;
+            
+            particulas.appendChild(particula);
+        }
+        
+        // Desactivar la interacción de pausa/play al hacer clic
+        document.querySelector('.disco').style.pointerEvents = 'none';
+        
+        // Botón para redirigir a la página Music.html
+        document.getElementById('musicBtn').addEventListener('click', function() {
+            // Agregar efecto de carga antes de redirigir
+            this.innerHTML = 'Cargando...';
+            this.style.pointerEvents = 'none'; // Desactivar nuevos clicks
+            
+            // Redirigir después de un breve retraso para que se vea el cambio
+            setTimeout(function() {
+                window.location.href = 'Music.html';
+            }, 500);
+        });
+    </script>
+</body>
+</html>
