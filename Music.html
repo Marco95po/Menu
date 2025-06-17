@@ -1249,13 +1249,13 @@
   <div class="disco-modal" id="discoModal">
     <div class="disco-container">
       <div class="disco">
-        <div class="portada" style="background-image: url('https://i.postimg.cc/Bnq284qP/Picsart-25-06-02-22-29-48-466.jpg')">
-          <div class="titulo">Sain NT</div>
-          <div class="artista">Artista</div>
-          <div class="año">2025</div>
+        <div class="portada" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')">
+          <div class="titulo"></div>
+          <div class="artista"></div>
+          <div class="año"></div>
         </div>
         <div class="vinilo">
-          <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/Bnq284qP/Picsart-25-06-02-22-29-48-466.jpg')"></div>
+          <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')"></div>
           <div class="lineas-vinilo"></div>
           <div class="centro-vinilo"></div>
         </div>
@@ -2196,8 +2196,10 @@
     function updateFloatingFavoriteIcon(songId) {
       if (favorites.includes(songId)) {
         floatingFavoriteIcon.classList.add('added');
+        floatingFavoriteIcon.textContent = '❤️';
       } else {
         floatingFavoriteIcon.classList.remove('added');
+        floatingFavoriteIcon.textContent = '♡';
       }
     }
 
