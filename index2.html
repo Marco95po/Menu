@@ -24,6 +24,9 @@
             height: 300px;
             perspective: 1000px;
             margin-bottom: 30px;
+            opacity: 0;
+            transform: scale(0.5) translateY(50px);
+            animation: appear 1s forwards 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .disco {
@@ -32,7 +35,7 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 1s;
-            animation: rotate 5s linear forwards; /* Cambiado a forwards para que se ejecute solo una vez */
+            animation: rotate 5s linear 2s forwards;
         }
 
         .portada {
@@ -51,6 +54,7 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
+            transform: translateZ(20px);
         }
 
         .titulo {
@@ -61,6 +65,9 @@
             background-color: rgba(0, 0, 0, 0.7);
             padding: 5px 10px;
             border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 1.5s;
         }
 
         .artista {
@@ -69,12 +76,18 @@
             background-color: rgba(0, 0, 0, 0.7);
             padding: 5px 10px;
             border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 1.7s;
         }
 
         .año {
             background-color: rgba(0, 0, 0, 0.7);
             padding: 5px 10px;
             border-radius: 5px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 1.9s;
         }
 
         .vinilo {
@@ -101,6 +114,8 @@
             background-position: center;
             filter: sepia(50%) brightness(70%) contrast(120%);
             z-index: 1;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2.5s;
         }
 
         .centro-vinilo {
@@ -111,6 +126,8 @@
             border: 2px solid #ccc;
             z-index: 3;
             position: relative;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2.7s;
         }
 
         .lineas-vinilo {
@@ -120,6 +137,8 @@
             border-radius: 50%;
             border: 2px dashed rgba(255, 255, 255, 0.1);
             z-index: 2;
+            opacity: 0;
+            animation: fadeIn 1s forwards 2.3s;
         }
 
         .particulas {
@@ -129,6 +148,8 @@
             top: 0;
             left: 0;
             pointer-events: none;
+            opacity: 0;
+            animation: fadeIn 1s forwards 3s;
         }
 
         .particula {
@@ -136,6 +157,21 @@
             background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             animation: float 5s infinite ease-in-out;
+        }
+
+        @keyframes appear {
+            0% { opacity: 0; transform: scale(0.5) translateY(50px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
 
         @keyframes rotate {
@@ -173,6 +209,9 @@
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards 3.5s;
         }
 
         .modern-btn:hover {
@@ -222,7 +261,7 @@
     </div>
 
     <button class="modern-btn" id="musicBtn">
-        Quiero escuchar el disco
+        YA DISPONIBLE EN MUSIC LIVE
     </button>
 
     <div class="particulas" id="particulas"></div>
