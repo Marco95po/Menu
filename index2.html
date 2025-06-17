@@ -242,71 +242,162 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.3);
         }
+
+        /* Estilos para el estado de carga */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .loading-text {
+            font-size: 24px;
+            margin-top: 20px;
+            color: white;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #FF8C00;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div class="disco-container">
-        <div class="disco">
-            <div class="portada" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')">
-                <div class="titulo"></div>
-                <div class="artista"></div>
-                <div class="año"></div>
-            </div>
-            <div class="vinilo">
-                <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')"></div>
-                <div class="lineas-vinilo"></div>
-                <div class="centro-vinilo"></div>
-            </div>
-        </div>
+    <!-- Pantalla de carga -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <div class="loading-text">Cargando...</div>
     </div>
 
-    <button class="modern-btn" id="musicBtn">
-        YA DISPONIBLE EN MUSIC LIVE
-    </button>
+    <!-- Contenido principal (solo visible las primeras 2 veces) -->
+    <div id="mainContent">
+        <div class="disco-container">
+            <div class="disco">
+                <div class="portada" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')">
+                    <div class="titulo"></div>
+                    <div class="artista"></div>
+                    <div class="año"></div>
+                </div>
+                <div class="vinilo">
+                    <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')"></div>
+                    <div class="lineas-vinilo"></div>
+                    <div class="centro-vinilo"></div>
+                </div>
+            </div>
+        </div>
 
-    <div class="particulas" id="particulas"></div>
+        <button class="modern-btn" id="musicBtn">
+            YA DISPONIBLE EN MUSIC LIVE
+        </button>
+
+        <div class="particulas" id="particulas"></div>
+    </div>
 
     <script>
-        // Crear partículas dinámicas
-        const particulas = document.getElementById('particulas');
-        const colores = ['#ff4e50', '#f9d423', '#e74c3c', '#3498db', '#2ecc71'];
+        // Configuración
+        const MAX_DISPLAYS = 2; // Máximo de veces que se muestra la animación antes de redirigir
+        const REDIRECT_DELAY = 500; // Medio segundo después de mostrar "Cargando"
+        const CURRENT_COVER_KEY = 'currentCover'; // Clave para almacenar la portada actual
+        const DISPLAY_COUNT_KEY = 'displayCount'; // Clave para almacenar el contador
         
-        for (let i = 0; i < 20; i++) {
-            const particula = document.createElement('div');
-            particula.classList.add('particula');
-            
-            // Tamaño aleatorio entre 2px y 6px
-            const size = Math.random() * 4 + 2;
-            particula.style.width = `${size}px`;
-            particula.style.height = `${size}px`;
-            
-            // Posición aleatoria
-            particula.style.left = `${Math.random() * 100}%`;
-            particula.style.top = `${Math.random() * 100}%`;
-            
-            // Color aleatorio
-            particula.style.background = colores[Math.floor(Math.random() * colores.length)];
-            
-            // Animación con delay aleatorio
-            particula.style.animationDelay = `${Math.random() * 5}s`;
-            
-            particulas.appendChild(particula);
+        // Obtener la URL de la portada actual
+        const currentCover = 'https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg';
+        
+        // Verificar si la portada ha cambiado
+        const storedCover = localStorage.getItem(CURRENT_COVER_KEY);
+        let displayCount = parseInt(localStorage.getItem(DISPLAY_COUNT_KEY)) || 0;
+        
+        if (storedCover !== currentCover) {
+            // Si la portada es diferente, reiniciar el contador
+            displayCount = 0;
+            localStorage.setItem(CURRENT_COVER_KEY, currentCover);
         }
         
-        // Desactivar la interacción de pausa/play al hacer clic
-        document.querySelector('.disco').style.pointerEvents = 'none';
+        // Incrementar el contador y guardarlo
+        displayCount++;
+        localStorage.setItem(DISPLAY_COUNT_KEY, displayCount.toString());
         
-        // Botón para redirigir a la página Music.html
-        document.getElementById('musicBtn').addEventListener('click', function() {
-            // Agregar efecto de carga antes de redirigir
-            this.innerHTML = 'Cargando...';
-            this.style.pointerEvents = 'none'; // Desactivar nuevos clicks
+        // Elementos del DOM
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+        const musicBtn = document.getElementById('musicBtn');
+        
+        // Si ya se mostró más de 2 veces, mostrar solo la pantalla de carga
+        if (displayCount > MAX_DISPLAYS) {
+            mainContent.style.display = 'none';
+            loadingScreen.classList.add('active');
             
-            // Redirigir después de un breve retraso para que se vea el cambio
-            setTimeout(function() {
+            // Redirigir después de un breve retraso
+            setTimeout(() => {
                 window.location.href = 'Music.html';
-            }, 500);
-        });
+            }, REDIRECT_DELAY);
+        } else {
+            // Mostrar la animación normal
+            // Crear partículas dinámicas
+            const particulas = document.getElementById('particulas');
+            const colores = ['#ff4e50', '#f9d423', '#e74c3c', '#3498db', '#2ecc71'];
+            
+            for (let i = 0; i < 20; i++) {
+                const particula = document.createElement('div');
+                particula.classList.add('particula');
+                
+                // Tamaño aleatorio entre 2px y 6px
+                const size = Math.random() * 4 + 2;
+                particula.style.width = `${size}px`;
+                particula.style.height = `${size}px`;
+                
+                // Posición aleatoria
+                particula.style.left = `${Math.random() * 100}%`;
+                particula.style.top = `${Math.random() * 100}%`;
+                
+                // Color aleatorio
+                particula.style.background = colores[Math.floor(Math.random() * colores.length)];
+                
+                // Animación con delay aleatorio
+                particula.style.animationDelay = `${Math.random() * 5}s`;
+                
+                particulas.appendChild(particula);
+            }
+            
+            // Desactivar la interacción de pausa/play al hacer clic
+            document.querySelector('.disco').style.pointerEvents = 'none';
+            
+            // Configurar el botón
+            musicBtn.addEventListener('click', function() {
+                // Mostrar pantalla de carga
+                mainContent.style.display = 'none';
+                loadingScreen.classList.add('active');
+                
+                // Redirigir después de un breve retraso
+                setTimeout(() => {
+                    window.location.href = 'Music.html';
+                }, REDIRECT_DELAY);
+            });
+        }
     </script>
 </body>
 </html>
