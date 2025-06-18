@@ -223,6 +223,7 @@
 
     .song-title {
       display: block;
+      margin-top: 5px;
       color: var(--song-title-color);
       font-size: 10px;
       white-space: nowrap;
@@ -1289,6 +1290,20 @@
       font-style: italic;
       padding: 20px;
     }
+    
+    /* Estilos para ocultar controles en anuncios */
+    .ad-playing #controls,
+    .ad-playing #progressContainer,
+    .ad-playing #timeContainer,
+    .ad-playing #closeButton,
+    .ad-playing #minimizeButton,
+    .ad-playing .favorite-icon {
+      display: none !important;
+    }
+    
+    .ad-playing .cover-container {
+      margin-bottom: 0;
+    }
   </style>
 </head>
 <body>
@@ -1825,7 +1840,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audio Publicidad 2",
+        id: "audio Anuncio1",
         audioSrc: "https://www.dropbox.com/scl/fi/dy2jhy8n06e4hckngg1o7/Que-son-los-Spots.mp3?rlkey=s9jv5rspyv7zwoyyofcvi3art&st=7rxsdd2f&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/FH2p8Xvm/Picsart-25-06-07-22-44-53-231.jpg",
         title: "¿Que es un Spots?",
@@ -2085,7 +2100,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audio Publicidad 1",
+        id: "audio Anuncio2",
         audioSrc: "https://www.dropbox.com/scl/fi/dy2jhy8n06e4hckngg1o7/Que-son-los-Spots.mp3?rlkey=s9jv5rspyv7zwoyyofcvi3art&st=7rxsdd2f&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/PrsytN40/Picsart-25-06-03-21-27-48-722.jpg",
         title: "¿Que es un Spots?",
@@ -2135,7 +2150,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audio Publicidad",
+        id: "audio Anuncio3",
         audioSrc: "https://www.dropbox.com/scl/fi/pxrqa5u0yt4xxapqh2erz/Informaci-n.mp3?rlkey=bwi9foffmxn0v9qyr7uk6hf1b&st=zqrfk9kd&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/9V4WSzq1/Picsart-25-06-03-21-12-45-867.jpg",
         title: "Informacion",
@@ -2165,7 +2180,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audiopUBLICIDAD2",
+        id: "audio Anuncio4",
         audioSrc: "https://www.dropbox.com/scl/fi/9yboeqg2lw5wq3s2txksa/favoritas.mp3?rlkey=ggk92138pdi5eqa732kcqg0l1&st=a0vf7iiv&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/gjWvP86d/Picsart-25-06-04-16-59-42-448.jpg",
         title: "¿Queson los favoritos?",
@@ -2175,6 +2190,21 @@
         releaseDate: "2023-07-15"
       },
     ];
+
+    // Función para verificar si la canción actual es un anuncio
+    function isCurrentSongAd() {
+      const currentSong = currentPlaylist[currentIndex];
+      return currentSong && currentSong.id.startsWith("audio Anuncio");
+    }
+
+    // Función para actualizar la visibilidad de los controles según el tipo de canción
+    function updateControlsVisibility() {
+      if (isCurrentSongAd()) {
+        floatingPlayer.classList.add('ad-playing');
+      } else {
+        floatingPlayer.classList.remove('ad-playing');
+      }
+    }
 
     // Función para mostrar/ocultar el panel de artistas seguidos
     function toggleFollowedArtistsPanel() {
@@ -2606,6 +2636,9 @@
       if (currentSong) {
         incrementPlayCount(currentSong.id);
       }
+      
+      // Actualizar visibilidad de controles
+      updateControlsVisibility();
     });
 
     audioPlayer.addEventListener('pause', () => {
@@ -2718,6 +2751,9 @@
       
       // Actualizar la lista de reproducción para resaltar la canción actual
       updatePlaylistHighlight();
+      
+      // Actualizar visibilidad de controles según si es anuncio o no
+      updateControlsVisibility();
     }
 
     // Función para reproducir una canción específica
