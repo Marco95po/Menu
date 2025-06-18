@@ -58,7 +58,6 @@
       animation: gradientBG 15s ease infinite;
       color: var(--text-color);
       transition: background 0.5s ease, color 0.3s ease;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     @keyframes gradientBG {
@@ -109,21 +108,21 @@
     }
 
     .Texp {
-      color: #ffc401;
-      margin: 0;
-      font-size: 2rem;
-      text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01, 0 0 15px #e6ff01;
-      animation: brillo 1.5s ease-in-out infinite alternate;
-    }
+  color: #ffc401;
+  margin: 0;
+  font-size: 2rem;
+  text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01, 0 0 15px #e6ff01;
+  animation: brillo 1.5s ease-in-out infinite alternate;
+}
 
-    @keyframes brillo {
-      from {
-        text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01;
-      }
-      to {
-        text-shadow: 0 0 10px #e6ff01, 0 0 20px #e6ff01, 0 0 30px #e6ff01;
-      }
-    }
+@keyframes brillo {
+  from {
+    text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01;
+  }
+  to {
+    text-shadow: 0 0 10px #e6ff01, 0 0 20px #e6ff01, 0 0 30px #e6ff01;
+  }
+}
 
     .categories-container {
       margin-top: 140px;
@@ -251,15 +250,41 @@
     }
 
     .favorite-btn {
-      display: none;
+      display: none; /* Ocultar botón de favoritos */
     }
 
     .favorite-count {
-      display: none;
+      display: none; /* Ocultar contador de favoritos */
     }
 
     .play-count {
-      display: none;
+      display: none; /* Ocultar contador de reproducciones */
+    }
+
+    .carousel-nav {
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 20px;
+    }
+
+    .nav-btn {
+      background-color: rgba(255, 174, 0, 0.7);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+      background-color: #ff5e01;
+      transform: scale(1.1);
     }
 
     /* Floating Player Styles */
@@ -1038,14 +1063,14 @@
     }
 
     .artist-name {
-      display: block;
-      margin-top: 5px;
-      color: var(--artist-name-color);
-      font-size: 10px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  display: block;
+  margin-top: 5px;
+  color: var(--artist-name-color);
+  font-size: 10px; /* Cambiado de 12px a 10px */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
     .artist-songs-title {
       font-size: 1.5rem;
@@ -1279,89 +1304,9 @@
     .ad-playing .cover-container {
       margin-bottom: 0;
     }
-    
-    /* Preloader */
-    .preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg-gradient-start);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease;
-    }
-    
-    .preloader-content {
-      text-align: center;
-    }
-    
-    .preloader-spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-      margin: 0 auto 20px;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .preloader-text {
-      color: white;
-      font-size: 1.2rem;
-      margin-top: 20px;
-    }
-    
-    /* Buffering indicator */
-    .buffering {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: none;
-      z-index: 10;
-    }
-    
-    .buffering-spinner {
-      width: 30px;
-      height: 30px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 0.6s linear infinite;
-    }
-    
-    /* Smooth transitions for audio player */
-    .audio-transition {
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    
-    /* Optimized animations */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
   </style>
 </head>
 <body>
-  <!-- Preloader -->
-  <div class="preloader" id="preloader">
-    <div class="preloader-content">
-      <div class="preloader-spinner"></div>
-      <div class="preloader-text">Cargando música...</div>
-    </div>
-  </div>
 
   <div class="header">
     <div class="header-content">
@@ -1446,12 +1391,7 @@
   </div>
 
   <!-- Audio Player (oculto) -->
-  <audio id="audioPlayer" preload="auto"></audio>
-  
-  <!-- Buffering indicator -->
-  <div class="buffering" id="bufferingIndicator">
-    <div class="buffering-spinner"></div>
-  </div>
+  <audio id="audioPlayer"></audio>
 
   <!-- Floating Player -->
   <div id="floatingPlayer">
@@ -1541,7 +1481,6 @@
     let pendingFilter = null;
     let isDarkMode = localStorage.getItem('darkMode') !== 'false';
     let followedArtists = JSON.parse(localStorage.getItem('followedArtists')) || [];
-    let isBuffering = false;
     const colorThief = new ColorThief();
 
     // Elementos del DOM
@@ -1577,8 +1516,6 @@
     const followedArtistsPanel = document.getElementById('followedArtistsPanel');
     const followedArtistsList = document.getElementById('followedArtistsList');
     const followedArtistsCategory = document.getElementById('followedArtistsCategory');
-    const preloader = document.getElementById('preloader');
-    const bufferingIndicator = document.getElementById('bufferingIndicator');
 
     // Datos de las canciones con archivos de audio
     const audioData = [
@@ -2123,7 +2060,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audio11",
+        id: "audio Anuncio5",
         audioSrc: "https://www.dropbox.com/scl/fi/vl4d6mwau9frvxmjm6wwn/Baner.mp3?rlkey=z8jezojlzlyt0i3qp16jrvid9&st=4agh5qsj&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/3RCBGNyR/Picsart-25-06-03-20-44-36-410.jpg",
         title: "Banner",
@@ -2257,7 +2194,7 @@
     // Función para verificar si la canción actual es un anuncio
     function isCurrentSongAd() {
       const currentSong = currentPlaylist[currentIndex];
-      return currentSong && currentSong.id.startsWith("audioAnuncio");
+      return currentSong && currentSong.id.startsWith("audio Anuncio");
     }
 
     // Función para actualizar la visibilidad de los controles según el tipo de canción
@@ -2525,10 +2462,8 @@
     function updateFloatingFavoriteIcon(songId) {
       if (favorites.includes(songId)) {
         floatingFavoriteIcon.classList.add('added');
-        floatingFavoriteIcon.innerHTML = '❤️';
       } else {
         floatingFavoriteIcon.classList.remove('added');
-        floatingFavoriteIcon.innerHTML = '♡';
       }
     }
 
@@ -2690,18 +2625,6 @@
       return luminance > 0.5 ? '#333' : '#fff';
     }
 
-    // Función para mostrar el indicador de buffering
-    function showBuffering() {
-      isBuffering = true;
-      bufferingIndicator.style.display = 'block';
-    }
-
-    // Función para ocultar el indicador de buffering
-    function hideBuffering() {
-      isBuffering = false;
-      bufferingIndicator.style.display = 'none';
-    }
-
     // Event listeners para el reproductor de audio
     audioPlayer.addEventListener('play', () => {
       isPlaying = true;
@@ -2750,11 +2673,6 @@
       updateProgress();
     });
 
-    audioPlayer.addEventListener('waiting', showBuffering);
-    audioPlayer.addEventListener('playing', hideBuffering);
-    audioPlayer.addEventListener('stalled', showBuffering);
-    audioPlayer.addEventListener('error', hideBuffering);
-
     // Función para iniciar el temporizador de progreso
     function startProgressTimer() {
       clearInterval(progressInterval);
@@ -2792,7 +2710,7 @@
 
     // Función para establecer la posición de reproducción
     function setProgress(event) {
-      if (!audioPlayer || !audioPlayer.duration) return;
+      if (!audioPlayer) return;
       
       const progressContainer = event.currentTarget;
       const rect = progressContainer.getBoundingClientRect();
@@ -2827,37 +2745,15 @@
       // Actualizar metadatos para pantalla bloqueada
       updateMediaMetadata(song);
       
-      // Preload del audio para evitar cortes
-      showBuffering();
-      const audioLoadPromise = new Promise((resolve) => {
-        audioPlayer.src = song.audioSrc;
-        audioPlayer.load();
-        
-        // Usamos canplaythrough para asegurar que el audio está listo para reproducirse sin buffering
-        const canPlayHandler = () => {
-          audioPlayer.removeEventListener('canplaythrough', canPlayHandler);
-          hideBuffering();
-          resolve();
-        };
-        
-        audioPlayer.addEventListener('canplaythrough', canPlayHandler);
-        
-        // Timeout por si falla el canplaythrough
-        setTimeout(() => {
-          audioPlayer.removeEventListener('canplaythrough', canPlayHandler);
-          hideBuffering();
-          resolve();
-        }, 5000);
-      });
+      // Cargar el audio
+      audioPlayer.src = song.audioSrc;
+      audioPlayer.load();
       
-      // Esperar a que el audio esté listo antes de continuar
-      audioLoadPromise.then(() => {
-        // Actualizar la lista de reproducción para resaltar la canción actual
-        updatePlaylistHighlight();
-        
-        // Actualizar visibilidad de controles según si es anuncio o no
-        updateControlsVisibility();
-      });
+      // Actualizar la lista de reproducción para resaltar la canción actual
+      updatePlaylistHighlight();
+      
+      // Actualizar visibilidad de controles según si es anuncio o no
+      updateControlsVisibility();
     }
 
     // Función para reproducir una canción específica
@@ -2875,23 +2771,9 @@
       if (index !== -1) {
         currentIndex = index;
         loadTrack(currentIndex);
-        
-        // Esperar a que el audio esté listo antes de reproducir
-        const checkReady = setInterval(() => {
-          if (audioPlayer.readyState > 0) {
-            clearInterval(checkReady);
-            audioPlayer.play().catch(e => {
-              console.error("Error al reproducir:", e);
-              // Intentar nuevamente con interacción del usuario
-              document.addEventListener('click', function tryPlayAgain() {
-                document.removeEventListener('click', tryPlayAgain);
-                audioPlayer.play().catch(e => console.error("Error al reintentar reproducir:", e));
-              }, { once: true });
-            });
-            isPlaying = true;
-            document.getElementById('playPauseButton').textContent = '⏸';
-          }
-        }, 100);
+        audioPlayer.play();
+        isPlaying = true;
+        document.getElementById('playPauseButton').textContent = '⏸';
       }
     }
 
@@ -2903,7 +2785,7 @@
       if (index !== -1) {
         currentIndex = index;
         loadTrack(currentIndex);
-        audioPlayer.play().catch(e => console.error("Error al reproducir:", e));
+        audioPlayer.play();
         isPlaying = true;
         document.getElementById('playPauseButton').textContent = '⏸';
       }
@@ -2914,15 +2796,7 @@
       if (isPlaying) {
         audioPlayer.pause();
       } else {
-        if (audioPlayer.readyState === 0) {
-          // Si el audio no está cargado, cargarlo primero
-          loadTrack(currentIndex);
-        }
-        audioPlayer.play().catch(e => {
-          console.error("Error al reproducir:", e);
-          // Mostrar mensaje para el usuario
-          alert("Por favor, haz clic en cualquier parte de la página para permitir la reproducción de audio.");
-        });
+        audioPlayer.play();
       }
     }
 
@@ -2943,9 +2817,7 @@
       }
       
       loadTrack(currentIndex);
-      if (isPlaying) {
-        audioPlayer.play().catch(e => console.error("Error al reproducir siguiente canción:", e));
-      }
+      if (isPlaying) audioPlayer.play();
     }
 
     // Función para la canción anterior
@@ -2955,9 +2827,7 @@
       } else {
         currentIndex = (currentIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
         loadTrack(currentIndex);
-        if (isPlaying) {
-          audioPlayer.play().catch(e => console.error("Error al reproducir canción anterior:", e));
-        }
+        if (isPlaying) audioPlayer.play();
       }
     }
 
@@ -3002,7 +2872,7 @@
         item.onclick = () => {
           currentIndex = index;
           loadTrack(currentIndex);
-          audioPlayer.play().catch(e => console.error("Error al reproducir desde playlist:", e));
+          audioPlayer.play();
           isPlaying = true;
           document.getElementById('playPauseButton').textContent = '⏸';
           playlistPanel.style.display = "none";
@@ -3278,7 +3148,7 @@
           currentPlaylist = favoriteSongs;
           currentIndex = currentPlaylist.findIndex(s => s.id === song.id);
           loadTrack(currentIndex);
-          audioPlayer.play().catch(e => console.error("Error al reproducir desde favoritos:", e));
+          audioPlayer.play();
           isPlaying = true;
           document.getElementById('playPauseButton').textContent = '⏸';
           favoritesPanel.style.display = "none";
@@ -3508,26 +3378,7 @@
             this.textContent = '▶ Reproducir';
         }
       });
-      
-      // Ocultar el preloader cuando todo esté listo
-      setTimeout(() => {
-        preloader.style.opacity = '0';
-        setTimeout(() => {
-          preloader.style.display = 'none';
-        }, 500);
-      }, 1500);
-      
-      // Establecer la lista de reproducción inicial
-      currentPlaylist = audioData;
     };
-    
-    // Manejar la reproducción automática bloqueada por el navegador
-    document.addEventListener('click', function() {
-      // Esto permite que la reproducción se inicie después de la interacción del usuario
-      if (audioPlayer.paused && isPlaying) {
-        audioPlayer.play().catch(e => console.error("Error al reanudar reproducción:", e));
-      }
-    }, { once: true });
   </script>
 </body>
 </html>
