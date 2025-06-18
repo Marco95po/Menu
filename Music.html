@@ -238,42 +238,15 @@
     }
 
     .favorite-btn {
-      background-color: transparent;
-      color: #ff5e01;
-      border: 1px solid #ff5e01;
-      padding: 5px 8px;
-      border-radius: 15px;
-      cursor: pointer;
-      margin-top: 5px;
-      font-size: 12px;
-      transition: all 0.3s ease;
-      width: 100%;
-    }
-
-    .favorite-btn:hover {
-      background-color: #ff5e01;
-      color: white;
-    }
-
-    .favorite-btn.added {
-      background-color: #ff5e01;
-      color: rgb(0, 0, 0);
+      display: none; /* Ocultar botón de favoritos */
     }
 
     .favorite-count {
-      display: block;
-      margin-top: 3px;
-      color: var(--text-color);
-      font-size: 10px;
-      text-align: center;
+      display: none; /* Ocultar contador de favoritos */
     }
 
     .play-count {
-      display: block;
-      margin-top: 3px;
-      color: var(--artist-name-color);
-      font-size: 10px;
-      text-align: center;
+      display: none; /* Ocultar contador de reproducciones */
     }
 
     .carousel-nav {
@@ -2317,9 +2290,6 @@
           <div class="song-info">
             <span class="song-title">${artist.name}</span>
             <span class="artist-name">${artist.songCount} canciones</span>
-            <button class="favorite-btn" onclick="showArtistProfile('${artist.name}')">
-              Ver canciones
-            </button>
           </div>
         `;
         container.appendChild(artistElement);
@@ -2863,7 +2833,6 @@
             <div class="playlist-item-title">${song.title}</div>
             <div class="playlist-item-artist">${song.artist}</div>
           </div>
-          <div class="playlist-item-plays">${playCount} plays</div>
         `;
         playlistItems.appendChild(item);
       });
@@ -3140,7 +3109,6 @@
             <div class="playlist-item-title">${song.title}</div>
             <div class="playlist-item-artist">${song.artist}</div>
           </div>
-          <div class="playlist-item-plays">${playCount} plays</div>
         `;
         favoritesItems.appendChild(item);
       });
@@ -3221,7 +3189,6 @@
       // Añadir las canciones
       songs.forEach((song, index) => {
         const isNew = song.releaseDate && new Date(song.releaseDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-        const playCount = playCounts[song.id] || 0;
         const isFavorite = favorites.includes(song.id);
         
         const songItem = document.createElement("div");
@@ -3234,11 +3201,6 @@
             <span class="song-title">${song.title}</span>
             <span class="artist-name">${song.artist}</span>
             ${song.album ? `<span class="album-name" style="display:block;color:#888;font-size:11px;">${song.album}</span>` : ''}
-            <button class="favorite-btn ${isFavorite ? 'added' : ''}" onclick="toggleFavorite('${song.id}', event)">
-              ${isFavorite ? '❤️ En Favoritos' : '❤️ Favorito'}
-            </button>
-            <span class="favorite-count" id="count-${song.id}">${favoriteCounts[song.id] || 0} favoritos</span>
-            <span class="play-count">${playCount} reproducciones</span>
           </div>
         `;
         container.appendChild(songItem);
@@ -3258,7 +3220,6 @@
         
         results.forEach((song, index) => {
           const isNew = song.releaseDate && new Date(song.releaseDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-          const playCount = playCounts[song.id] || 0;
           const isFavorite = favorites.includes(song.id);
           
           const songItem = document.createElement("div");
@@ -3271,11 +3232,6 @@
               <span class="song-title">${song.title}</span>
               <span class="artist-name">${song.artist}</span>
               ${song.album ? `<span class="album-name" style="display:block;color:#888;font-size:11px;">${song.album}</span>` : ''}
-              <button class="favorite-btn ${isFavorite ? 'added' : ''}" onclick="toggleFavorite('${song.id}', event)">
-                ${isFavorite ? '❤️ En Favoritos' : '❤️ Favorito'}
-              </button>
-              <span class="favorite-count" id="count-${song.id}">${favoriteCounts[song.id] || 0} favoritos</span>
-              <span class="play-count">${playCount} reproducciones</span>
             </div>
           `;
           searchResultsGrid.appendChild(songItem);
