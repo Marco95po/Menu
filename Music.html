@@ -1170,6 +1170,137 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     }
+    
+    /* Estilos para la sección de artistas seguidos */
+    .followed-artists-container {
+      margin-top: 20px;
+    }
+    
+    .followed-artist {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      background-color: rgba(255, 94, 1, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .followed-artist:hover {
+      background-color: rgba(255, 94, 1, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .followed-artist-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 15px;
+      border: 2px solid #ff5e01;
+    }
+    
+    .followed-artist-info {
+      flex: 1;
+    }
+    
+    .followed-artist-name {
+      font-weight: bold;
+      color: var(--song-title-color);
+      margin-bottom: 5px;
+    }
+    
+    .followed-artist-songs {
+      font-size: 12px;
+      color: var(--artist-name-color);
+    }
+    
+    .unfollow-btn {
+      background-color: transparent;
+      color: #ff5e01;
+      border: 1px solid #ff5e01;
+      border-radius: 20px;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .unfollow-btn:hover {
+      background-color: #ff5e01;
+      color: white;
+    }
+    
+    /* Estilos para el botón de artistas seguidos */
+    .followed-artists-btn {
+      background-color: #ff5e01;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    
+    .followed-artists-btn:hover {
+      background-color: #ff8c00;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    /* Panel de artistas seguidos */
+    #followedArtistsPanel {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--panel-bg);
+      border-radius: 10px;
+      padding: 20px;
+      width: 80%;
+      max-width: 600px;
+      max-height: 70vh;
+      overflow-y: auto;
+      z-index: 10000;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    }
+    
+    #closeFollowedArtistsButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      color: #ff5e01;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    #followedArtistsPanel h2 {
+      color: #ff5e01;
+      margin-top: 0;
+    }
+    
+    #followedArtistsList {
+      margin-top: 20px;
+    }
+    
+    .no-followed-artists {
+      text-align: center;
+      color: var(--artist-name-color);
+      font-style: italic;
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
@@ -1212,6 +1343,13 @@
     <div class="cover-container">
       <img src="https://cdn.pixabay.com/animation/2023/10/22/03/31/03-31-40-761_512.gif" alt="Portada musical" class="vertical-cover">
     </div>
+    
+    <!-- Nueva sección de artistas seguidos -->
+    <div class="category" id="followedArtistsCategory" style="display: none;">
+      <h2 class="category-title"><span class="category-icon">👥</span>Artistas que sigues</h2>
+      <div class="two-column-list" id="followedArtists"></div>
+    </div>
+    
     <div class="category" id="mostPlayedCategory">
       <h2 class="category-title"><span class="category-icon">🔥</span>Toda la musica</h2>
       <div class="two-column-list" id="mostPlayed"></div>
@@ -1229,7 +1367,7 @@
     <div class="artist-header">
       <img id="artistAvatar" src="" alt="Artista" class="artist-avatar">
       <h2 id="artistProfileName" class="artist-name">Nombre del Artista</h2>
-      <button class="artist-button">Seguir</button>
+      <button class="artist-button" id="followArtistBtn">Seguir</button>
       <button class="listen-artist-btn" id="listenArtistBtn">Escuchar solo a este artista</button>
     </div>
     <h3 class="artist-songs-title">Canciones</h3>
@@ -1302,9 +1440,21 @@
     <div id="favoritesItems"></div>
   </div>
 
+  <!-- Panel de artistas seguidos -->
+  <div id="followedArtistsPanel">
+    <button id="closeFollowedArtistsButton" onclick="toggleFollowedArtistsPanel()">×</button>
+    <h2>Artistas que sigues</h2>
+    <div id="followedArtistsList"></div>
+  </div>
+
   <!-- Favorites Button -->
   <button class="Favoritosbtn" onclick="toggleFavoritesPanel()">
     <span>💀</span>
+  </button>
+  
+  <!-- Followed Artists Button -->
+  <button class="followed-artists-btn" onclick="toggleFollowedArtistsPanel()">
+    <span>👥 Artistas</span>
   </button>
 
   <!-- Color Thief Library -->
@@ -1327,12 +1477,14 @@
     let currentAlbumFilter = null;
     let pendingFilter = null;
     let isDarkMode = localStorage.getItem('darkMode') !== 'false';
+    let followedArtists = JSON.parse(localStorage.getItem('followedArtists')) || [];
     const colorThief = new ColorThief();
 
     // Elementos del DOM
     const audioPlayer = document.getElementById('audioPlayer');
     const mostPlayedContainer = document.getElementById('mostPlayed');
     const trendingContainer = document.getElementById('trending');
+    const followedArtistsContainer = document.getElementById('followedArtists');
     const playlistPanel = document.getElementById('playlistPanel');
     const playlistItems = document.getElementById('playlistItems');
     const favoritesPanel = document.getElementById('favoritesPanel');
@@ -1357,6 +1509,10 @@
     const artistProfileName = document.getElementById('artistProfileName');
     const artistSongs = document.getElementById('artistSongs');
     const listenArtistBtn = document.getElementById('listenArtistBtn');
+    const followArtistBtn = document.getElementById('followArtistBtn');
+    const followedArtistsPanel = document.getElementById('followedArtistsPanel');
+    const followedArtistsList = document.getElementById('followedArtistsList');
+    const followedArtistsCategory = document.getElementById('followedArtistsCategory');
 
     // Datos de las canciones con archivos de audio
     const audioData = [
@@ -2032,6 +2188,144 @@
       },
     ];
 
+    // Función para mostrar/ocultar el panel de artistas seguidos
+    function toggleFollowedArtistsPanel() {
+      if (followedArtistsPanel.style.display === "block") {
+        followedArtistsPanel.style.display = "none";
+      } else {
+        followedArtistsPanel.style.display = "block";
+        renderFollowedArtistsList();
+      }
+    }
+
+    // Función para renderizar la lista de artistas seguidos
+    function renderFollowedArtistsList() {
+      followedArtistsList.innerHTML = '';
+      
+      if (followedArtists.length === 0) {
+        followedArtistsList.innerHTML = '<div class="no-followed-artists">No sigues a ningún artista todavía</div>';
+        return;
+      }
+      
+      followedArtists.forEach(artist => {
+        // Buscar una canción del artista para obtener la imagen
+        const artistSong = audioData.find(song => song.artist === artist);
+        
+        const artistElement = document.createElement('div');
+        artistElement.className = 'followed-artist';
+        artistElement.innerHTML = `
+          <img src="${artistSong ? artistSong.cover : 'https://via.placeholder.com/60'}" class="followed-artist-avatar" alt="${artist}">
+          <div class="followed-artist-info">
+            <div class="followed-artist-name">${artist}</div>
+            <div class="followed-artist-songs">${getArtistSongCount(artist)} canciones</div>
+          </div>
+          <button class="unfollow-btn" onclick="unfollowArtist('${artist}', event)">Dejar de seguir</button>
+        `;
+        
+        // Agregar evento para ver el perfil del artista
+        artistElement.addEventListener('click', function(e) {
+          // Evitar que el evento se active si se hizo clic en el botón de dejar de seguir
+          if (!e.target.classList.contains('unfollow-btn')) {
+            showArtistProfile(artist);
+            followedArtistsPanel.style.display = "none";
+          }
+        });
+        
+        followedArtistsList.appendChild(artistElement);
+      });
+    }
+
+    // Función para obtener el número de canciones de un artista
+    function getArtistSongCount(artistName) {
+      return audioData.filter(song => song.artist === artistName).length;
+    }
+
+    // Función para seguir/dejar de seguir un artista
+    function toggleFollowArtist(artistName) {
+      const index = followedArtists.indexOf(artistName);
+      if (index === -1) {
+        // Seguir al artista
+        followedArtists.push(artistName);
+        followArtistBtn.textContent = "Siguiendo ✓";
+        followArtistBtn.style.backgroundColor = "#4CAF50";
+      } else {
+        // Dejar de seguir al artista
+        followedArtists.splice(index, 1);
+        followArtistBtn.textContent = "Seguir";
+        followArtistBtn.style.backgroundColor = "";
+      }
+      
+      // Guardar en localStorage
+      localStorage.setItem('followedArtists', JSON.stringify(followedArtists));
+      
+      // Actualizar la lista de artistas seguidos
+      renderFollowedArtistsList();
+      updateFollowedArtistsSection();
+    }
+
+    // Función para dejar de seguir un artista desde la lista
+    function unfollowArtist(artistName, event) {
+      event.stopPropagation(); // Evitar que el evento se propague al elemento padre
+      
+      const index = followedArtists.indexOf(artistName);
+      if (index !== -1) {
+        followedArtists.splice(index, 1);
+        localStorage.setItem('followedArtists', JSON.stringify(followedArtists));
+        renderFollowedArtistsList();
+        updateFollowedArtistsSection();
+        
+        // Si estamos en el perfil del artista, actualizar el botón
+        if (artistProfileName.textContent === artistName) {
+          followArtistBtn.textContent = "Seguir";
+          followArtistBtn.style.backgroundColor = "";
+        }
+      }
+    }
+
+    // Función para actualizar la sección de artistas seguidos
+    function updateFollowedArtistsSection() {
+      if (followedArtists.length > 0) {
+        followedArtistsCategory.style.display = 'block';
+        
+        // Obtener información de los artistas seguidos
+        const followedArtistsData = followedArtists.map(artist => {
+          const artistSong = audioData.find(song => song.artist === artist);
+          return {
+            name: artist,
+            cover: artistSong ? artistSong.cover : 'https://via.placeholder.com/160',
+            songCount: getArtistSongCount(artist)
+          };
+        });
+        
+        // Renderizar los artistas seguidos
+        renderFollowedArtistsInCategory(followedArtistsContainer, followedArtistsData);
+      } else {
+        followedArtistsCategory.style.display = 'none';
+      }
+    }
+
+    // Función para renderizar artistas seguidos en la categoría
+    function renderFollowedArtistsInCategory(container, artists) {
+      container.innerHTML = "";
+      
+      artists.forEach((artist, index) => {
+        const artistElement = document.createElement("div");
+        artistElement.className = "song-item";
+        artistElement.style.animationDelay = `${index * 0.1}s`;
+        artistElement.innerHTML = `
+          <img src="${artist.cover}" alt="${artist.name}" onclick="showArtistProfile('${artist.name}')">
+          <div class="song-info">
+            <span class="song-title">${artist.name}</span>
+            <span class="artist-name">${artist.songCount} canciones</span>
+            <button class="favorite-btn" onclick="showArtistProfile('${artist.name}')">
+              Ver canciones
+            </button>
+          </div>
+        `;
+        container.appendChild(artistElement);
+      });
+    }
+
     // Función para mostrar el perfil del artista
     function showArtistProfile(artistName) {
       // Ocultar todos los contenedores
@@ -2049,6 +2343,17 @@
       if (artistSong) {
         artistAvatar.src = artistSong.cover;
       }
+      
+      // Actualizar el botón de seguir
+      const isFollowing = followedArtists.includes(artistName);
+      followArtistBtn.textContent = isFollowing ? "Siguiendo ✓" : "Seguir";
+      followArtistBtn.style.backgroundColor = isFollowing ? "#4CAF50" : "";
+      
+      // Configurar el evento de clic para seguir/dejar de seguir
+      followArtistBtn.onclick = function(e) {
+        e.stopPropagation();
+        toggleFollowArtist(artistName);
+      };
       
       // Filtrar las canciones del artista
       const artistSongsList = audioData.filter(song => song.artist === artistName);
@@ -2884,6 +3189,9 @@
       // 2. Tendencias (basado en reproducciones recientes)
       const trendingSongs = calculateTrendingSongs();
       renderSongsInCategory(trendingContainer, trendingSongs, "trending");
+      
+      // 3. Actualizar sección de artistas seguidos
+      updateFollowedArtistsSection();
     }
 
     // Función para calcular canciones en tendencia
@@ -3021,6 +3329,12 @@
         localStorage.setItem('favoriteCounts', JSON.stringify({}));
         favoriteCounts = {};
       }
+      
+      // Inicializar artistas seguidos si no existen
+      if (!localStorage.getItem('followedArtists')) {
+        localStorage.setItem('followedArtists', JSON.stringify([]));
+        followedArtists = [];
+      }
 
       // Inicializar los filtros de artista
       initializeArtistFilters();
@@ -3039,6 +3353,11 @@
           confirmationModal.style.display = 'none';
           pendingFilter = null;
         }
+      });
+      
+      // Evento para cerrar el panel de artistas seguidos
+      document.getElementById('closeFollowedArtistsButton').addEventListener('click', function() {
+        followedArtistsPanel.style.display = 'none';
       });
       
       // Configurar el botón de reproducción del video
