@@ -108,10 +108,21 @@
     }
 
     .Texp {
-      color: #ff7301;
-      margin: 0;
-      font-size: 2rem;
-    }
+  color: #ffc401;
+  margin: 0;
+  font-size: 2rem;
+  text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01, 0 0 15px #e6ff01;
+  animation: brillo 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes brillo {
+  from {
+    text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01;
+  }
+  to {
+    text-shadow: 0 0 10px #e6ff01, 0 0 20px #e6ff01, 0 0 30px #e6ff01;
+  }
+}
 
     .categories-container {
       margin-top: 140px;
@@ -232,7 +243,7 @@
     .Nuevo {
       display: block;
       margin-top: 5px;
-      color: #ff5e01;
+      color: #51ff01;
       font-size: 10px;
       font-weight: bold;
     }
@@ -1206,7 +1217,7 @@
     
     /* Estilos para el botón de artistas seguidos */
     .followed-artists-btn {
-      background-color: #ff5e01;
+      background-color: #1a1614;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -1427,7 +1438,7 @@
   
   <!-- Followed Artists Button -->
   <button class="followed-artists-btn" onclick="toggleFollowedArtistsPanel()">
-    <span>👥 Artistas</span>
+    <span>sig.</span>
   </button>
 
   <!-- Color Thief Library -->
