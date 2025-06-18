@@ -1392,6 +1392,8 @@
 
   <!-- Audio Player (oculto) -->
   <audio id="audioPlayer"></audio>
+  <!-- Audio Player oculto para precarga -->
+  <audio id="bufferPlayer" style="display:none;"></audio>
 
   <!-- Floating Player -->
   <div id="floatingPlayer">
@@ -1481,10 +1483,12 @@
     let pendingFilter = null;
     let isDarkMode = localStorage.getItem('darkMode') !== 'false';
     let followedArtists = JSON.parse(localStorage.getItem('followedArtists')) || [];
+    let nextTrackPreloaded = false;
     const colorThief = new ColorThief();
 
     // Elementos del DOM
     const audioPlayer = document.getElementById('audioPlayer');
+    const bufferPlayer = document.getElementById('bufferPlayer');
     const mostPlayedContainer = document.getElementById('mostPlayed');
     const trendingContainer = document.getElementById('trending');
     const followedArtistsContainer = document.getElementById('followedArtists');
@@ -2060,7 +2064,7 @@
         releaseDate: "2023-07-15"
       },
       {
-        id: "audio Anuncio5",
+        id: "audio11",
         audioSrc: "https://www.dropbox.com/scl/fi/vl4d6mwau9frvxmjm6wwn/Baner.mp3?rlkey=z8jezojlzlyt0i3qp16jrvid9&st=4agh5qsj&raw=1", // Audio de muestra 2
         cover: "https://i.postimg.cc/3RCBGNyR/Picsart-25-06-03-20-44-36-410.jpg",
         title: "Banner",
@@ -2204,6 +2208,34 @@
       } else {
         floatingPlayer.classList.remove('ad-playing');
       }
+    }
+
+    // Función para precargar la siguiente canción
+    function preloadNextTrack() {
+      if (currentPlaylist.length <= 1) return;
+      
+      const nextIndex = isShuffle ? 
+        getRandomIndexDifferentFromCurrent() : 
+        (currentIndex + 1) % currentPlaylist.length;
+      
+      const nextSong = currentPlaylist[nextIndex];
+      if (nextSong) {
+        bufferPlayer.src = nextSong.audioSrc;
+        bufferPlayer.load();
+        nextTrackPreloaded = true;
+      }
+    }
+
+    // Función para obtener un índice aleatorio diferente al actual
+    function getRandomIndexDifferentFromCurrent() {
+      if (currentPlaylist.length <= 1) return 0;
+      
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * currentPlaylist.length);
+      } while (newIndex === currentIndex);
+      
+      return newIndex;
     }
 
     // Función para mostrar/ocultar el panel de artistas seguidos
@@ -2639,6 +2671,9 @@
       
       // Actualizar visibilidad de controles
       updateControlsVisibility();
+      
+      // Precargar la siguiente canción
+      preloadNextTrack();
     });
 
     audioPlayer.addEventListener('pause', () => {
@@ -2652,18 +2687,45 @@
       if (currentPlaylist.length > 0) {
         if (isShuffle) {
           // Si está en modo aleatorio, seleccionar una canción aleatoria diferente a la actual
-          let newIndex;
-          do {
-            newIndex = Math.floor(Math.random() * currentPlaylist.length);
-          } while (newIndex === currentIndex && currentPlaylist.length > 1);
-          currentIndex = newIndex;
+          currentIndex = getRandomIndexDifferentFromCurrent();
         } else {
           // Si no está en modo aleatorio, ir a la siguiente canción
           currentIndex = (currentIndex + 1) % currentPlaylist.length;
         }
         
-        loadTrack(currentIndex);
-        audioPlayer.play();
+        // Si la siguiente canción ya está precargada, usarla
+        if (nextTrackPreloaded) {
+          // Intercambiar los reproductores
+          const tempSrc = audioPlayer.src;
+          audioPlayer.src = bufferPlayer.src;
+          bufferPlayer.src = '';
+          
+          // Actualizar la interfaz
+          const nextSong = currentPlaylist[currentIndex];
+          document.getElementById('songTitle').textContent = nextSong.title;
+          document.getElementById('artistName').textContent = nextSong.artist;
+          document.getElementById('albumTitle').textContent = nextSong.album || '';
+          document.getElementById('coverImage').src = nextSong.cover;
+          
+          // Actualizar el icono de favoritos
+          updateFloatingFavoriteIcon(nextSong.id);
+          
+          // Actualizar metadatos para pantalla bloqueada
+          updateMediaMetadata(nextSong);
+          
+          // Actualizar la lista de reproducción para resaltar la canción actual
+          updatePlaylistHighlight();
+          
+          // Reproducir
+          audioPlayer.play();
+          
+          // Precargar la siguiente canción
+          preloadNextTrack();
+        } else {
+          // Si no está precargada, cargarla normalmente
+          loadTrack(currentIndex);
+          audioPlayer.play();
+        }
       }
     });
 
@@ -2671,6 +2733,25 @@
 
     audioPlayer.addEventListener('loadedmetadata', () => {
       updateProgress();
+    });
+
+    audioPlayer.addEventListener('error', (e) => {
+      console.error('Error al reproducir audio:', e);
+      // Intentar cargar la siguiente canción si hay un error
+      setTimeout(() => {
+        nextTrack();
+      }, 1000);
+    });
+
+    // Event listener para el reproductor de buffer
+    bufferPlayer.addEventListener('error', (e) => {
+      console.error('Error al precargar audio:', e);
+      nextTrackPreloaded = false;
+    });
+
+    bufferPlayer.addEventListener('canplaythrough', () => {
+      // La canción está lista para reproducirse sin interrupciones
+      console.log('Canción precargada lista');
     });
 
     // Función para iniciar el temporizador de progreso
@@ -2694,6 +2775,11 @@
       
       // Actualizar los tiempos
       updateTimes(currentTime, duration);
+      
+      // Precargar la siguiente canción cuando quede poco de la actual
+      if (duration > 0 && !nextTrackPreloaded && (duration - currentTime) < 10) {
+        preloadNextTrack();
+      }
     }
 
     // Función para formatear y mostrar los tiempos
@@ -2754,6 +2840,9 @@
       
       // Actualizar visibilidad de controles según si es anuncio o no
       updateControlsVisibility();
+      
+      // Resetear el estado de precarga
+      nextTrackPreloaded = false;
     }
 
     // Función para reproducir una canción específica
@@ -2806,11 +2895,7 @@
       
       if (isShuffle) {
         // Si está en modo aleatorio, seleccionar una canción aleatoria diferente a la actual
-        let newIndex;
-        do {
-          newIndex = Math.floor(Math.random() * currentPlaylist.length);
-        } while (newIndex === currentIndex && currentPlaylist.length > 1);
-        currentIndex = newIndex;
+        currentIndex = getRandomIndexDifferentFromCurrent();
       } else {
         // Si no está en modo aleatorio, ir a la siguiente canción
         currentIndex = (currentIndex + 1) % currentPlaylist.length;
