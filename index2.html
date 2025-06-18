@@ -23,7 +23,7 @@
             width: 300px;
             height: 300px;
             perspective: 1000px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             opacity: 0;
             transform: scale(0.5) translateY(50px);
             animation: appear 1s forwards 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -55,6 +55,14 @@
             box-sizing: border-box;
             text-align: center;
             transform: translateZ(20px);
+        }
+
+        .info-container {
+            text-align: center;
+            margin-top: 20px;
+            width: 300px;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards 1.5s;
         }
 
         .titulo {
@@ -297,17 +305,22 @@
     <div id="mainContent">
         <div class="disco-container">
             <div class="disco">
-                <div class="portada" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')">
-                    <div class="titulo"></div>
-                    <div class="artista"></div>
-                    <div class="año"></div>
+                <div class="portada" style="background-image: url('https://i.postimg.cc/g01NwBTF/Screenshot-20250606-180521.jpg')">
+                    <!-- Contenido de la portada vacío ya que la info está debajo -->
                 </div>
                 <div class="vinilo">
-                    <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg')"></div>
+                    <div class="portada-vinilo" style="background-image: url('https://i.postimg.cc/g01NwBTF/Screenshot-20250606-180521.jpg')"></div>
                     <div class="lineas-vinilo"></div>
                     <div class="centro-vinilo"></div>
                 </div>
             </div>
+        </div>
+
+        <!-- Contenedor de información debajo de la portada -->
+        <div class="info-container">
+            <div class="titulo">Musicl Live</div>
+            <div class="artista">Nuevas funciones</div>
+            <div class="año">2025</div>
         </div>
 
         <button class="modern-btn" id="musicBtn">
@@ -325,7 +338,7 @@
         const DISPLAY_COUNT_KEY = 'displayCount'; // Clave para almacenar el contador
         
         // Obtener la URL de la portada actual
-        const currentCover = 'https://i.postimg.cc/ZnFX572Y/Picsart-25-06-15-09-32-13-140.jpg';
+        const currentCover = 'https://i.postimg.cc/g01NwBTF/Screenshot-20250606-180521.jpg';
         
         // Verificar si la portada ha cambiado
         const storedCover = localStorage.getItem(CURRENT_COVER_KEY);
