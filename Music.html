@@ -1062,10 +1062,14 @@
     }
 
     .artist-name {
-      font-size: 2rem;
-      color: var(--song-title-color);
-      margin-bottom: 10px;
-    }
+  display: block;
+  margin-top: 5px;
+  color: var(--artist-name-color);
+  font-size: 10px; /* Cambiado de 12px a 10px */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
     .artist-songs-title {
       font-size: 1.5rem;
