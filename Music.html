@@ -113,7 +113,6 @@
       font-size: 2rem;
       text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01, 0 0 15px #e6ff01;
       animation: brillo 1.5s ease-in-out infinite alternate;
-      cursor: pointer;
     }
 
     @keyframes brillo {
@@ -1314,7 +1313,7 @@
 
   <div class="header">
     <div class="header-content">
-      <h1 class="Texp" onclick="scrollToTop()">Music Live</h1>
+      <h1 class="Texp">Music Live</h1>
       <button class="theme-toggle" id="themeToggle">🌓</button>
     </div>
     <div class="search-container">
@@ -2204,14 +2203,6 @@
   releaseDate: "2023-07-15"
 }
     ];
-
-    // Función para desplazarse al inicio de la página
-    function scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
 
     // Función para verificar si la canción actual es un anuncio
     function isCurrentSongAd() {
