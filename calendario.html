@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¿Qué celebramos hoy?</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #FFA500;
+      --secondary-color: #FF8C00;
+      --dark-bg: #111;
+      --card-bg: #222;
+      --text-light: #ccc;
+      --text-muted: #999;
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--primary-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 2rem;
+      background-image: radial-gradient(circle at 10% 20%, rgba(255, 165, 0, 0.1) 0%, rgba(255, 140, 0, 0.05) 90%);
+    }
+
+    .container {
+      background-color: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 30px rgba(255, 165, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
+      transition: transform 0.3s ease;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 3px;
+    }
+
+    .fecha {
+      font-size: 1.3rem;
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      font-weight: 300;
+    }
+
+    .celebracion {
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .celebracion i {
+      margin-right: 15px;
+      font-size: 2rem;
+    }
+
+    .nada {
+      color: var(--text-muted);
+    }
+
+    .icono-celebracion {
+      color: var(--secondary-color);
+    }
+
+    .boton-celebracion {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #222;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .boton-celebracion:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 165, 0, 0.4);
+    }
+
+    .boton-celebracion::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    .boton-celebracion:focus:not(:active)::after {
+      animation: ripple 1s ease-out;
+    }
+
+    .confeti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: var(--primary-color);
+      opacity: 0;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 1;
+      }
+      20% {
+        transform: scale(25, 25);
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: scale(40, 40);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .celebracion {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-calendar-alt"></i> ¿Qué celebramos hoy?</h1>
+    <div class="fecha" id="fechaActual"></div>
+    <div class="celebracion" id="eventoDelDia"></div>
+    
+    <div id="botonContainer"></div>
+  </div>
+
+  <script>
+    const celebraciones = {
+      "01-01": {nombre: "Año Nuevo", icono: "fa-glass-cheers"},
+      "04-01": {nombre: "Día Mundial del Braille", icono: "fa-braille"},
+      "06-01": {nombre: "Día de Reyes (Epifanía)", icono: "fa-crown"},
+      "02-02": {nombre: "Día de la Candelaria", icono: "fa-candle-holder"},
+      "03-02": {nombre: "Día de la Constitución (México)", icono: "fa-file-contract"},
+      "14-02": {nombre: "San Valentín", icono: "fa-heart"},
+      "17-03": {nombre: "Natalicio de Benito Juárez", icono: "fa-landmark"},
+      "13-04": {nombre: "Inicio de Semana Santa", icono: "fa-cross"},
+      "20-04": {nombre: "Domingo de Pascua", icono: "fa-egg"},
+      "01-05": {nombre: "Día del Trabajo", icono: "fa-briefcase"},
+      "05-05": {nombre: "Batalla de Puebla / Cinco de Mayo", icono: "fa-flag"},
+      "10-05": {nombre: "Día de las Madres (México)", icono: "fa-gift"},
+      "15-05": {nombre: "Día del Maestro", icono: "fa-chalkboard-teacher"},
+      "02-06": {nombre: "Jornada Electoral (México)", icono: "fa-vote-yea"},
+      "05-06": {nombre: "Día Mundial del Medio Ambiente", icono: "fa-leaf"},
+      "08-06": {nombre: "Domingo de Pentecostés", icono: "fa-dove"},
+      "15-06": {nombre: "Día del Padre", icono: "fa-user-tie"},
+      "19-06": {nombre: "Corpus Christi", icono: "fa-wine-glass-alt"},
+      "20-06": {nombre: "Solsticio de Verano / Día Mundial de los Refugiados", icono: "fa-sun"},
+      "21-06": {nombre: "Día del Yoga / Solsticio", icono: "fa-spa"},
+      "11-07": {nombre: "Día Mundial de la Población", icono: "fa-users"},
+      "18-07": {nombre: "Día de Nelson Mandela", icono: "fa-handshake"},
+      "15-08": {nombre: "Asunción de María", icono: "fa-cloud"},
+      "30-08": {nombre: "Día Internacional de las Personas de Origen Africano", icono: "fa-globe-africa"},
+      "15-09": {nombre: "Grito de Independencia (México)", icono: "fa-bell"},
+      "16-09": {nombre: "Día de la Independencia (México)", icono: "fa-flag-usa"},
+      "22-09": {nombre: "Equinoccio de Otoño", icono: "fa-leaf"},
+      "12-10": {nombre: "Día de la Raza / Hispanidad", icono: "fa-globe-americas"},
+      "31-10": {nombre: "Halloween", icono: "fa-ghost"},
+      "01-11": {nombre: "Día de Todos los Santos", icono: "fa-church"},
+      "02-11": {nombre: "Día de los Muertos", icono: "fa-skull"},
+      "17-11": {nombre: "Día de la Revolución Mexicana", icono: "fa-horse"},
+      "23-11": {nombre: "Cristo Rey", icono: "fa-crown"},
+      "08-12": {nombre: "Inmaculada Concepción", icono: "fa-star"},
+      "12-12": {nombre: "Día de la Virgen de Guadalupe", icono: "fa-star-of-david"},
+      "21-12": {nombre: "Solsticio de Invierno", icono: "fa-snowflake"},
+      "24-12": {nombre: "Nochebuena", icono: "fa-holly-berry"},
+      "25-12": {nombre: "Navidad", icono: "fa-sleigh"},
+      "28-12": {nombre: "Día de los Santos Inocentes", icono: "fa-grin-squint-tears"},
+      "31-12": {nombre: "Nochevieja", icono: "fa-clock"}
+    };
+
+    // Obtener fecha actual
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, "0");
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
+    const claveHoy = `${mes}-${dia}`;
+    
+    // Formatear fecha en español
+    const fechaTexto = hoy.toLocaleDateString("es-MX", {
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric'
+    });
+
+    document.getElementById("fechaActual").textContent = fechaTexto;
+
+    // Mostrar celebración actual
+    const eventoHoy = celebraciones[claveHoy];
+    const eventoElemento = document.getElementById("eventoDelDia");
+    const botonContainer = document.getElementById("botonContainer");
+    
+    if (eventoHoy) {
+      eventoElemento.innerHTML = `<i class="fas ${eventoHoy.icono} icono-celebracion"></i>${eventoHoy.nombre}`;
+      
+      // Crear botón especial para la celebración
+      const botonCelebracion = document.createElement("button");
+      botonCelebracion.className = "boton-celebracion";
+      botonCelebracion.innerHTML = `<i class="fas ${eventoHoy.icono}"></i> ¡Celebrar ${eventoHoy.nombre}!`;
+      botonContainer.appendChild(botonCelebracion);
+      
+      // Efecto de confeti al hacer clic en el botón
+      botonCelebracion.addEventListener("click", function() {
+        crearConfeti();
+        this.innerHTML = `<i class="fas ${eventoHoy.icono}"></i> ¡${eventoHoy.nombre} celebrado! <i class="fas fa-check"></i>`;
+        this.style.background = "linear-gradient(135deg, #4CAF50, #2E7D32)";
+        setTimeout(() => {
+          this.innerHTML = `<i class="fas ${eventoHoy.icono}"></i> ¡Celebrar ${eventoHoy.nombre} de nuevo!`;
+          this.style.background = "linear-gradient(135deg, var(--primary-color), var(--secondary-color))";
+        }, 2000);
+      });
+      
+      // Crear confeti inicial
+      crearConfeti();
+    } else {
+      // Redirigir a index.html si no hay celebración
+      window.location.href = "Music.html";
+    }
+
+    // Efecto de confeti para celebraciones
+    function crearConfeti() {
+      const container = document.querySelector(".container");
+      for (let i = 0; i < 50; i++) {
+        const confeti = document.createElement("div");
+        confeti.className = "confeti";
+        confeti.style.left = Math.random() * 100 + "%";
+        confeti.style.top = -10 + "px";
+        confeti.style.backgroundColor = `hsl(${Math.random() * 60 + 20}, 100%, 50%)`;
+        confeti.style.width = Math.random() * 8 + 5 + "px";
+        confeti.style.height = Math.random() * 8 + 5 + "px";
+        confeti.style.opacity = Math.random() + 0.5;
+        confeti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confeti.style.animation = `caer ${Math.random() * 3 + 2}s linear forwards`;
+        
+        container.appendChild(confeti);
+        
+        // Animación con JavaScript
+        animateConfeti(confeti);
+      }
+    }
+
+    function animateConfeti(confeti) {
+      const startTime = Date.now();
+      const duration = Math.random() * 3000 + 2000;
+      const startLeft = parseFloat(confeti.style.left);
+      const drift = Math.random() * 200 - 100;
+      
+      function update() {
+        const elapsed = Date.now() - startTime;
+        const progress = elapsed / duration;
+        
+        if (progress < 1) {
+          const newTop = progress * window.innerHeight;
+          const newLeft = startLeft + drift * progress;
+          const rotation = progress * 360 * 5;
+          
+          confeti.style.top = newTop + "px";
+          confeti.style.left = newLeft + "px";
+          confeti.style.transform = `rotate(${rotation}deg)`;
+          confeti.style.opacity = 1 - progress * 0.7;
+          
+          requestAnimationFrame(update);
+        } else {
+          confeti.remove();
+        }
+      }
+      
+      requestAnimationFrame(update);
+    }
+
+    // Agregar animación CSS dinámicamente
+    const style = document.createElement("style");
+    style.textContent = `
+      @keyframes caer {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
