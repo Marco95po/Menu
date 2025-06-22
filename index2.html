@@ -250,58 +250,10 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.3);
         }
-
-        /* Estilos para el estado de carga */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-
-        .loading-screen.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .loading-text {
-            font-size: 24px;
-            margin-top: 20px;
-            color: white;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: #FF8C00;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-    <!-- Pantalla de carga -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="spinner"></div>
-        <div class="loading-text">Cargando...</div>
-    </div>
-
-    <!-- Contenido principal (solo visible las primeras 2 veces) -->
+    <!-- Contenido principal -->
     <div id="mainContent">
         <div class="disco-container">
             <div class="disco">
@@ -333,7 +285,6 @@
     <script>
         // Configuración
         const MAX_DISPLAYS = 2; // Máximo de veces que se muestra la animación antes de redirigir
-        const REDIRECT_DELAY = 500; // Medio segundo después de mostrar "Cargando"
         const CURRENT_COVER_KEY = 'currentCover'; // Clave para almacenar la portada actual
         const DISPLAY_COUNT_KEY = 'displayCount'; // Clave para almacenar el contador
         
@@ -355,19 +306,12 @@
         localStorage.setItem(DISPLAY_COUNT_KEY, displayCount.toString());
         
         // Elementos del DOM
-        const loadingScreen = document.getElementById('loadingScreen');
         const mainContent = document.getElementById('mainContent');
         const musicBtn = document.getElementById('musicBtn');
         
-        // Si ya se mostró más de 2 veces, mostrar solo la pantalla de carga
+        // Si ya se mostró más de 2 veces, redirigir directamente
         if (displayCount > MAX_DISPLAYS) {
-            mainContent.style.display = 'none';
-            loadingScreen.classList.add('active');
-            
-            // Redirigir después de un breve retraso
-            setTimeout(() => {
-                window.location.href = 'bienvenida.html';
-            }, REDIRECT_DELAY);
+            window.location.href = 'bienvenida.html';
         } else {
             // Mostrar la animación normal
             // Crear partículas dinámicas
@@ -401,14 +345,7 @@
             
             // Configurar el botón
             musicBtn.addEventListener('click', function() {
-                // Mostrar pantalla de carga
-                mainContent.style.display = 'none';
-                loadingScreen.classList.add('active');
-                
-                // Redirigir después de un breve retraso
-                setTimeout(() => {
-                    window.location.href = 'Music.html';
-                }, REDIRECT_DELAY);
+                window.location.href = 'Music.html';
             });
         }
     </script>
