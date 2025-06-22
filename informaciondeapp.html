@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Live - Información</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background-color: #000000;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+        
+        h1 {
+            color: #FF8C00; /* Naranja oscuro */
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        h2 {
+            color: #000000;
+            border-bottom: 2px solid #FF8C00;
+            padding-bottom: 10px;
+        }
+        
+        .logo {
+            max-width: 200px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .info-section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #FF8C00;
+        }
+        
+        footer {
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: #FF8C00;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #FFA500; /* Naranja más claro al hover */
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        strong {
+            color: #FF8C00;
+        }
+        
+        .music-btn {
+            display: inline-block;
+            background-color: #FF8C00;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .music-btn:hover {
+            background-color: #FFA500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Estilos para el botón flotante */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Botón adicional en el header (opcional) */
+        .header-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://i.postimg.cc/8cmtsGnD/FB-IMG-1748821802278.jpg" alt="Music Live Logo" class="logo">
+            <h1>Music Live</h1>
+            <p>La experiencia musical definitiva</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="info-section">
+            <h2>¿Qué es Music Live?</h2>
+            <p>Music Live es una plataforma innovadora dedicada a la producción, distribución y promoción de contenido musical de alta calidad. Nuestro enfoque principal es brindar experiencias musicales únicas tanto para artistas como para el público.</p>
+            
+            <p>Desde conciertos en vivo hasta producciones de estudio, Music Live se ha posicionado como un referente en la industria musical, combinando tecnología de punta con talento artístico excepcional.</p>
+        </div>
+        
+        <div class="info-section">
+            <h2>Karim Music: El Creador</h2>
+            <p>Music Live fue fundado por <strong>Karim Music</strong>, una disquera musical visionaria que ha revolucionado la forma en que experimentamos la música. Karim Music no es solo un sello discográfico, es un ecosistema completo para artistas y amantes de la música.</p>
+            
+            <p>Con años de experiencia en la industria, Karim Music ha desarrollado un enfoque único que combina:</p>
+            <ul>
+                <li>Producción musical de alta calidad</li>
+                <li>Promoción estratégica de artistas</li>
+                <li>Tecnología innovadora para experiencias musicales</li>
+                <li>Distribución global de contenido</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>Nuestra Filosofía</h2>
+            <p>En Music Live, creemos que la música es más que sonido; es una experiencia emocional que conecta a las personas. Bajo el liderazgo de Karim Music, nos esforzamos por:</p>
+            
+            <ul>
+                <li>Descubrir y desarrollar nuevos talentos</li>
+                <li>Innovar constantemente en producción musical</li>
+                <li>Crear conexiones genuinas entre artistas y audiencias</li>
+                <li>Mantener los más altos estándares de calidad</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Botón flotante -->
+    <a href="Music.html" class="music-btn floating-btn">Ir a Music</a>
+    
+    <footer>
+        <div class="container">
+            <h3>Conéctate con Music Live</h3>
+            <div class="social-links">
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">YouTube</a>
+            </div>
+            <p>&copy; 2023 Music Live by Karim Music. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
