@@ -62,6 +62,72 @@
     --menu-active-text: #ffffff;
 }
 
+/* Menú Hamburguesa */
+.menu-container {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1002;
+}
+
+.menu-btn {
+    background-color: var(--menu-bg);
+    color: var(--menu-text);
+    padding: 12px 16px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    z-index: 1003;
+}
+
+.menu-btn:hover {
+    background-color: var(--menu-hover-bg);
+    transform: scale(1.1);
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    background-color: var(--panel-bg);
+    min-width: 200px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1002;
+    border-radius: 10px;
+    top: 60px;
+    left: 0;
+    overflow: hidden;
+}
+
+.menu-content a {
+    color: var(--panel-text);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.menu-content a:last-child {
+    border-bottom: none;
+}
+
+.menu-content a:hover {
+    background-color: var(--menu-hover-bg);
+    color: var(--menu-active-text);
+}
+
+.menu-container:hover .menu-content {
+    display: block;
+}
+
 /* Menú Superior Moderno */
 .menu-superior {
     background-color: var(--menu-bg);
@@ -205,7 +271,7 @@ body {
 
         .header {
             position: fixed;
-            top: 40px;
+            top: 60px;
             left: 0;
             width: 100%;
             background-color: var(--header-bg);
@@ -221,7 +287,7 @@ body {
 
         .header-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             width: 100%;
             max-width: 1200px;
@@ -434,7 +500,7 @@ body {
             background-color: var(--player-bg);
             border: 2px solid #333;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
             padding: 40px;
             z-index: 9999;
             text-align: center;
@@ -847,52 +913,6 @@ body {
 
         #searchInput::placeholder {
             color: #ccc;
-        }
-
-        /* Favorites Button */
-        .Favoritosbtn {
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            animation: colorChange 8s infinite alternate;
-        }
-
-        @keyframes colorChange {
-            0% {
-                background-color: #ffffff;
-            }
-            25% {
-                background-color: #ffcccb;
-            }
-            50% {
-                background-color: #b5ead7;
-            }
-            75% {
-                background-color: #c7ceea;
-            }
-            100% {
-                background-color: #ffddac;
-            }
-        }
-
-        .Favoritosbtn:hover {
-            animation: none;
-            background-color: #ffa600;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         /* Audio Player (oculto) */
@@ -1360,32 +1380,6 @@ body {
             color: white;
         }
         
-        /* Estilos para el botón de artistas seguidos */
-        .followed-artists-btn {
-            background-color: #1a1614;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 1000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-        
-        .followed-artists-btn:hover {
-            background-color: #ff8c00;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-        
         /* Panel de artistas seguidos */
         #followedArtistsPanel {
             display: none;
@@ -1525,6 +1519,15 @@ body {
     </style>
 </head>
 <body>
+
+    <!-- Menú Hamburguesa -->
+    <div class="menu-container">
+        <button class="menu-btn">☰</button>
+        <div class="menu-content">
+            <a href="#" onclick="toggleFollowedArtistsPanel()">Siguiendo</a>
+            <a href="#" onclick="toggleFavoritesPanel()">Favoritos</a>
+        </div>
+    </div>
 
     <!-- Menú Superior -->
     <div class="menu-superior">
@@ -1702,16 +1705,6 @@ body {
         <div id="followedArtistsList"></div>
     </div>
 
-    <!-- Favorites Button -->
-    <button class="Favoritosbtn" id="favoritesButton" onclick="toggleFavoritesPanel()">
-        <span>Favoritos</span>
-    </button>
-    
-    <!-- Followed Artists Button -->
-    <button class="followed-artists-btn" id="followedArtistsButton" onclick="toggleFollowedArtistsPanel()">
-        <span>Siguiendo</span>
-    </button>
-
     <!-- Color Thief Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <!-- Font Awesome para el ícono de YouTube -->
@@ -1775,12 +1768,10 @@ body {
         const podcastButton = document.getElementById('podcastButton');
         const featuredPodcasts = document.getElementById('featuredPodcasts');
         const recentEpisodes = document.getElementById('recentEpisodes');
-        const favoritesButton = document.getElementById('favoritesButton');
-        const followedArtistsButton = document.getElementById('followedArtistsButton');
 
         // Datos de las canciones con archivos de audio
         const audioData = [
-            {
+           {
   id: "audio63",
   audioSrc: "https://www.dropbox.com/scl/fi/m61e64x8j2s3lles47u99/Mentiras-LilCrazy-Ft-eMSECK.wav?rlkey=ha5zh40wzdzutmrnbiih2rn6c&st=r7m69y0s&raw=1",
   cover: "https://i.postimg.cc/8CKs8n67/FB-IMG-1750276140437.jpg",
@@ -2489,9 +2480,6 @@ body {
                 podcastContent.style.display = 'none';
                 musicButton.classList.add('active');
                 podcastButton.classList.remove('active');
-                // Mostrar botones de favoritos y seguidos
-                favoritesButton.style.display = 'flex';
-                followedArtistsButton.style.display = 'flex';
                 // Establecer la lista de reproducción actual a música
                 currentPlaylist = audioData;
             } else if (type === 'podcast') {
@@ -2499,9 +2487,6 @@ body {
                 podcastContent.style.display = 'block';
                 musicButton.classList.remove('active');
                 podcastButton.classList.add('active');
-                // Ocultar botones de favoritos y seguidos
-                favoritesButton.style.display = 'none';
-                followedArtistsButton.style.display = 'none';
                 // Renderizar podcasts
                 renderPodcasts();
                 // Establecer la lista de reproducción actual a podcasts (todos los episodios)
