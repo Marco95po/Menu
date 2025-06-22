@@ -63,56 +63,92 @@
 }
 
 /* Menú Hamburguesa */
+:root {
+    /* Colores base */
+    --menu-bg: #3a3a3a;
+    --menu-text: #ffffff;
+    --menu-hover-bg: #4a4a4a;
+    --menu-active-text: #f8f5f3;
+    --panel-bg: #2d2d2d;
+    --panel-text: #e0e0e0;
+    
+    /* Valores RGB para efectos de transparencia */
+    --menu-bg-rgb: 58, 58, 58;
+    --menu-hover-bg-rgb: 74, 74, 74;
+    --panel-bg-rgb: 45, 45, 45;
+}
+
 .menu-container {
     position: fixed;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     z-index: 1002;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
 .menu-btn {
-    background-color: var(--menu-bg);
+    background-color: rgba(var(--menu-bg-rgb), 0.9);
     color: var(--menu-text);
-    padding: 12px 16px;
-    font-size: 18px;
+    padding: 12px;
+    font-size: 20px;
     border: none;
     cursor: pointer;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    border-radius: 12px;
+    width: 52px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     z-index: 1003;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .menu-btn:hover {
-    background-color: var(--menu-hover-bg);
-    transform: scale(1.1);
+    background-color: rgba(var(--menu-hover-bg-rgb), 0.95);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    color: var(--menu-active-text);
 }
 
 .menu-content {
     display: none;
     position: absolute;
-    background-color: var(--panel-bg);
-    min-width: 200px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    background-color: rgba(var(--panel-bg-rgb), 0.95);
+    min-width: 220px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
     z-index: 1002;
-    border-radius: 10px;
-    top: 60px;
+    border-radius: 14px;
+    top: 70px;
     left: 0;
     overflow: hidden;
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transform-origin: top left;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.menu-container:hover .menu-content {
+    display: block;
+    transform: scale(1);
+    opacity: 1;
 }
 
 .menu-content a {
     color: var(--panel-text);
-    padding: 12px 16px;
+    padding: 14px 20px 14px 40px;
     text-decoration: none;
-    display: block;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.25s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-weight: 500;
+    position: relative;
 }
 
 .menu-content a:last-child {
@@ -120,12 +156,85 @@
 }
 
 .menu-content a:hover {
-    background-color: var(--menu-hover-bg);
+    background-color: rgba(var(--menu-hover-bg-rgb), 0.3);
     color: var(--menu-active-text);
+    padding-left: 44px;
 }
 
-.menu-container:hover .menu-content {
-    display: block;
+.menu-content a::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    background-color: var(--menu-active-text);
+    border-radius: 50%;
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.menu-content a:hover::before {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+}
+
+/* Íconos para cada elemento (opcional) */
+.menu-content a::after {
+    font-family: 'Material Icons';
+    position: absolute;
+    right: 20px;
+    opacity: 0.5;
+    font-size: 18px;
+    transition: opacity 0.2s ease;
+}
+
+.menu-content a:hover::after {
+    opacity: 1;
+}
+
+/* Efecto de aparición escalonada para los items */
+.menu-content a {
+    transition: all 0.3s ease, opacity 0.2s ease;
+    opacity: 0;
+    transform: translateX(-10px);
+}
+
+.menu-container:hover .menu-content a {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.menu-content a:nth-child(1) { transition-delay: 0.05s; }
+.menu-content a:nth-child(2) { transition-delay: 0.1s; }
+.menu-content a:nth-child(3) { transition-delay: 0.15s; }
+.menu-content a:nth-child(4) { transition-delay: 0.2s; }
+.menu-content a:nth-child(5) { transition-delay: 0.25s; }
+
+/* Efecto de "morphing" para el botón cuando el menú está abierto */
+.menu-container:hover .menu-btn {
+    border-radius: 12px 12px 0 0;
+    transform: translateY(10px) scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .menu-container {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .menu-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 18px;
+    }
+    
+    .menu-content {
+        min-width: 180px;
+        top: 60px;
+    }
 }
 
 /* Menú Superior Moderno */
@@ -1522,12 +1631,13 @@ body {
 
     <!-- Menú Hamburguesa -->
     <div class="menu-container">
-        <button class="menu-btn">☰</button>
-        <div class="menu-content">
-            <a href="#" onclick="toggleFollowedArtistsPanel()">Siguiendo</a>
-            <a href="#" onclick="toggleFavoritesPanel()">Favoritos</a>
-        </div>
+    <button class="menu-btn">☰</button>
+    <div class="menu-content">
+        <a href="#" onclick="toggleFollowedArtistsPanel()">Siguiendo</a>
+        <a href="#" onclick="toggleFavoritesPanel()">Favoritos</a>
+        <a href="#" onclick="redirectToIndex()">Información</a>
     </div>
+</div>
 
     <!-- Menú Superior -->
     <div class="menu-superior">
@@ -3872,6 +3982,9 @@ body {
             // Mostrar contenido de música por defecto
             showContent('music');
         };
+        function redirectToIndex() {
+    window.location.href = "informaciondeapp.html"; // Redirige a index.html
+}
     </script>
 </body>
 </html>
