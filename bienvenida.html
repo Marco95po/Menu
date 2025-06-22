@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificación</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .notification-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .notification-box {
+            background-color: #121212;
+            color: #fff;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+        
+        .notification-header {
+            background-color: #ff6d00;
+            color: #121212;
+            padding: 15px 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .notification-content {
+            padding: 25px;
+            line-height: 1.6;
+        }
+        
+        .notification-footer {
+            padding: 15px 25px;
+            text-align: right;
+            background-color: #1e1e1e;
+            border-top: 1px solid #333;
+        }
+        
+        .btn-acknowledge {
+            background-color: #ff6d00;
+            color: #121212;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-acknowledge:hover {
+            background-color: #ff8c00;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="notification-overlay" id="notificationOverlay">
+        <div class="notification-box">
+            <div class="notification-header">
+                <span class="notification-icon">⚠️</span>
+                <span>Aviso importante</span>
+            </div>
+            <div class="notification-content">
+                <p>Esta aplicación no puede reproducir música en segundo plano.</p>
+                <p>Para disfrutar de la música sin interrupciones, mantén la aplicación abierta en primer plano.</p>
+            </div>
+            <div class="notification-footer">
+                <button class="btn-acknowledge" id="btnAcknowledge">Entendido</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationOverlay = document.getElementById('notificationOverlay');
+            const btnAcknowledge = document.getElementById('btnAcknowledge');
+            
+            // Verificar si ya se ha aceptado la notificación
+            const notificationAccepted = localStorage.getItem('notificationAccepted');
+            
+            if (!notificationAccepted) {
+                // Mostrar la notificación solo si no se ha aceptado antes
+                showNotification();
+                
+                // Configurar intervalo para mostrar la notificación cada hora
+                const notificationInterval = setInterval(showNotification, 3600000);
+                
+                // Función para mostrar la notificación
+                function showNotification() {
+                    notificationOverlay.style.display = 'flex';
+                }
+                
+                // Manejar el clic en el botón
+                btnAcknowledge.addEventListener('click', function() {
+                    // Ocultar la notificación
+                    notificationOverlay.style.display = 'none';
+                    
+                    // Marcar como aceptada en localStorage
+                    localStorage.setItem('notificationAccepted', 'true');
+                    
+                    // Limpiar el intervalo
+                    clearInterval(notificationInterval);
+                    
+                    // Redirigir a Music.html
+                    window.location.href = "Music.html";
+                });
+            } else {
+                // Si ya se aceptó antes, redirigir directamente
+                window.location.href = "Music.html";
+            }
+        });
+    </script>
+</body>
+</html>
