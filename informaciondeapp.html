@@ -3,438 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi culpa - Sain Nt | Reproductor Moderno</title>
-    <meta name="theme-color" content="#6c5ce7">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg">
+    <title>Music Live - Información</title>
     <style>
-        :root {
-            --primary-color: #6c5ce7;
-            --secondary-color: #a29bfe;
-            --dark-color: #2d3436;
-            --light-color: #f5f6fa;
-            --accent-color: #fd79a8;
-        }
-        
-        * {
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background-color: #f5f5f5;
         }
         
-        body {
-            background: linear-gradient(135deg, var(--dark-color), #1a1a1a);
-            color: var(--light-color);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .player-container {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(45, 52, 54, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .player-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-        }
-        
-        .cover-container {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-        }
-        
-        .cover-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .player-container:hover .cover-image {
-            transform: scale(1.05);
-        }
-        
-        .overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-        }
-        
-        .song-info {
-            padding: 20px;
+        header {
+            background-color: #000000;
+            color: #fff;
+            padding: 20px 0;
             text-align: center;
+            position: relative;
         }
         
-        .song-title {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: white;
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px 0;
         }
         
-        .song-artist {
-            font-size: 16px;
-            color: var(--secondary-color);
-            margin-bottom: 3px;
+        h1 {
+            color: #FF8C00; /* Naranja oscuro */
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
         
-        .song-album {
-            font-size: 14px;
-            color: #b2bec3;
+        h2 {
+            color: #000000;
+            border-bottom: 2px solid #FF8C00;
+            padding-bottom: 10px;
+        }
+        
+        .logo {
+            max-width: 200px;
+            margin: 20px auto;
+            display: block;
+        }
+        
+        .info-section {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left: 4px solid #FF8C00;
+        }
+        
+        footer {
+            background-color: #000000;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            color: #FF8C00;
+            margin: 0 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .social-links a:hover {
+            color: #FFA500; /* Naranja más claro al hover */
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        p {
             margin-bottom: 15px;
         }
         
-        .progress-container {
-            width: 100%;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin: 20px 0;
-            cursor: pointer;
+        strong {
+            color: #FF8C00;
         }
         
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-            border-radius: 3px;
-            position: relative;
-            transition: width 0.1s linear;
-        }
-        
-        .progress-bar::after {
-            content: '';
-            position: absolute;
-            right: -5px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        
-        .progress-container:hover .progress-bar::after {
-            opacity: 1;
-        }
-        
-        .time-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #b2bec3;
-            margin-top: 5px;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .control-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            margin: 0 15px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
-        }
-        
-        .control-btn.play-btn {
-            background: var(--primary-color);
-            width: 50px;
-            height: 50px;
-            font-size: 24px;
-        }
-        
-        .control-btn.play-btn:hover {
-            background: var(--secondary-color);
-            transform: scale(1.1);
-        }
-        
-        .volume-control {
-            width: 100%;
-            padding: 0 20px 20px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .volume-icon {
-            margin-right: 10px;
-            color: #b2bec3;
-        }
-        
-        .volume-slider {
-            flex-grow: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 2px;
-            -webkit-appearance: none;
-            appearance: none;
-            outline: none;
-        }
-        
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            background: white;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        
-        .category-badge {
+        .music-btn {
             display: inline-block;
-            background: var(--accent-color);
+            background-color: #FF8C00;
             color: white;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-top: 10px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .music-btn:hover {
+            background-color: #FFA500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Estilos para el botón flotante */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 99;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Botón adicional en el header (opcional) */
+        .header-btn {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="player-container">
-        <div class="cover-container">
-            <img src="https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg" alt="Portada del álbum" class="cover-image">
-            <div class="overlay"></div>
+    <header>
+        <div class="container">
+            <img src="https://i.postimg.cc/8cmtsGnD/FB-IMG-1748821802278.jpg" alt="Music Live Logo" class="logo">
+            <h1>Music Live</h1>
+            <p>La experiencia musical definitiva</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="info-section">
+            <h2>¿Qué es Music Live?</h2>
+            <p>Music Live es una plataforma innovadora dedicada a la producción, distribución y promoción de contenido musical de alta calidad. Nuestro enfoque principal es brindar experiencias musicales únicas tanto para artistas como para el público.</p>
+            
+            <p>Desde conciertos en vivo hasta producciones de estudio, Music Live se ha posicionado como un referente en la industria musical, combinando tecnología de punta con talento artístico excepcional.</p>
         </div>
         
-        <div class="song-info">
-            <h1 class="song-title">Mi culpa</h1>
-            <p class="song-artist">Sain Nt</p>
-            <p class="song-album">Sin compromiso • 2024</p>
+        <div class="info-section">
+            <h2>Karim Music: El Creador</h2>
+            <p>Music Live fue fundado por <strong>Karim Music</strong>, una disquera musical visionaria que ha revolucionado la forma en que experimentamos la música. Karim Music no es solo un sello discográfico, es un ecosistema completo para artistas y amantes de la música.</p>
             
-            <div class="progress-container">
-                <div class="progress-bar" id="progress"></div>
-            </div>
-            <div class="time-info">
-                <span id="current-time">0:00</span>
-                <span id="duration">3:45</span>
-            </div>
+            <p>Con años de experiencia en la industria, Karim Music ha desarrollado un enfoque único que combina:</p>
+            <ul>
+                <li>Producción musical de alta calidad</li>
+                <li>Promoción estratégica de artistas</li>
+                <li>Tecnología innovadora para experiencias musicales</li>
+                <li>Distribución global de contenido</li>
+            </ul>
+        </div>
+        
+        <div class="info-section">
+            <h2>Nuestra Filosofía</h2>
+            <p>En Music Live, creemos que la música es más que sonido; es una experiencia emocional que conecta a las personas. Bajo el liderazgo de Karim Music, nos esforzamos por:</p>
             
-            <div class="controls">
-                <button class="control-btn" id="prev-btn">⏮</button>
-                <button class="control-btn" id="rewind-btn">⏪</button>
-                <button class="control-btn play-btn" id="play-btn">▶</button>
-                <button class="control-btn" id="forward-btn">⏩</button>
-                <button class="control-btn" id="next-btn">⏭</button>
-            </div>
-            
-            <div class="volume-control">
-                <span class="volume-icon">🔊</span>
-                <input type="range" class="volume-slider" id="volume-slider" min="0" max="1" step="0.01" value="0.7">
-            </div>
-            
-            <span class="category-badge">Más escuchados</span>
+            <ul>
+                <li>Descubrir y desarrollar nuevos talentos</li>
+                <li>Innovar constantemente en producción musical</li>
+                <li>Crear conexiones genuinas entre artistas y audiencias</li>
+                <li>Mantener los más altos estándares de calidad</li>
+            </ul>
         </div>
     </div>
-
-    <audio id="audio-player" src="https://www.dropbox.com/scl/fi/w32a11405ox96obylj3yw/Sain-Nt-Mi-Culpa-Video-Oficial.mp3?rlkey=kebnf2oetl34p4ayog4r75ssx&st=8vpl5v6u&raw=1" playsinline></audio>
-
-    <script>
-        // Registra el Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('ServiceWorker registrado con éxito:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('Error al registrar el ServiceWorker:', error);
-                    });
-            });
-        }
-
-        const audioPlayer = document.getElementById('audio-player');
-        const playBtn = document.getElementById('play-btn');
-        const progressBar = document.getElementById('progress');
-        const progressContainer = document.querySelector('.progress-container');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        const volumeSlider = document.getElementById('volume-slider');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const rewindBtn = document.getElementById('rewind-btn');
-        const forwardBtn = document.getElementById('forward-btn');
-        
-        // Configura la API Media Session
-        function setupMediaSession() {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: 'Mi culpa',
-                    artist: 'Sain Nt',
-                    album: 'Sin compromiso',
-                    artwork: [
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '96x96', type: 'image/jpg' },
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '128x128', type: 'image/jpg' },
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '192x192', type: 'image/jpg' },
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '256x256', type: 'image/jpg' },
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '384x384', type: 'image/jpg' },
-                        { src: 'https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg', sizes: '512x512', type: 'image/jpg' }
-                    ]
-                });
-                
-                navigator.mediaSession.setActionHandler('play', () => {
-                    audioPlayer.play();
-                    playBtn.innerHTML = '⏸';
-                });
-                
-                navigator.mediaSession.setActionHandler('pause', () => {
-                    audioPlayer.pause();
-                    playBtn.innerHTML = '▶';
-                });
-                
-                navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-                    const skipTime = details.seekOffset || 10;
-                    audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - skipTime);
-                });
-                
-                navigator.mediaSession.setActionHandler('seekforward', (details) => {
-                    const skipTime = details.seekOffset || 10;
-                    audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + skipTime);
-                });
-                
-                navigator.mediaSession.setActionHandler('previoustrack', () => {
-                    // Lógica para canción anterior
-                    console.log('Canción anterior');
-                });
-                
-                navigator.mediaSession.setActionHandler('nexttrack', () => {
-                    // Lógica para siguiente canción
-                    console.log('Siguiente canción');
-                });
-            }
-        }
-        
-        // Play/Pause
-        function togglePlayPause() {
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-                playBtn.innerHTML = '⏸';
-            } else {
-                audioPlayer.pause();
-                playBtn.innerHTML = '▶';
-            }
-        }
-        
-        playBtn.addEventListener('click', togglePlayPause);
-        
-        // Controles de navegación
-        rewindBtn.addEventListener('click', () => {
-            audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
-        });
-        
-        forwardBtn.addEventListener('click', () => {
-            audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
-        });
-        
-        prevBtn.addEventListener('click', () => {
-            console.log('Canción anterior');
-        });
-        
-        nextBtn.addEventListener('click', () => {
-            console.log('Siguiente canción');
-        });
-        
-        // Update progress bar
-        audioPlayer.addEventListener('timeupdate', () => {
-            const { currentTime, duration } = audioPlayer;
-            const progressPercent = (currentTime / duration) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-            
-            // Update time display
-            currentTimeEl.textContent = formatTime(currentTime);
-            if (duration) {
-                durationEl.textContent = formatTime(duration);
-            }
-            
-            // Actualiza la posición de reproducción en la API Media Session
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.setPositionState({
-                    duration: duration,
-                    playbackRate: audioPlayer.playbackRate,
-                    position: currentTime
-                });
-            }
-        });
-        
-        // Click on progress bar to seek
-        progressContainer.addEventListener('click', (e) => {
-            const width = progressContainer.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audioPlayer.duration;
-            audioPlayer.currentTime = (clickX / width) * duration;
-        });
-        
-        // Volume control
-        volumeSlider.addEventListener('input', () => {
-            audioPlayer.volume = volumeSlider.value;
-        });
-        
-        // Format time (seconds to MM:SS)
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-        
-        // Set initial volume
-        audioPlayer.volume = volumeSlider.value;
-        
-        // When metadata is loaded, update duration
-        audioPlayer.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(audioPlayer.duration);
-            setupMediaSession();
-        });
-        
-        // Maneja el evento cuando la app está en segundo plano
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                console.log('La aplicación está en segundo plano');
-            } else {
-                console.log('La aplicación está en primer plano');
-            }
-        });
-        
-        // Configuración inicial
-        setupMediaSession();
-    </script>
+    
+    <!-- Botón flotante -->
+    <a href="calendario.html" class="music-btn floating-btn">Ir a Music</a>
+    
+    <footer>
+        <div class="container">
+            <h3>Conéctate con Music Live</h3>
+            <div class="social-links">
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+                <a href="#">Twitter</a>
+                <a href="#">YouTube</a>
+            </div>
+            <p>&copy; 2023 Music Live by Karim Music. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 </body>
 </html>
