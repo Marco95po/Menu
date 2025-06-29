@@ -1811,7 +1811,7 @@ video::-webkit-media-controls {
     <button onclick="nextTrack()">⏭</button>
 </div>
 <div>
-    <button class="modern-btn" onclick="goToYouTube()">⇄ Compartir</button>
+    <button class="modern-btn" onclick="goToYouTube()">⇄ Comparitr</button>
 </div>
     </div>
 
@@ -1904,7 +1904,7 @@ video::-webkit-media-controls {
 
         // Datos de las canciones con archivos de audio
         const audioData = [
-        {
+{
   id: "audio65",
   audioSrc: "https://www.dropbox.com/scl/fi/unx75wsjq436o92siqpey/ME-LLAMA-feat.-J-vazquez.flac?rlkey=r7r37wclldgbna31f09iugvde&st=nteomu5b&raw=1",
   cover: "https://i.postimg.cc/9MHvJPnG/Picsart-25-06-21-23-57-48-606.jpg",
@@ -2595,7 +2595,6 @@ video::-webkit-media-controls {
   releaseDate: "2023-07-15"
 }
         ];
-
         // Datos de podcasts
         const podcastData = [
             {
@@ -4044,6 +4043,25 @@ function goToYouTube() {
     // Redirige a compartirredes.html en la misma ventana
     window.location.href = 'compartirredes.html';
 }
+// Configurar el audio para seguir reproduciendo en segundo plano
+audioPlayer.setAttribute('playsinline', '');
+audioPlayer.setAttribute('webkit-playsinline', '');
+// Evitar que el audio se detenga
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden) {
+    // App en segundo plano - intentar mantener el audio activo
+    if (isPlaying) {
+      audioPlayer.play().catch(e => console.log("Error al reproducir en segundo plano:", e));
+    }
+  }
+});
+
+// Forzar la reproducción cuando la app vuelva a primer plano
+document.addEventListener('resume', function() {
+  if (isPlaying) {
+    audioPlayer.play();
+  }
+}, false);
     </script>
 </body>
 </html>
