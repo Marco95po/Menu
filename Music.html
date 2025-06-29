@@ -1591,6 +1591,56 @@ video::-webkit-media-controls {
     color: var(--artist-name-color);
     font-size: 12px;
 }
+.modern-btn {
+        /* Estilo base */
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #FF0000, #CC0000);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .modern-btn:hover {
+        /* Efecto hover */
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        background: linear-gradient(135deg, #CC0000, #990000);
+    }
+    
+    .modern-btn:active {
+        /* Efecto al presionar */
+        transform: translateY(1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .modern-btn::before {
+        /* Efecto de brillo */
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        transition: 0.5s;
+    }
+    
+    .modern-btn:hover::before {
+        left: 100%;
+    }
+
     </style>
 </head>
 <body>
@@ -1754,12 +1804,22 @@ video::-webkit-media-controls {
         </div>
 
         <div id="controls">
-            <button onclick="prevTrack()">⏮</button>
-            <button onclick="togglePlaylist()">📋</button>
-            <button id="playPauseButton" onclick="togglePlay()">▶</button>
-            <button onclick="toggleShuffle()">🔀</button>
-            <button onclick="nextTrack()">⏭</button>
-        </div>
+    <button onclick="prevTrack()">⏮</button>
+    <button onclick="togglePlaylist()">📋</button>
+    <button id="playPauseButton" onclick="togglePlay()">▶</button>
+    <button onclick="toggleShuffle()">🔀</button>
+    <button onclick="nextTrack()">⏭</button>
+</div>
+<div>
+    <button class="modern-btn" onclick="goToYouTube()">YouTube</button>
+</div>
+
+<script>
+    function goToYouTube() {
+        // Reemplaza 'URL_DEL_CANAL' con la URL real del canal de YouTube
+        window.open('https://www.youtube.com/channel/URL_DEL_CANAL', '_blank');
+    }
+</script>
     </div>
 
     <!-- Playlist Panel -->
