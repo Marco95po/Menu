@@ -1594,7 +1594,7 @@ video::-webkit-media-controls {
 .modern-btn {
         /* Estilo base */
         padding: 12px 24px;
-        background: linear-gradient(135deg, #FF0000, #CC0000);
+        background: linear-gradient(135deg, #ffc400, #CC0000);
         color: white;
         border: none;
         border-radius: 8px;
@@ -1611,7 +1611,7 @@ video::-webkit-media-controls {
         /* Efecto hover */
         transform: translateY(-2px);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        background: linear-gradient(135deg, #CC0000, #990000);
+        background: linear-gradient(135deg, #000000, #990000);
     }
     
     .modern-btn:active {
@@ -1811,15 +1811,8 @@ video::-webkit-media-controls {
     <button onclick="nextTrack()">⏭</button>
 </div>
 <div>
-    <button class="modern-btn" onclick="goToYouTube()">YouTube</button>
+    <button class="modern-btn" onclick="goToYouTube()">⇄ Comparitr</button>
 </div>
-
-<script>
-    function goToYouTube() {
-        // Reemplaza 'URL_DEL_CANAL' con la URL real del canal de YouTube
-        window.open('https://www.youtube.com/channel/URL_DEL_CANAL', '_blank');
-    }
-</script>
     </div>
 
     <!-- Playlist Panel -->
@@ -4046,6 +4039,10 @@ function redirectToArtistMusic() {
 }
 function redirectToShare() {
     window.location.href = "compartirredes.html";
+}
+function goToYouTube() {
+    // Redirige a compartirredes.html en la misma ventana
+    window.location.href = 'compartirredes.html';
 }
     </script>
 </body>
