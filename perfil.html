@@ -490,7 +490,7 @@
     <!-- Buscador centrado -->
     <div class="search-container">
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre..." oninput="filterGallery()">
+            <input type="text" id="searchInput" placeholder="Buscar por RFC completo..." oninput="filterGallery()">
         </div>
     </div>
     
@@ -574,19 +574,23 @@
         // Variable para almacenar el elemento seleccionado
         let selectedItem = null;
         
-        // Función para filtrar la galería según el texto de búsqueda
+        // Función para filtrar la galería según el RFC completo
         function filterGallery() {
-            const searchText = document.getElementById('searchInput').value.toLowerCase();
-            const galleryItems = document.querySelectorAll('.gallery-item');
+            const searchText = document.getElementById('searchInput').value.trim().toUpperCase();
+            const galleryItemsElements = document.querySelectorAll('.gallery-item');
             const galleryContainer = document.getElementById('galleryContainer');
             const noResults = document.getElementById('noResults');
             const introText = document.getElementById('introText');
             
             let hasResults = false;
             
-            galleryItems.forEach(item => {
-                const title = item.querySelector('.title').textContent.toLowerCase();
-                if (title.includes(searchText)) {
+            galleryItemsElements.forEach(item => {
+                const itemTitle = item.querySelector('.title').textContent;
+                const itemData = galleryItems[itemTitle];
+                const itemRFC = itemData.rfc;
+                
+                // Solo mostrar si el RFC coincide exactamente
+                if (searchText === itemRFC) {
                     item.style.display = 'block';
                     hasResults = true;
                 } else {
