@@ -15,6 +15,9 @@
             --button-hover: #128C7E;
             --toggle-bg: #ddd;
             --toggle-circle: white;
+            --info-bg: #e8f5e9;
+            --info-text: #2e7d32;
+            --info-border: #c8e6c9;
         }
         
         .dark-mode {
@@ -27,6 +30,9 @@
             --button-hover: #075e54;
             --toggle-bg: #333;
             --toggle-circle: #25D366;
+            --info-bg: #1b5e20;
+            --info-text: #e8f5e9;
+            --info-border: #2e7d32;
         }
         
         body {
@@ -143,6 +149,23 @@
         input:checked + .slider:before {
             transform: translateX(30px);
         }
+        
+        .info-box {
+            background-color: var(--info-bg);
+            color: var(--info-text);
+            border-left: 4px solid var(--info-border);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .info-box strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
     </style>
 </head>
 <body>
@@ -170,6 +193,13 @@
             <div class="form-group">
                 <label for="nombreArtista">Nombre de artista:</label>
                 <input type="text" id="nombreArtista" name="nombreArtista" required>
+            </div>
+            
+            <div class="info-box">
+                <strong>Gracias por completar su registro con nosotros.</strong>
+                Le informamos que, como parte de nuestro protocolo de seguridad y confidencialidad de datos, la confirmación oficial de su registro le será enviada directamente por mensaje de WhatsApp.
+                <br><br>
+                Este procedimiento garantiza una comunicación directa y segura, protegiendo su información personal y profesional.
             </div>
             
             <button type="button" onclick="enviarPorWhatsApp()">Enviar registro</button>
