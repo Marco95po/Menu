@@ -4,112 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Artista</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <style>
         :root {
-            --bg-color: #f5f5f5;
-            --text-color: #333;
-            --container-bg: white;
-            --border-color: #ddd;
-            --primary-color: #075e54;
-            --button-bg: #25D366;
-            --button-hover: #128C7E;
-            --toggle-bg: #ddd;
-            --toggle-circle: white;
-            --info-bg: #e8f5e9;
-            --info-text: #2e7d32;
-            --info-border: #c8e6c9;
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --container-bg: #ffffff;
+            --border-color: #e0e3e7;
+            --primary-color: #6c5ce7;
+            --button-bg: #6c5ce7;
+            --button-hover: #5649c0;
+            --toggle-bg: #e0e3e7;
+            --toggle-circle: #ffffff;
+            --info-bg: #f0f5ff;
+            --info-text: #2d3748;
+            --info-border: #a3bffa;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.05), 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .dark-mode {
-            --bg-color: #121212;
-            --text-color: #f5f5f5;
-            --container-bg: #1e1e1e;
-            --border-color: #333;
-            --primary-color: #25D366;
-            --button-bg: #128C7E;
-            --button-hover: #075e54;
-            --toggle-bg: #333;
-            --toggle-circle: #25D366;
-            --info-bg: #1b5e20;
-            --info-text: #e8f5e9;
-            --info-border: #2e7d32;
+            --bg-color: #121218;
+            --text-color: #e2e8f0;
+            --container-bg: #1e1e2a;
+            --border-color: #2d3748;
+            --primary-color: #8b7df1;
+            --button-bg: #8b7df1;
+            --button-hover: #6c5ce7;
+            --toggle-bg: #2d3748;
+            --toggle-circle: #8b7df1;
+            --info-bg: #1a202c;
+            --info-text: #e2e8f0;
+            --info-border: #4a5568;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
         
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            font-family: 'Inter', sans-serif;
+            max-width: 640px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px;
             background-color: var(--bg-color);
             color: var(--text-color);
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            line-height: 1.5;
         }
         
         h1 {
             text-align: center;
             color: var(--primary-color);
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
         }
         
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-color);
         }
         
         input[type="text"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px 16px;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 8px;
             background-color: var(--container-bg);
             color: var(--text-color);
+            font-size: 15px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
         }
         
         button {
             background-color: var(--button-bg);
             color: white;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 24px;
             font-size: 16px;
-            border-radius: 4px;
+            font-weight: 600;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 16px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
         button:hover {
             background-color: var(--button-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
         
         .form-container {
             background-color: var(--container-bg);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            margin-top: 16px;
         }
         
         .toggle-container {
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            gap: 12px;
         }
         
         .toggle-label {
-            margin-right: 10px;
             font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
         }
         
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 30px;
+            width: 52px;
+            height: 28px;
         }
         
         .toggle-switch input {
@@ -126,19 +164,19 @@
             right: 0;
             bottom: 0;
             background-color: var(--toggle-bg);
-            transition: .4s;
+            transition: var(--transition);
             border-radius: 34px;
         }
         
         .slider:before {
             position: absolute;
             content: "";
-            height: 22px;
-            width: 22px;
+            height: 20px;
+            width: 20px;
             left: 4px;
             bottom: 4px;
             background-color: var(--toggle-circle);
-            transition: .4s;
+            transition: var(--transition);
             border-radius: 50%;
         }
         
@@ -147,16 +185,16 @@
         }
         
         input:checked + .slider:before {
-            transform: translateX(30px);
+            transform: translateX(24px);
         }
         
         .info-box {
             background-color: var(--info-bg);
             color: var(--info-text);
             border-left: 4px solid var(--info-border);
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 0 4px 4px 0;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
             font-size: 14px;
             line-height: 1.6;
         }
@@ -165,6 +203,22 @@
             display: block;
             margin-bottom: 8px;
             font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+        }
+        
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+            
+            .form-container {
+                padding: 24px;
+            }
         }
     </style>
 </head>
@@ -178,31 +232,34 @@
     </div>
     
     <div class="form-container">
-        <h1>Formulario de Artista</h1>
+        <h1>Registro de Artista</h1>
         <form id="artistForm">
             <div class="form-group">
-                <label for="nombre">Nombre completo:</label>
-                <input type="text" id="nombre" name="nombre" required>
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" name="nombre" required placeholder="Ej. María González López">
             </div>
             
             <div class="form-group">
-                <label for="rfc">RFC:</label>
-                <input type="text" id="rfc" name="rfc" required>
+                <label for="rfc">RFC</label>
+                <input type="text" id="rfc" name="rfc" required placeholder="Ej. GOLM850101ABC">
             </div>
             
             <div class="form-group">
-                <label for="nombreArtista">Nombre de artista:</label>
-                <input type="text" id="nombreArtista" name="nombreArtista" required>
+                <label for="nombreArtista">Nombre artístico</label>
+                <input type="text" id="nombreArtista" name="nombreArtista" required placeholder="Ej. MARIGOL">
             </div>
             
             <div class="info-box">
-                <strong>Gracias por completar su registro con nosotros.</strong>
-                Le informamos que, como parte de nuestro protocolo de seguridad y confidencialidad de datos, la confirmación oficial de su registro le será enviada directamente por mensaje de WhatsApp.
-                <br><br>
-                Este procedimiento garantiza una comunicación directa y segura, protegiendo su información personal y profesional.
+                <strong>Confirmación de registro</strong>
+                Por su seguridad, la confirmación oficial de su registro será enviada directamente por WhatsApp. Este proceso garantiza una comunicación segura y protege su información personal y profesional.
             </div>
             
-            <button type="button" onclick="enviarPorWhatsApp()">Enviar registro</button>
+            <button type="button" onclick="enviarPorWhatsApp()">
+                <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Enviar por WhatsApp
+            </button>
         </form>
     </div>
 
@@ -228,9 +285,9 @@
         
         function enviarPorWhatsApp() {
             // Obtener los valores del formulario
-            const nombre = document.getElementById('nombre').value;
-            const rfc = document.getElementById('rfc').value;
-            const nombreArtista = document.getElementById('nombreArtista').value;
+            const nombre = document.getElementById('nombre').value.trim();
+            const rfc = document.getElementById('rfc').value.trim();
+            const nombreArtista = document.getElementById('nombreArtista').value.trim();
             
             // Validar que todos los campos estén llenos
             if (!nombre || !rfc || !nombreArtista) {
@@ -238,11 +295,17 @@
                 return;
             }
             
+            // Validar formato básico de RFC
+            if (!/^[A-ZÑ&]{3,4}\d{6}[A-Z0-9]{3}$/i.test(rfc)) {
+                alert('Por favor, ingrese un RFC válido.');
+                return;
+            }
+            
             // Crear el mensaje con los datos del formulario
             const mensaje = `*Nuevo registro de artista*%0A%0A` +
-                            `*Nombre:* ${nombre}%0A` +
-                            `*RFC:* ${rfc}%0A` +
-                            `*Nombre de artista:* ${nombreArtista}`;
+                            `*Nombre completo:* ${nombre}%0A` +
+                            `*RFC:* ${rfc.toUpperCase()}%0A` +
+                            `*Nombre artístico:* ${nombreArtista}`;
             
             // Número de teléfono (código de país + número sin espacios o caracteres especiales)
             const telefono = '524621098798';
