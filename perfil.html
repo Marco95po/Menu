@@ -529,15 +529,15 @@ h1 {
     </div>
     
     <!-- Texto introductorio -->
-    <div id="introText" class="intro-text">
+    <div id="introText1" class="intro-text">
         Aquí puedes ver lo que has ganado de tu música.
     </div>
-     <div id="introText" class="intro-text">
+     <div id="introText2" class="intro-text">
        "Una vez que completes tu registro, tu cuenta será activada en un plazo máximo de 5 días. Te notificaremos en cuanto esté lista para que comiences a disfrutar de tus Ganancias".
     </div>
     
     <!-- Botón de registro -->
-    <a href="reguistrodertista.html" id="registerBtn" class="register-btn">Registrar Nuevo Artista</a>
+    <a href="reguistrodertista.html" id="registerBtn" class="register-btn">Registrarme</a>
     
     <!-- Mensaje cuando no hay resultados -->
     <div id="noResults" class="no-results">
@@ -620,7 +620,8 @@ h1 {
             const galleryItemsElements = document.querySelectorAll('.gallery-item');
             const galleryContainer = document.getElementById('galleryContainer');
             const noResults = document.getElementById('noResults');
-            const introText = document.getElementById('introText');
+            const introText1 = document.getElementById('introText1');
+            const introText2 = document.getElementById('introText2');
             const registerBtn = document.getElementById('registerBtn');
             
             let hasResults = false;
@@ -642,7 +643,8 @@ h1 {
             // Mostrar u ocultar la galería y el mensaje de no resultados
             if (searchText.length > 0) {
                 galleryContainer.classList.add('visible');
-                introText.classList.add('hidden');
+                introText1.classList.add('hidden');
+                introText2.classList.add('hidden');
                 registerBtn.classList.add('hidden');
                 
                 if (hasResults) {
@@ -653,7 +655,8 @@ h1 {
             } else {
                 galleryContainer.classList.remove('visible');
                 noResults.style.display = 'none';
-                introText.classList.remove('hidden');
+                introText1.classList.remove('hidden');
+                introText2.classList.remove('hidden');
                 registerBtn.classList.remove('hidden');
             }
         }
