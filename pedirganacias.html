@@ -76,13 +76,14 @@
             height: 20px;
         }
         .info-text {
-            color: #FF6600;
             text-align: center;
             margin-top: 20px;
+            padding: 15px;
+            background-color: #333333;
+            border-radius: 5px;
+            border-left: 4px solid #FF6600;
             font-size: 14px;
             line-height: 1.5;
-        }
-        .hidden {
             display: none;
         }
         
@@ -104,6 +105,7 @@
             }
             .info-text {
                 font-size: 13px;
+                padding: 10px;
             }
         }
     </style>
@@ -132,61 +134,45 @@
                 <input type="text" id="monto" name="monto" placeholder="Ejemplo: 1500.50 o 1500,50" required>
             </div>
             
-            <div id="buttonContainer">
-                <button type="button" class="btn hidden" id="submitBtn" onclick="enviarWhatsApp()">
-                    Enviar solicitud de retiro
-                </button>
-                <p class="info-text" id="infoText">
-                    Los retiros se realizan cada 3 mes únicamente el día 29 de cada mes. 
-                    El formulario estará disponible por 24 horas en esa fecha.
-                </p>
+            <button type="button" class="btn" id="submitBtn" style="display: none;">
+                Enviar solicitud de retiro
+            </button>
+            
+            <div class="info-text" id="infoText">
+                Los retiros se realizan cada 3 meses y solo están disponibles cada día 29 de cada 2do mes. El formulario estará disponible por 24 horas en esas fechas.
             </div>
         </form>
     </div>
 
     <script>
-        function checkRetiroDate() {
-            const now = new Date();
-            const currentMonth = now.getMonth() + 1; // Enero es 0
-            const currentDate = now.getDate();
-            const currentHour = now.getHours();
+        // Función para verificar si hoy es el día 29 de un mes par (febrero, abril, junio, etc.)
+        function esFechaValida() {
+            const hoy = new Date();
+            const dia = hoy.getDate();
+            const mes = hoy.getMonth() + 1; // Los meses van de 0 a 11
             
-            // Meses permitidos: febrero (2), mayo (5), agosto (8), noviembre (11)
-            const mesesPermitidos = [2, 5, 8, 11];
+            // Verificar si es día 29 y mes par (febrero=2, abril=4, etc.)
+            return dia === 29 && mes % 2 === 0;
+        }
+        
+        // Función para mostrar/ocultar elementos según la fecha
+        function actualizarVisibilidad() {
+            const esValido = esFechaValida();
+            document.getElementById('submitBtn').style.display = esValido ? 'block' : 'none';
+            document.getElementById('infoText').style.display = esValido ? 'none' : 'block';
             
-            // Verificar si es un mes permitido, día 29 y dentro de las 24 horas
-            if (mesesPermitidos.includes(currentMonth) && currentDate === 29) {
-                const submitBtn = document.getElementById('submitBtn');
-                const infoText = document.getElementById('infoText');
-                
-                submitBtn.classList.remove('hidden');
-                infoText.classList.add('hidden');
-                
-                // Guardar en localStorage que el botón fue mostrado hoy
-                localStorage.setItem('lastRetiroDay', now.toDateString());
+            // Si es válido, establecer un temporizador para ocultar después de 24 horas
+            if (esValido) {
+                setTimeout(() => {
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('infoText').style.display = 'block';
+                }, 24 * 60 * 60 * 1000); // 24 horas en milisegundos
             }
         }
         
-        // Verificar localStorage para ver si el botón ya fue mostrado hoy
-        function checkLocalStorage() {
-            const lastRetiroDay = localStorage.getItem('lastRetiroDay');
-            const today = new Date().toDateString();
-            
-            if (lastRetiroDay === today) {
-                const submitBtn = document.getElementById('submitBtn');
-                const infoText = document.getElementById('infoText');
-                
-                submitBtn.classList.remove('hidden');
-                infoText.classList.add('hidden');
-            }
-        }
+        // Llamar a la función al cargar la página
+        window.onload = actualizarVisibilidad;
         
-        // Al cargar la página
-        window.onload = function() {
-            checkLocalStorage();
-            checkRetiroDate();
-        };
-
         function enviarWhatsApp() {
             const cuenta = document.getElementById('cuenta').value;
             const rfc = document.getElementById('rfc').value;
@@ -211,6 +197,9 @@
             
             window.open(url, '_blank');
         }
+        
+        // Asignar la función al botón
+        document.getElementById('submitBtn').onclick = enviarWhatsApp;
     </script>
 </body>
 </html>
