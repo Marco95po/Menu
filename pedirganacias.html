@@ -7,7 +7,211 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #000000;<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Transferencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
             background-color: #000000;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 15px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #222222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #FF6600;
+        }
+        h1 {
+            color: #FF6600;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #FF6600;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #FF6600;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #FFFFFF;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #FF9933;
+            box-shadow: 0 0 5px #FF9933;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #FF6600;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #FF9933;
+        }
+        .whatsapp-icon {
+            margin-right: 8px;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+        }
+        .info-text {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #333333;
+            border-radius: 5px;
+            border-left: 4px solid #FF6600;
+            font-size: 14px;
+            line-height: 1.5;
+            display: none;
+        }
+        
+        /* Media queries para dispositivos móviles */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            input[type="text"] {
+                padding: 8px;
+                font-size: 14px;
+            }
+            .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .info-text {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Datos de Transferencia</h1>
+        <form id="transferForm">
+            <div class="form-group">
+                <label for="cuenta">Cuenta Bancaria:</label>
+                <input type="text" id="cuenta" name="cuenta" placeholder="Ingrese el número de cuenta" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rfc">RFC:</label>
+                <input type="text" id="rfc" name="rfc" placeholder="Ingrese el RFC" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre del Titular:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre completo" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="monto">Monto de Retiro:</label>
+                <input type="text" id="monto" name="monto" placeholder="Ejemplo: 1500.50 o 1500,50" required>
+            </div>
+            
+            <button type="button" class="btn" id="submitBtn" style="display: none;">
+                Enviar solicitud de retiro
+            </button>
+            
+            <div class="info-text" id="infoText">
+                Los retiros se realizan cada 3 mes y solo están disponibles cada día 29 de cada mes. El formulario estará disponible por 24 horas en esas fechas.
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Función para verificar si hoy es el día 29 de un mes par (febrero, abril, junio, etc.)
+        function esFechaValida() {
+            const hoy = new Date();
+            const dia = hoy.getDate();
+            const mes = hoy.getMonth() + 1; // Los meses van de 0 a 11
+            
+            // Verificar si es día 29 y mes par (febrero=2, abril=4, etc.)
+            return dia === 29 && mes % 2 === 0;
+        }
+        
+        // Función para mostrar/ocultar elementos según la fecha
+        function actualizarVisibilidad() {
+            const esValido = esFechaValida();
+            document.getElementById('submitBtn').style.display = esValido ? 'block' : 'none';
+            document.getElementById('infoText').style.display = esValido ? 'none' : 'block';
+            
+            // Si es válido, establecer un temporizador para ocultar después de 24 horas
+            if (esValido) {
+                setTimeout(() => {
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('infoText').style.display = 'block';
+                }, 24 * 60 * 60 * 1000); // 24 horas en milisegundos
+            }
+        }
+        
+        // Llamar a la función al cargar la página
+        window.onload = actualizarVisibilidad;
+        
+        function enviarWhatsApp() {
+            const cuenta = document.getElementById('cuenta').value;
+            const rfc = document.getElementById('rfc').value;
+            const nombre = document.getElementById('nombre').value;
+            let monto = document.getElementById('monto').value;
+            
+            if (!cuenta || !rfc || !nombre || !monto) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+            
+            // Validar y normalizar el formato del monto
+            monto = monto.replace(/,/g, '.'); // Reemplazar comas por puntos
+            if (!/^\d+(\.\d{1,2})?$/.test(monto)) {
+                alert('Por favor ingrese un monto válido (ejemplo: 1500.50 o 1500,50)');
+                return;
+            }
+            
+            const mensaje = `Datos de Transferencia:%0A%0A*Cuenta Bancaria:* ${cuenta}%0A*RFC:* ${rfc}%0A*Nombre del Titular:* ${nombre}%0A*Monto de Retiro:* $${monto}`;
+            const telefono = '524621098798';
+            const url = `https://wa.me/${telefono}?text=${mensaje}`;
+            
+            window.open(url, '_blank');
+        }
+        
+        // Asignar la función al botón
+        document.getElementById('submitBtn').onclick = enviarWhatsApp;
+    </script>
+</body>
+</html>
             color: #FFFFFF;
             margin: 0;
             padding: 15px;
