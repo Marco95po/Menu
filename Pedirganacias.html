@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Transferencia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #222222;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px #FF6600;
+        }
+        h1 {
+            color: #FF6600;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #FF6600;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #FF6600;
+            border-radius: 5px;
+            background-color: #333333;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #FF9933;
+            box-shadow: 0 0 5px #FF9933;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #FF6600;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #FF9933;
+        }
+        .whatsapp-icon {
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Datos de Transferencia</h1>
+        <form id="transferForm">
+            <div class="form-group">
+                <label for="cuenta">Cuenta Bancaria:</label>
+                <input type="text" id="cuenta" name="cuenta" placeholder="Ingrese el número de cuenta" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rfc">RFC:</label>
+                <input type="text" id="rfc" name="rfc" placeholder="Ingrese el RFC" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombre">Nombre del Titular:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre completo" required>
+            </div>
+            
+            <button type="button" class="btn" onclick="enviarWhatsApp()">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" width="20">
+                Enviar por WhatsApp
+            </button>
+        </form>
+    </div>
+
+    <script>
+        function enviarWhatsApp() {
+            const cuenta = document.getElementById('cuenta').value;
+            const rfc = document.getElementById('rfc').value;
+            const nombre = document.getElementById('nombre').value;
+            
+            if (!cuenta || !rfc || !nombre) {
+                alert('Por favor complete todos los campos');
+                return;
+            }
+            
+            const mensaje = `Datos de Transferencia:%0A%0A*Cuenta Bancaria:* ${cuenta}%0A*RFC:* ${rfc}%0A*Nombre del Titular:* ${nombre}`;
+            const telefono = '524621098798';
+            const url = `https://wa.me/${telefono}?text=${mensaje}`;
+            
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

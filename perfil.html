@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Imágenes con Autenticación</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --card-bg: white;
+            --border-color: #ddd;
+            --shadow-color: rgba(0,0,0,0.1);
+            --hover-shadow-color: rgba(0,0,0,0.15);
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --error-color: #d32f2f;
+            --error-bg: #ffebee;
+            --table-header-bg: #f2f2f2;
+            --modal-bg: white;
+            --search-border: #ddd;
+            --search-focus: #4CAF50;
+            --image-border: #f2f2f2;
+            --action-btn: #2196F3;
+            --action-btn-hover: #0b7dda;
+        }
+
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+            --shadow-color: rgba(0,0,0,0.3);
+            --hover-shadow-color: rgba(0,0,0,0.5);
+            --primary-color: #2e7d32;
+            --primary-hover: #1b5e20;
+            --error-color: #f44336;
+            --error-bg: #311;
+            --table-header-bg: #2d2d2d;
+            --modal-bg: #1e1e1e;
+            --search-border: #333;
+            --search-focus: #2e7d32;
+            --image-border: #333;
+            --action-btn: #1976D2;
+            --action-btn-hover: #1565C0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        /* Estilos para el buscador */
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+        
+        .search-box {
+            width: 100%;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid var(--search-border);
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: all 0.3s;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--search-focus);
+            box-shadow: 0 2px 10px rgba(76, 175, 80, 0.2);
+        }
+        
+        .search-box::after {
+            content: "🔍";
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            pointer-events: none;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            display: none; /* Galería oculta inicialmente */
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 15px;
+        }
+        
+        .gallery.visible {
+            display: grid; /* Mostrar galería cuando tenga la clase visible */
+        }
+        
+        .gallery-item {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px var(--hover-shadow-color);
+        }
+        
+        .gallery-item img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+        
+        .gallery-item .title {
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--text-color);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Modales */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--modal-bg);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            text-align: center;
+            animation: modalFadeIn 0.3s;
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #ff0000;
+        }
+        
+        /* Modal de imagen */
+        .modal-image-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--image-border);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+        
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .info-table th, .info-table td {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .info-table th {
+            background-color: var(--table-header-bg);
+            width: 30%;
+        }
+        
+        /* Modal de autenticación */
+        .auth-content {
+            background: var(--modal-bg);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 400px;
+            width: 90%;
+            position: relative;
+            text-align: center;
+            animation: modalFadeIn 0.3s;
+            color: var(--text-color);
+            box-sizing: border-box;
+        }
+        
+        .auth-content h2 {
+            margin-top: 0;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .auth-content input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+        
+        .auth-content input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .auth-content button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .auth-content button:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            margin-top: 10px;
+            display: none;
+            background-color: var(--error-bg);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        /* Estilos modernos para el botón de acción */
+        .modal-footer {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .action-btn {
+            background-color: var(--action-btn);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-btn:hover {
+            background-color: var(--action-btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-btn::after {
+            content: "→";
+            margin-left: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .action-btn:hover::after {
+            transform: translateX(4px);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                padding: 0 10px;
+            }
+            
+            .gallery-item img {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .search-container {
+                padding: 0 10px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .modal-content, .auth-content {
+                padding: 20px;
+            }
+            
+            .info-table th, .info-table td {
+                padding: 8px;
+                font-size: 13px;
+            }
+            
+            .action-btn {
+                padding: 10px 24px;
+                font-size: 15px;
+            }
+            
+            .gallery-item img {
+                width: 140px;
+                height: 140px;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .gallery-item img {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .gallery-item .title {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .search-box input {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            
+            .auth-content {
+                padding: 20px 15px;
+            }
+        }
+        
+        /* Botón de modo oscuro/claro */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.1);
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 30px;
+            display: none;
+            font-size: 18px;
+            opacity: 0.8;
+            padding: 0 15px;
+        }
+        
+        .intro-text {
+            text-align: center;
+            color: var(--text-color);
+            margin-top: 20px;
+            font-size: 18px;
+            opacity: 0.8;
+            padding: 0 15px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .intro-text.hidden {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botón para cambiar el tema -->
+    <button class="theme-toggle" id="themeToggle">🌓</button>
+    
+    <h1>Perfil de artista</h1>
+    
+    <!-- Buscador centrado -->
+    <div class="search-container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre..." oninput="filterGallery()">
+        </div>
+    </div>
+    
+    <!-- Texto introductorio -->
+    <div id="introText" class="intro-text">
+        Aquí puedes ver lo que has ganado de tu música.
+    </div>
+    
+    <!-- Mensaje cuando no hay resultados -->
+    <div id="noResults" class="no-results">
+        No se encontraron resultados para su búsqueda.
+    </div>
+    
+    <!-- Galería (oculta inicialmente) -->
+    <div class="gallery" id="galleryContainer">
+        <!-- Los elementos de la galería se generarán dinámicamente con JavaScript -->
+    </div>
+    
+    <!-- Modal de autenticación -->
+    <div id="authModal" class="modal">
+        <div class="auth-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            <h2>Autenticación Requerida</h2>
+            <p id="authPrompt">Por favor ingrese el RFC para acceder a la información de <strong><span id="itemName"></span></strong></p>
+            <input type="text" id="rfcInput" placeholder="Ingrese su RFC (ej. xxxxxxxxxxx)" required>
+            <button onclick="verifyRFC()">Verificar</button>
+            <p id="errorMessage" class="error-message">RFC incorrecto. Por favor verifique e intente nuevamente.</p>
+        </div>
+    </div>
+    
+    <!-- Modal para mostrar la información detallada -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-image-container">
+                <img id="modalImage" class="modal-image" src="" alt="">
+            </div>
+            <h2 id="modalTitle"></h2>
+            
+            <table class="info-table">
+                <tr>
+                    <th>RFC</th>
+                    <td id="modalRfc"></td>
+                </tr>
+                <tr>
+                    <th>Ganancias Anuales</th>
+                    <td id="modalEarnings"></td>
+                </tr>
+                <tr>
+                    <th>Artista</th>
+                    <td id="modalPeriod"></td>
+                </tr>
+            </table>
+            
+            <!-- Botón para redirigir a pedirganacias.html con nuevo estilo -->
+            <div class="modal-footer">
+                <button onclick="window.location.href='pedirganacias.html'" class="action-btn">
+                    Pedir Ganancias
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos iniciales de los elementos de la galería
+        let galleryItems = {
+            'Marco Otoniel Martinez Martinez': {
+                rfc: 'MAMM9511036K6',
+                imageSrc: 'https://i.postimg.cc/Bnq284qP/Picsart-25-06-02-22-29-48-466.jpg',
+                earnings: '$0,00 MXN',
+                period: 'Sain Nt'
+            },
+            'Kerim': {
+                rfc: 'MAMM9511032K2',
+                imageSrc: 'https://via.placeholder.com/300x200?text=Empresa+B',
+                earnings: '$ MXN',
+                period: 'Enero 2023 - Diciembre 2023'
+            }
+        };
+        
+        // Variable para almacenar el elemento seleccionado
+        let selectedItem = null;
+        
+        // Función para filtrar la galería según el texto de búsqueda
+        function filterGallery() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase();
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const galleryContainer = document.getElementById('galleryContainer');
+            const noResults = document.getElementById('noResults');
+            const introText = document.getElementById('introText');
+            
+            let hasResults = false;
+            
+            galleryItems.forEach(item => {
+                const title = item.querySelector('.title').textContent.toLowerCase();
+                if (title.includes(searchText)) {
+                    item.style.display = 'block';
+                    hasResults = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            
+            // Mostrar u ocultar la galería y el mensaje de no resultados
+            if (searchText.length > 0) {
+                galleryContainer.classList.add('visible');
+                introText.classList.add('hidden');
+                
+                if (hasResults) {
+                    noResults.style.display = 'none';
+                } else {
+                    noResults.style.display = 'block';
+                }
+            } else {
+                galleryContainer.classList.remove('visible');
+                noResults.style.display = 'none';
+                introText.classList.remove('hidden');
+            }
+        }
+        
+        // Función para inicializar la galería
+        function initializeGallery() {
+            const galleryContainer = document.getElementById('galleryContainer');
+            galleryContainer.innerHTML = '';
+            
+            for (const [title, data] of Object.entries(galleryItems)) {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.onclick = () => requestAccess(title, data.rfc);
+                
+                galleryItem.innerHTML = `
+                    <img src="${data.imageSrc}" alt="${title}">
+                    <div class="title">${title}</div>
+                `;
+                
+                galleryContainer.appendChild(galleryItem);
+            }
+        }
+        
+        // Función para solicitar acceso
+        function requestAccess(title, correctRFC) {
+            // Configurar el modal de autenticación
+            document.getElementById('itemName').textContent = title;
+            document.getElementById('rfcInput').value = '';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Almacenar la información del item seleccionado
+            selectedItem = {
+                title: title,
+                ...galleryItems[title]
+            };
+            
+            // Mostrar el modal de autenticación
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('rfcInput').focus();
+        }
+        
+        // Función para verificar el RFC
+        function verifyRFC() {
+            const inputRFC = document.getElementById('rfcInput').value.trim().toUpperCase();
+            const correctRFC = selectedItem.rfc;
+            const errorElement = document.getElementById('errorMessage');
+            
+            if (inputRFC === correctRFC) {
+                // RFC correcto, mostrar la información
+                closeAuthModal();
+                showItemInfo();
+            } else {
+                // RFC incorrecto, mostrar error
+                errorElement.style.display = 'block';
+                document.getElementById('rfcInput').focus();
+            }
+        }
+        
+        // Función para mostrar la información del item
+        function showItemInfo() {
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = selectedItem.imageSrc;
+            document.getElementById('modalTitle').textContent = selectedItem.title;
+            document.getElementById('modalRfc').textContent = selectedItem.rfc;
+            document.getElementById('modalEarnings').textContent = selectedItem.earnings;
+            document.getElementById('modalPeriod').textContent = selectedItem.period;
+            
+            modal.style.display = 'flex';
+        }
+        
+        // Función para cerrar el modal de autenticación
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+        
+        // Función para cerrar el modal de información
+        function closeModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+        
+        // Función para alternar entre modo oscuro y claro
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            
+            // Cambiar el icono según el modo
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+        }
+        
+        // Cargar preferencia de tema al iniciar
+        function loadThemePreference() {
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeToggle').textContent = '☀️';
+            } else {
+                document.getElementById('themeToggle').textContent = '🌙';
+            }
+        }
+        
+        // Cerrar modales al hacer clic fuera del contenido
+        window.onclick = function(event) {
+            const authModal = document.getElementById('authModal');
+            const imageModal = document.getElementById('imageModal');
+            
+            if (event.target === authModal) {
+                closeAuthModal();
+            }
+            
+            if (event.target === imageModal) {
+                closeModal();
+            }
+        }
+        
+        // Permitir enviar el formulario con Enter
+        document.getElementById('rfcInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                verifyRFC();
+            }
+        });
+        
+        // Permitir buscar al presionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                filterGallery();
+            }
+        });
+        
+        // Inicializar la galería al cargar la página
+        window.onload = function() {
+            initializeGallery();
+            loadThemePreference();
+            
+            // Configurar el botón de cambio de tema
+            document.getElementById('themeToggle').addEventListener('click', toggleDarkMode);
+        };
+    </script>
+</body>
+</html>
