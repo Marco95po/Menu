@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Artista</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #333;
+            --container-bg: white;
+            --border-color: #ddd;
+            --primary-color: #075e54;
+            --button-bg: #25D366;
+            --button-hover: #128C7E;
+            --toggle-bg: #ddd;
+            --toggle-circle: white;
+        }
+        
+        .dark-mode {
+            --bg-color: #121212;
+            --text-color: #f5f5f5;
+            --container-bg: #1e1e1e;
+            --border-color: #333;
+            --primary-color: #25D366;
+            --button-bg: #128C7E;
+            --button-hover: #075e54;
+            --toggle-bg: #333;
+            --toggle-circle: #25D366;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            background-color: var(--container-bg);
+            color: var(--text-color);
+        }
+        
+        button {
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: var(--button-hover);
+        }
+        
+        .form-container {
+            background-color: var(--container-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        
+        .toggle-label {
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--toggle-circle);
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--toggle-bg);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-container">
+        <span class="toggle-label">Modo oscuro</span>
+        <label class="toggle-switch">
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+    
+    <div class="form-container">
+        <h1>Formulario de Artista</h1>
+        <form id="artistForm">
+            <div class="form-group">
+                <label for="nombre">Nombre completo:</label>
+                <input type="text" id="nombre" name="nombre" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rfc">RFC:</label>
+                <input type="text" id="rfc" name="rfc" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="nombreArtista">Nombre de artista:</label>
+                <input type="text" id="nombreArtista" name="nombreArtista" required>
+            </div>
+            
+            <button type="button" onclick="enviarPorWhatsApp()">Enviar registro</button>
+        </form>
+    </div>
+
+    <script>
+        // Función para cambiar entre modo claro y oscuro
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+        
+        // Verificar preferencia guardada al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkMode = localStorage.getItem('darkMode') === 'true';
+            
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+            }
+            
+            darkModeToggle.addEventListener('change', toggleDarkMode);
+        });
+        
+        function enviarPorWhatsApp() {
+            // Obtener los valores del formulario
+            const nombre = document.getElementById('nombre').value;
+            const rfc = document.getElementById('rfc').value;
+            const nombreArtista = document.getElementById('nombreArtista').value;
+            
+            // Validar que todos los campos estén llenos
+            if (!nombre || !rfc || !nombreArtista) {
+                alert('Por favor, complete todos los campos del formulario.');
+                return;
+            }
+            
+            // Crear el mensaje con los datos del formulario
+            const mensaje = `*Nuevo registro de artista*%0A%0A` +
+                            `*Nombre:* ${nombre}%0A` +
+                            `*RFC:* ${rfc}%0A` +
+                            `*Nombre de artista:* ${nombreArtista}`;
+            
+            // Número de teléfono (código de país + número sin espacios o caracteres especiales)
+            const telefono = '524621098798';
+            
+            // Crear el enlace de WhatsApp
+            const url = `https://wa.me/${telefono}?text=${mensaje}`;
+            
+            // Abrir WhatsApp en una nueva pestaña
+            window.open(url, '_blank');
+            
+            // Opcional: Resetear el formulario después de enviar
+            document.getElementById('artistForm').reset();
+        }
+    </script>
+</body>
+</html>
