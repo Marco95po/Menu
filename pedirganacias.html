@@ -10,37 +10,41 @@
             background-color: #000000;
             color: #FFFFFF;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
         .container {
             max-width: 500px;
             margin: 0 auto;
             background-color: #222222;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 15px #FF6600;
         }
         h1 {
             color: #FF6600;
             text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         label {
             display: block;
             margin-bottom: 8px;
             color: #FF6600;
             font-weight: bold;
+            font-size: 14px;
         }
         input[type="text"] {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid #FF6600;
             border-radius: 5px;
             background-color: #333333;
             color: #FFFFFF;
-            font-size: 16px;
+            font-size: 14px;
+            box-sizing: border-box;
         }
         input[type="text"]:focus {
             outline: none;
@@ -59,6 +63,8 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 20px;
+            box-sizing: border-box;
         }
         .btn:hover {
             background-color: #FF9933;
@@ -66,6 +72,39 @@
         .whatsapp-icon {
             margin-right: 8px;
             vertical-align: middle;
+            width: 20px;
+            height: 20px;
+        }
+        .info-text {
+            color: #FF6600;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .hidden {
+            display: none;
+        }
+        
+        /* Media queries para dispositivos móviles */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            input[type="text"] {
+                padding: 8px;
+                font-size: 14px;
+            }
+            .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .info-text {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
@@ -88,25 +127,85 @@
                 <input type="text" id="nombre" name="nombre" placeholder="Ingrese el nombre completo" required>
             </div>
             
-            <button type="button" class="btn" onclick="enviarWhatsApp()">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" width="20">
-                Enviar por WhatsApp
-            </button>
+            <div class="form-group">
+                <label for="monto">Monto de Retiro:</label>
+                <input type="text" id="monto" name="monto" placeholder="Ejemplo: 1500.50 o 1500,50" required>
+            </div>
+            
+            <div id="buttonContainer">
+                <button type="button" class="btn hidden" id="submitBtn" onclick="enviarWhatsApp()">
+                    Enviar solicitud de retiro
+                </button>
+                <p class="info-text" id="infoText">
+                    Los retiros se realizan cada 3 mes únicamente el día 29 de cada mes. 
+                    El formulario estará disponible por 24 horas en esa fecha.
+                </p>
+            </div>
         </form>
     </div>
 
     <script>
+        function checkRetiroDate() {
+            const now = new Date();
+            const currentMonth = now.getMonth() + 1; // Enero es 0
+            const currentDate = now.getDate();
+            const currentHour = now.getHours();
+            
+            // Meses permitidos: febrero (2), mayo (5), agosto (8), noviembre (11)
+            const mesesPermitidos = [2, 5, 8, 11];
+            
+            // Verificar si es un mes permitido, día 29 y dentro de las 24 horas
+            if (mesesPermitidos.includes(currentMonth) && currentDate === 29) {
+                const submitBtn = document.getElementById('submitBtn');
+                const infoText = document.getElementById('infoText');
+                
+                submitBtn.classList.remove('hidden');
+                infoText.classList.add('hidden');
+                
+                // Guardar en localStorage que el botón fue mostrado hoy
+                localStorage.setItem('lastRetiroDay', now.toDateString());
+            }
+        }
+        
+        // Verificar localStorage para ver si el botón ya fue mostrado hoy
+        function checkLocalStorage() {
+            const lastRetiroDay = localStorage.getItem('lastRetiroDay');
+            const today = new Date().toDateString();
+            
+            if (lastRetiroDay === today) {
+                const submitBtn = document.getElementById('submitBtn');
+                const infoText = document.getElementById('infoText');
+                
+                submitBtn.classList.remove('hidden');
+                infoText.classList.add('hidden');
+            }
+        }
+        
+        // Al cargar la página
+        window.onload = function() {
+            checkLocalStorage();
+            checkRetiroDate();
+        };
+
         function enviarWhatsApp() {
             const cuenta = document.getElementById('cuenta').value;
             const rfc = document.getElementById('rfc').value;
             const nombre = document.getElementById('nombre').value;
+            let monto = document.getElementById('monto').value;
             
-            if (!cuenta || !rfc || !nombre) {
+            if (!cuenta || !rfc || !nombre || !monto) {
                 alert('Por favor complete todos los campos');
                 return;
             }
             
-            const mensaje = `Datos de Transferencia:%0A%0A*Cuenta Bancaria:* ${cuenta}%0A*RFC:* ${rfc}%0A*Nombre del Titular:* ${nombre}`;
+            // Validar y normalizar el formato del monto
+            monto = monto.replace(/,/g, '.'); // Reemplazar comas por puntos
+            if (!/^\d+(\.\d{1,2})?$/.test(monto)) {
+                alert('Por favor ingrese un monto válido (ejemplo: 1500.50 o 1500,50)');
+                return;
+            }
+            
+            const mensaje = `Datos de Transferencia:%0A%0A*Cuenta Bancaria:* ${cuenta}%0A*RFC:* ${rfc}%0A*Nombre del Titular:* ${nombre}%0A*Monto de Retiro:* $${monto}`;
             const telefono = '524621098798';
             const url = `https://wa.me/${telefono}?text=${mensaje}`;
             
