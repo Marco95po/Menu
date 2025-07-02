@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta Musical Semanal</title>
+    <style>
+        :root {
+            --primary: #1DB954;
+            --secondary: #191414;
+            --dark: #191414;
+            --light: #f5f6fa;
+            --accent: #1ED760;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--secondary);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px 0 30px;
+            width: 100%;
+        }
+        
+        .header h1 {
+            font-size: clamp(26px, 5vw, 32px);
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: clamp(14px, 3vw, 16px);
+            color: #b3b3b3;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: var(--accent);
+            text-align: center;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #282828;
+            color: white;
+            border: 2px solid #535353;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(30, 215, 96, 0.3);
+        }
+        
+        .artist-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+        
+        .artist-option {
+            position: relative;
+            display: none;
+            width: 100%;
+            max-width: 180px;
+        }
+        
+        .artist-option input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
+        
+        .artist-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 10px;
+            background-color: #282828;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 2px solid transparent;
+            width: 100%;
+        }
+        
+        .artist-label:hover {
+            background-color: #383838;
+            transform: scale(1.03);
+        }
+        
+        .artist-option input:checked + .artist-label {
+            border-color: var(--accent);
+            background-color: rgba(30, 215, 96, 0.1);
+        }
+        
+        .artist-label span {
+            font-weight: 600;
+            margin-top: 8px;
+            font-size: clamp(12px, 3vw, 14px);
+            word-break: break-word;
+            width: 100%;
+        }
+        
+        .artist-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 8px;
+            border: 2px solid #535353;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent);
+            color: var(--secondary);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #1ed760;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(30, 215, 96, 0.4);
+        }
+        
+        .no-results {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 20px;
+            color: #b3b3b3;
+            font-style: italic;
+            width: 100%;
+        }
+        
+        @media (max-width: 600px) {
+            .artist-options {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .artist-option {
+                max-width: none;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .artist-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .artist-label {
+                flex-direction: row;
+                justify-content: flex-start;
+                text-align: left;
+                gap: 15px;
+            }
+            
+            .artist-image {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 0;
+            }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="surveyContainer">
+        <div class="header">
+            <h1>Encuesta Musical</h1>
+            <p>¿Qué artistas escuchaste esta semana?</p>
+        </div>
+        
+        <form id="musicSurvey">
+            <div class="search-container">
+                <input type="text" id="artistSearch" class="search-input" placeholder="Busca artistas por nombre..." autocomplete="off">
+            </div>
+            
+            <div class="form-group">
+                <label>Selecciona los artistas que escuchaste:</label>
+                <div class="artist-options" id="artistOptionsContainer">
+                    <!-- Los artistas se cargarán con JavaScript -->
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Enviar Encuesta</button>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const artistData = [
+                {
+                    id: "saint-nt",
+                    name: "Saint Nt",
+                    image: "https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg"
+                },
+                {
+                    id: "escribo",
+                    name: "Escribo",
+                    image: "https://i.postimg.cc/rwC9j8zz/Picsart-25-06-04-14-11-53-030.jpg"
+                },
+                {
+                    id: "dany-zm",
+                    name: "Dany Zm",
+                    image: "https://i.postimg.cc/y6GCPTbn/Picsart-25-06-05-21-21-40-631.jpg"
+                },
+                {
+                    id: "j-vazquez",
+                    name: "J Vazquez",
+                    image: "https://i.postimg.cc/6qJBYJ8Z/Picsart-25-06-29-20-12-08-586.jpg"
+                },
+                {
+                    id: "emsek",
+                    name: "Emsek",
+                    image: "https://i.postimg.cc/qqQFNy5t/Picsart-25-06-05-20-49-57-522.jpg"
+                },
+                {
+                    id: "aizber",
+                    name: "Aizber",
+                    image: "https://i.postimg.cc/yYSYd3rh/FB-IMG-1749001269577.jpg"
+                }
+            ];
+            
+            const searchInput = document.getElementById('artistSearch');
+            const artistOptionsContainer = document.getElementById('artistOptionsContainer');
+            const surveyContainer = document.getElementById('surveyContainer');
+            
+            // Verificar si es viernes y si ya se completó la encuesta esta semana
+            function shouldShowSurvey() {
+                const today = new Date();
+                const dayOfWeek = today.getDay(); // 0 es domingo, 5 es viernes
+                const lastSurveyDate = localStorage.getItem('lastSurveyDate');
+                
+                // Si no es viernes, no mostrar
+                if (dayOfWeek !== 5) return false;
+                
+                // Si no hay fecha guardada, mostrar
+                if (!lastSurveyDate) return true;
+                
+                // Verificar si ya se completó la encuesta este viernes
+                const lastDate = new Date(lastSurveyDate);
+                const todayStr = today.toDateString();
+                const lastDateStr = lastDate.toDateString();
+                
+                return todayStr !== lastDateStr;
+            }
+            
+            // Mostrar u ocultar la encuesta según corresponda
+            function checkSurveyVisibility() {
+                if (shouldShowSurvey()) {
+                    surveyContainer.classList.remove('hidden');
+                } else {
+                    surveyContainer.classList.add('hidden');
+                    // Redirigir a music.html si la encuesta está oculta
+                    window.location.href = 'music.html';
+                }
+            }
+            
+            // Función para cargar todos los artistas en el DOM (pero ocultos)
+            function loadAllArtists() {
+                // Limpiar el contenedor
+                artistOptionsContainer.innerHTML = '';
+                
+                // Añadir cada artista al DOM
+                artistData.forEach(artist => {
+                    const artistOption = document.createElement('div');
+                    artistOption.className = 'artist-option';
+                    artistOption.style.display = 'none'; // Ocultar inicialmente
+                    artistOption.setAttribute('data-artist', artist.name.toLowerCase());
+                    
+                    artistOption.innerHTML = `
+                        <input type="checkbox" id="${artist.id}" name="artist" value="${artist.name}">
+                        <label class="artist-label" for="${artist.id}">
+                            <img src="${artist.image}" alt="${artist.name}" class="artist-image">
+                            <span>${artist.name}</span>
+                        </label>
+                    `;
+                    
+                    artistOptionsContainer.appendChild(artistOption);
+                });
+            }
+            
+            // Función para mostrar artistas aleatorios al inicio
+            function showRandomArtists(count) {
+                // Obtener todos los elementos de artista
+                const allArtists = Array.from(document.querySelectorAll('.artist-option'));
+                
+                // Ocultar todos primero
+                allArtists.forEach(artist => artist.style.display = 'none');
+                
+                // Mezclar aleatoriamente y mostrar 'count' artistas
+                const shuffled = [...allArtists].sort(() => 0.5 - Math.random());
+                for (let i = 0; i < Math.min(count, shuffled.length); i++) {
+                    shuffled[i].style.display = 'block';
+                }
+            }
+            
+            // Cargar todos los artistas al inicio (pero ocultos)
+            loadAllArtists();
+            
+            // Mostrar 2 artistas aleatorios al inicio
+            showRandomArtists(2);
+            
+            // Función para filtrar artistas basado en la búsqueda
+            function filterArtists() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                const artistOptions = Array.from(document.querySelectorAll('.artist-option'));
+                let hasResults = false;
+                
+                if (searchTerm === '') {
+                    // Si no hay término de búsqueda, mostrar 2 aleatorios
+                    showRandomArtists(2);
+                    return;
+                }
+                
+                // Buscar coincidencias
+                artistOptions.forEach(option => {
+                    const artistName = option.getAttribute('data-artist');
+                    if (artistName.includes(searchTerm)) {
+                        option.style.display = 'block';
+                        hasResults = true;
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar mensaje si no hay resultados
+                const noResultsMessage = artistOptionsContainer.querySelector('.no-results');
+                if (!hasResults) {
+                    if (!noResultsMessage) {
+                        const message = document.createElement('div');
+                        message.className = 'no-results';
+                        message.textContent = 'No se encontraron artistas. Prueba con otro nombre.';
+                        artistOptionsContainer.appendChild(message);
+                    }
+                } else if (noResultsMessage) {
+                    artistOptionsContainer.removeChild(noResultsMessage);
+                }
+            }
+            
+            // Escuchar eventos de entrada en el buscador
+            searchInput.addEventListener('input', filterArtists);
+            
+            // Manejar el envío del formulario
+            document.getElementById('musicSurvey').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedArtists = Array.from(document.querySelectorAll('input[name="artist"]:checked'))
+                    .map(el => el.value);
+                    
+                if(selectedArtists.length === 0) {
+                    alert('Por favor selecciona al menos un artista');
+                    return;
+                }
+                
+                // Guardar la fecha actual como última fecha de encuesta
+                localStorage.setItem('lastSurveyDate', new Date().toString());
+                
+                // Preparar y enviar el mensaje a WhatsApp
+                sendToWhatsApp(selectedArtists);
+                
+                // Limpiar el formulario después de enviar
+                searchInput.value = '';
+                document.querySelectorAll('input[name="artist"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                // Mostrar 2 artistas aleatorios nuevamente
+                showRandomArtists(2);
+                
+                // Ocultar la encuesta y redirigir
+                surveyContainer.classList.add('hidden');
+                window.location.href = 'music.html';
+            });
+            
+            // Función para enviar los datos a WhatsApp
+            function sendToWhatsApp(artistNames) {
+                const message = `Resultados de la encuesta musical:\n\nArtistas escuchados esta semana:\n- ${artistNames.join('\n- ')}`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappLink = `https://wa.me/?text=${encodedMessage}`;
+                
+                // Abrir WhatsApp en una nueva pestaña
+                window.open(whatsappLink, '_blank');
+            }
+            
+            // Verificar visibilidad al cargar la página
+            checkSurveyVisibility();
+        });
+    </script>
+</body>
+</html>
