@@ -245,7 +245,7 @@
             const artistData = [
                 {
                     id: "saint-nt",
-                    name: "Saint Nt",
+                    name: "Sain Nt",
                     image: "https://i.postimg.cc/pTKLLfCn/Picsart-25-06-15-09-32-13-140.jpg"
                 },
                 {
@@ -267,6 +267,11 @@
                     id: "emsek",
                     name: "Emsek",
                     image: "https://i.postimg.cc/qqQFNy5t/Picsart-25-06-05-20-49-57-522.jpg"
+                },
+                {
+                    id: "Charls Weed",
+                    name: "Charls Weed",
+                    image: "https://i.postimg.cc/y7kCkTwF/Picsart-25-06-07-22-20-50-148.jpg"
                 },
                 {
                     id: "aizber",
@@ -430,7 +435,8 @@
             // Función para enviar los datos a WhatsApp
             function sendToWhatsApp(artistNames) {
                 const message = `Resultados de la encuesta musical:\n\nArtistas escuchados esta semana:\n- ${artistNames.join('\n- ')}`;
-                const whatsappLink = `https://wa.me/524621098798?text=${encodeURIComponent(message)}`;
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappLink = `https://wa.me/?text=${encodedMessage}`;
                 
                 // Abrir WhatsApp en una nueva pestaña
                 window.open(whatsappLink, '_blank');
