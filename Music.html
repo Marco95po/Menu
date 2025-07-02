@@ -1905,7 +1905,17 @@ video::-webkit-media-controls {
 
         // Datos de las canciones con archivos de audio
         const audioData = [
-{
+            {
+                id: "audio66",
+                audioSrc: "https://www.dropbox.com/scl/fi/t2lfdkvy7jm57qjhiwrvg/Beyby-J-Vazquez.flac?rlkey=1zf3e463qal3k8wj1kcejsi4p&st=2udvs9w0&raw=1",
+                cover: "https://i.postimg.cc/6qJBYJ8Z/Picsart-25-06-29-20-12-08-586.jpg",
+                title: "J Vazquez",
+                artist: "BABY",
+                album: "La Aceptacion",
+                category: ["mostPlayed"],
+                releaseDate: "2025-07-04"
+            },
+            {
   id: "audio65",
   audioSrc: "https://www.dropbox.com/scl/fi/unx75wsjq436o92siqpey/ME-LLAMA-feat.-J-vazquez.flac?rlkey=r7r37wclldgbna31f09iugvde&st=nteomu5b&raw=1",
   cover: "https://i.postimg.cc/9MHvJPnG/Picsart-25-06-21-23-57-48-606.jpg",
@@ -2595,7 +2605,9 @@ video::-webkit-media-controls {
   category: ["mostPlayed"],
   releaseDate: "2023-07-15"
 }
+
         ];
+        
         // Datos de podcasts
         const podcastData = [
             {
@@ -2632,6 +2644,21 @@ video::-webkit-media-controls {
             },
         ];
 
+        // Función para filtrar canciones que ya han sido lanzadas
+        function getReleasedSongs() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            return audioData.filter(song => {
+                if (!song.releaseDate) return true; // Si no tiene fecha, siempre visible
+                
+                const releaseDate = new Date(song.releaseDate);
+                releaseDate.setHours(0, 0, 0, 0);
+                
+                return releaseDate <= today;
+            });
+        }
+
         // Función para mostrar/ocultar contenido de Música o Podcast
         function showContent(type) {
             if (type === 'music') {
@@ -2640,7 +2667,7 @@ video::-webkit-media-controls {
                 musicButton.classList.add('active');
                 podcastButton.classList.remove('active');
                 // Establecer la lista de reproducción actual a música
-                currentPlaylist = audioData;
+                currentPlaylist = getReleasedSongs();
             } else if (type === 'podcast') {
                 musicContent.style.display = 'none';
                 podcastContent.style.display = 'block';
@@ -2870,7 +2897,7 @@ video::-webkit-media-controls {
             
             followedArtists.forEach(artist => {
                 // Buscar una canción del artista para obtener la imagen
-                const artistSong = audioData.find(song => song.artist === artist);
+                const artistSong = getReleasedSongs().find(song => song.artist === artist);
                 
                 const artistElement = document.createElement('div');
                 artistElement.className = 'followed-artist';
@@ -2898,7 +2925,7 @@ video::-webkit-media-controls {
 
         // Función para obtener el número de canciones de un artista
         function getArtistSongCount(artistName) {
-            return audioData.filter(song => song.artist === artistName).length;
+            return getReleasedSongs().filter(song => song.artist === artistName).length;
         }
 
         // Función para seguir/dejar de seguir un artista
@@ -2950,7 +2977,7 @@ video::-webkit-media-controls {
                 
                 // Obtener información de los artistas seguidos
                 const followedArtistsData = followedArtists.map(artist => {
-                    const artistSong = audioData.find(song => song.artist === artist);
+                    const artistSong = getReleasedSongs().find(song => song.artist === artist);
                     return {
                         name: artist,
                         cover: artistSong ? artistSong.cover : 'https://via.placeholder.com/160',
@@ -2997,7 +3024,7 @@ video::-webkit-media-controls {
             artistProfileName.textContent = artistName;
             
             // Buscar la primera canción del artista para obtener la imagen del avatar
-            const artistSong = audioData.find(song => song.artist === artistName);
+            const artistSong = getReleasedSongs().find(song => song.artist === artistName);
             if (artistSong) {
                 artistAvatar.src = artistSong.cover;
             }
@@ -3014,7 +3041,7 @@ video::-webkit-media-controls {
             };
             
             // Filtrar las canciones del artista
-            const artistSongsList = audioData.filter(song => song.artist === artistName);
+            const artistSongsList = getReleasedSongs().filter(song => song.artist === artistName);
             
             // Renderizar las canciones del artista
             renderSongsInCategory(artistSongs, artistSongsList, "artist");
@@ -3031,7 +3058,7 @@ video::-webkit-media-controls {
             searchResultsContainer.style.display = 'block';
             
             // Restablecer la lista de reproducción a todas las canciones
-            currentPlaylist = audioData;
+            currentPlaylist = getReleasedSongs();
         }
 
         // Función para filtrar por artista
@@ -3054,7 +3081,7 @@ video::-webkit-media-controls {
             });
             
             // Filtrar las canciones en "Toda la música" para mostrar solo las del artista
-            const mostPlayedSongs = [...audioData]
+            const mostPlayedSongs = [...getReleasedSongs()]
                 .filter(song => song.artist.toLowerCase() === artistName.toLowerCase())
                 .sort(() => Math.random() - 0.5);
             
@@ -3405,11 +3432,11 @@ video::-webkit-media-controls {
         function playAudio(id) {
             // Establecer la lista de reproducción actual según los filtros activos
             if (currentArtistFilter) {
-                currentPlaylist = audioData.filter(song => song.artist.toLowerCase() === currentArtistFilter.toLowerCase());
+                currentPlaylist = getReleasedSongs().filter(song => song.artist.toLowerCase() === currentArtistFilter.toLowerCase());
             } else if (currentAlbumFilter) {
-                currentPlaylist = audioData.filter(song => song.album && song.album.toLowerCase() === currentAlbumFilter.toLowerCase());
+                currentPlaylist = getReleasedSongs().filter(song => song.album && song.album.toLowerCase() === currentAlbumFilter.toLowerCase());
             } else {
-                currentPlaylist = audioData;
+                currentPlaylist = getReleasedSongs();
             }
             
             const index = currentPlaylist.findIndex(song => song.id === id);
@@ -3425,7 +3452,7 @@ video::-webkit-media-controls {
         // Función para reproducir una canción desde favoritos
         function playAudioFromFavorites(id) {
             // Establecer la lista de reproducción actual solo con canciones favoritas
-            currentPlaylist = audioData.filter(song => favorites.includes(song.id));
+            currentPlaylist = getReleasedSongs().filter(song => favorites.includes(song.id));
             const index = currentPlaylist.findIndex(song => song.id === id);
             if (index !== -1) {
                 currentIndex = index;
@@ -3582,7 +3609,7 @@ video::-webkit-media-controls {
             artistProfile.style.display = 'none';
             
             // Filtrar canciones que coincidan con el término de búsqueda
-            const results = audioData.filter(song => {
+            const results = getReleasedSongs().filter(song => {
                 return (
                     song.title.toLowerCase().includes(searchTerm) ||
                     song.artist.toLowerCase().includes(searchTerm) ||
@@ -3591,7 +3618,7 @@ video::-webkit-media-controls {
             });
             
             // Verificar si hay una coincidencia exacta con un artista
-            const exactArtistMatch = audioData.find(song => song.artist.toLowerCase() === searchTerm);
+            const exactArtistMatch = getReleasedSongs().find(song => song.artist.toLowerCase() === searchTerm);
             
             if (exactArtistMatch) {
                 // Mostrar el perfil del artista en lugar de los resultados normales
@@ -3603,7 +3630,7 @@ video::-webkit-media-controls {
             displaySearchResults(results, searchTerm);
             
             // Verificar si el término de búsqueda coincide exactamente con un álbum
-            const exactAlbumMatch = audioData.find(song => song.album && song.album.toLowerCase() === searchTerm);
+            const exactAlbumMatch = getReleasedSongs().find(song => song.album && song.album.toLowerCase() === searchTerm);
             
             // Si hay una coincidencia exacta con un álbum, mostrar el modal de confirmación
             if (exactAlbumMatch && exactAlbumMatch.album.toLowerCase() === searchTerm) {
@@ -3658,7 +3685,7 @@ video::-webkit-media-controls {
             });
             
             // Filtrar las canciones en "Toda la música" para mostrar solo las del álbum
-            const mostPlayedSongs = [...audioData]
+            const mostPlayedSongs = [...getReleasedSongs()]
                 .filter(song => song.album && song.album.toLowerCase() === albumName.toLowerCase())
                 .sort(() => Math.random() - 0.5);
             
@@ -3697,7 +3724,7 @@ video::-webkit-media-controls {
             artistFilterContainer.innerHTML = '';
             
             // Obtener todos los artistas únicos
-            const allArtists = [...new Set(audioData.map(song => song.artist))];
+            const allArtists = [...new Set(getReleasedSongs().map(song => song.artist))];
             
             // Crear botón para limpiar filtros
             const clearButton = document.createElement('button');
@@ -3783,7 +3810,7 @@ video::-webkit-media-controls {
                 return;
             }
 
-            const favoriteSongs = audioData.filter(song => favorites.includes(song.id));
+            const favoriteSongs = getReleasedSongs().filter(song => favorites.includes(song.id));
             favoriteSongs.forEach((song, index) => {
                 const playCount = playCounts[song.id] || 0;
                 const item = document.createElement("div");
@@ -3847,7 +3874,7 @@ video::-webkit-media-controls {
         // Función para actualizar las categorías basadas en reproducciones
         function updateCategoriesBasedOnPlays() {
             // 1. Toda la música (orden aleatorio)
-            const shuffledSongs = [...audioData].sort(() => Math.random() - 0.5);
+            const shuffledSongs = [...getReleasedSongs()].sort(() => Math.random() - 0.5);
             renderSongsInCategory(mostPlayedContainer, shuffledSongs, "plays");
 
             // 2. Tendencias (basado en reproducciones recientes)
@@ -3870,7 +3897,7 @@ video::-webkit-media-controls {
             });
             
             // Ordenar por reproducciones en las últimas 24 horas
-            const trending = [...audioData].sort((a, b) => {
+            const trending = [...getReleasedSongs()].sort((a, b) => {
                 return (playCountsLast24h[b.id] || 0) - (playCountsLast24h[a.id] || 0);
             }).slice(0, 8); // Tomar las 8 más escuchadas recientemente
             
@@ -3948,7 +3975,7 @@ video::-webkit-media-controls {
             if (!localStorage.getItem('playCounts')) {
                 // Asignar algunas reproducciones iniciales para demostración
                 const initialPlayCounts = {};
-                audioData.forEach(song => {
+                getReleasedSongs().forEach(song => {
                     initialPlayCounts[song.id] = Math.floor(Math.random() * 100);
                 });
                 localStorage.setItem('playCounts', JSON.stringify(initialPlayCounts));
@@ -3960,7 +3987,7 @@ video::-webkit-media-controls {
                 // Crear algunas reproducciones recientes para demostración
                 const initialRecentPlays = [];
                 const now = new Date().getTime();
-                audioData.forEach(song => {
+                getReleasedSongs().forEach(song => {
                     const randomHoursAgo = Math.floor(Math.random() * 24);
                     initialRecentPlays.push({
                         id: song.id,
@@ -4026,7 +4053,7 @@ video::-webkit-media-controls {
             });
             
             // Establecer la lista de reproducción inicial
-            currentPlaylist = audioData;
+            currentPlaylist = getReleasedSongs();
             
             // Mostrar contenido de música por defecto
             showContent('music');
