@@ -1913,7 +1913,7 @@ video::-webkit-media-controls {
                 artist: "BABY",
                 album: "La Aceptacion",
                 category: ["mostPlayed"],
-                releaseDate: "2025-07-05"
+                releaseDate: "2025-07-04" // Fecha de estreno en formato YYYY-MM-DD
             },
             {
   id: "audio65",
@@ -2644,7 +2644,7 @@ video::-webkit-media-controls {
             },
         ];
 
-        // Función para filtrar canciones que ya han sido lanzadas
+        // Función mejorada para filtrar canciones que ya han sido lanzadas
         function getReleasedSongs() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -2652,10 +2652,22 @@ video::-webkit-media-controls {
             return audioData.filter(song => {
                 if (!song.releaseDate) return true; // Si no tiene fecha, siempre visible
                 
-                const releaseDate = new Date(song.releaseDate);
-                releaseDate.setHours(0, 0, 0, 0);
-                
-                return releaseDate <= today;
+                try {
+                    // Parsear la fecha de lanzamiento (formato YYYY-MM-DD)
+                    const releaseParts = song.releaseDate.split('-');
+                    if (releaseParts.length !== 3) return true; // Formato inválido, mostramos por si acaso
+                    
+                    const releaseDate = new Date(
+                        parseInt(releaseParts[0]), // año
+                        parseInt(releaseParts[1]) - 1, // mes (0-based)
+                        parseInt(releaseParts[2]) // día
+                    );
+                    
+                    return releaseDate <= today;
+                } catch (e) {
+                    console.error("Error al parsear fecha de lanzamiento:", e);
+                    return true; // Si hay error, mostramos la canción
+                }
             });
         }
 
@@ -3911,8 +3923,8 @@ video::-webkit-media-controls {
             
             // Añadir las canciones
             songs.forEach((song, index) => {
-                const isNew = song.releaseDate && new Date(song.releaseDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-                const isFavorite = favorites.includes(song.id);
+                // Verificar si la canción es nueva (lanzada en los últimos 30 días)
+                const isNew = song.releaseDate && isSongNew(song.releaseDate);
                 
                 const songItem = document.createElement("div");
                 songItem.className = "song-item";
@@ -3930,6 +3942,28 @@ video::-webkit-media-controls {
             });
         }
 
+        // Función para verificar si una canción es nueva (lanzada en los últimos 30 días)
+        function isSongNew(releaseDate) {
+            try {
+                const releaseParts = releaseDate.split('-');
+                if (releaseParts.length !== 3) return false;
+                
+                const releaseDateObj = new Date(
+                    parseInt(releaseParts[0]), // año
+                    parseInt(releaseParts[1]) - 1, // mes (0-based)
+                    parseInt(releaseParts[2]) // día
+                );
+                
+                const thirtyDaysAgo = new Date();
+                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                
+                return releaseDateObj > thirtyDaysAgo;
+            } catch (e) {
+                console.error("Error al verificar si la canción es nueva:", e);
+                return false;
+            }
+        }
+
         // Función para mostrar los resultados de búsqueda
         function displaySearchResults(results, searchTerm) {
             searchResultsGrid.innerHTML = '';
@@ -3942,8 +3976,7 @@ video::-webkit-media-controls {
                 searchResultsTitle.textContent = `Resultados para "${searchTerm}"`;
                 
                 results.forEach((song, index) => {
-                    const isNew = song.releaseDate && new Date(song.releaseDate) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-                    const isFavorite = favorites.includes(song.id);
+                    const isNew = song.releaseDate && isSongNew(song.releaseDate);
                     
                     const songItem = document.createElement("div");
                     songItem.className = "song-item";
@@ -4058,38 +4091,47 @@ video::-webkit-media-controls {
             // Mostrar contenido de música por defecto
             showContent('music');
         };
+        
+        // Función para redirigir a la página de información
         function redirectToIndex() {
-    window.location.href = "informaciondeapp.html"; // Redirige a index.html
-}
-function redirectToArtistMusic() {
-    window.location.href = "artistamusic.html";
-}
-function redirectToShare() {
-    window.location.href = "compartirredes.html";
-}
-function goToYouTube() {
-    // Redirige a compartirredes.html en la misma ventana
-    window.location.href = 'compartirredes.html';
-}
-// Configurar el audio para seguir reproduciendo en segundo plano
-audioPlayer.setAttribute('playsinline', '');
-audioPlayer.setAttribute('webkit-playsinline', '');
-// Evitar que el audio se detenga
-document.addEventListener('visibilitychange', function() {
-  if (document.hidden) {
-    // App en segundo plano - intentar mantener el audio activo
-    if (isPlaying) {
-      audioPlayer.play().catch(e => console.log("Error al reproducir en segundo plano:", e));
-    }
-  }
-});
+            window.location.href = "informaciondeapp.html";
+        }
+        
+        // Función para redirigir a la página de artistas
+        function redirectToArtistMusic() {
+            window.location.href = "artistamusic.html";
+        }
+        
+        // Función para redirigir a la página de compartir
+        function redirectToShare() {
+            window.location.href = "compartirredes.html";
+        }
+        
+        // Función para ir a YouTube
+        function goToYouTube() {
+            window.location.href = 'compartirredes.html';
+        }
+        
+        // Configurar el audio para seguir reproduciendo en segundo plano
+        audioPlayer.setAttribute('playsinline', '');
+        audioPlayer.setAttribute('webkit-playsinline', '');
+        
+        // Evitar que el audio se detenga
+        document.addEventListener('visibilitychange', function() {
+          if (document.hidden) {
+            // App en segundo plano - intentar mantener el audio activo
+            if (isPlaying) {
+              audioPlayer.play().catch(e => console.log("Error al reproducir en segundo plano:", e));
+            }
+          }
+        });
 
-// Forzar la reproducción cuando la app vuelva a primer plano
-document.addEventListener('resume', function() {
-  if (isPlaying) {
-    audioPlayer.play();
-  }
-}, false);
+        // Forzar la reproducción cuando la app vuelva a primer plano
+        document.addEventListener('resume', function() {
+          if (isPlaying) {
+            audioPlayer.play();
+          }
+        }, false);
     </script>
 </body>
 </html>
