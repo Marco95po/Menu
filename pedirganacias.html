@@ -87,6 +87,34 @@
             display: none;
         }
         
+        /* Estilos para la barra de progreso */
+        .progress-container {
+            width: 100%;
+            background-color: #333333;
+            border-radius: 5px;
+            margin: 20px 0;
+            display: none;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #FF6600;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .progress-text {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 14px;
+            color: #FF9933;
+        }
+        
         /* Media queries para dispositivos móviles */
         @media (max-width: 480px) {
             .container {
@@ -106,6 +134,13 @@
             .info-text {
                 font-size: 13px;
                 padding: 10px;
+            }
+            .progress-bar {
+                height: 15px;
+                font-size: 10px;
+            }
+            .progress-text {
+                font-size: 12px;
             }
         }
     </style>
@@ -134,12 +169,18 @@
                 <input type="text" id="monto" name="monto" placeholder="Ejemplo: 1500.50 o 1500,50" required>
             </div>
             
+            <!-- Barra de progreso -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar">0%</div>
+                <div class="progress-text" id="progressText">Cargando disponibilidad de retiro...</div>
+            </div>
+            
             <button type="button" class="btn" id="submitBtn" style="display: none;">
                 Enviar solicitud de retiro
             </button>
             
             <div class="info-text" id="infoText">
-                Los retiros se realizan cada 3 mes y solo están disponibles cada día 29 de cada mes. El formulario estará disponible por 24 horas en esas fechas.
+                Los retiros se realizan cada 2 meses y solo están disponibles cada día 29 de cada mes par. El formulario estará disponible por 24 horas en esas fechas.
             </div>
         </form>
     </div>
@@ -155,23 +196,92 @@
             return dia === 29 && mes % 2 === 0;
         }
         
+        // Función para calcular el progreso hacia el próximo día 29 de mes par
+        function calcularProgreso() {
+            const hoy = new Date();
+            const dia = hoy.getDate();
+            const mes = hoy.getMonth() + 1;
+            const año = hoy.getFullYear();
+            
+            // Encontrar el próximo mes par (si el actual es impar, será el siguiente)
+            let proximoMesPar = mes % 2 === 0 ? mes : mes + 1;
+            
+            // Si estamos en un mes par pero ya pasó el día 29, ir al siguiente mes par
+            if (mes % 2 === 0 && dia > 29) {
+                proximoMesPar = mes + 2;
+            }
+            
+            // Ajustar año si necesario (por ejemplo, si estamos en diciembre)
+            let proximoAño = año;
+            if (proximoMesPar > 12) {
+                proximoMesPar -= 12;
+                proximoAño++;
+            }
+            
+            // Fecha objetivo (29 del próximo mes par)
+            const fechaObjetivo = new Date(proximoAño, proximoMesPar - 1, 29);
+            
+            // Si hoy es después del 29 de un mes par, calcular días hasta el siguiente 29 de mes par
+            const tiempoRestante = fechaObjetivo - hoy;
+            const diasRestantes = Math.ceil(tiempoRestante / (1000 * 60 * 60 * 24));
+            
+            // El ciclo completo son aproximadamente 60 días (2 meses)
+            // Calcular progreso como porcentaje del ciclo
+            const diasEnCiclo = 60;
+            const diasTranscurridos = diasEnCiclo - diasRestantes;
+            const porcentaje = Math.min(100, Math.max(0, (diasTranscurridos / diasEnCiclo) * 100));
+            
+            return {
+                porcentaje: Math.round(porcentaje),
+                diasRestantes: diasRestantes,
+                fechaObjetivo: fechaObjetivo
+            };
+        }
+        
+        // Función para actualizar la barra de progreso
+        function actualizarBarraProgreso() {
+            const progreso = calcularProgreso();
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const progressContainer = document.getElementById('progressContainer');
+            
+            progressBar.style.width = progreso.porcentaje + '%';
+            progressBar.textContent = progreso.porcentaje + '%';
+            
+            if (progreso.porcentaje < 100) {
+                progressText.textContent = `Cargando... ${progreso.diasRestantes} días restantes para el próximo retiro (29/${progreso.fechaObjetivo.getMonth() + 1})`;
+            } else {
+                progressText.textContent = "¡Carga completa! Ya puedes realizar tu retiro hoy.";
+            }
+            
+            progressContainer.style.display = 'block';
+        }
+        
         // Función para mostrar/ocultar elementos según la fecha
         function actualizarVisibilidad() {
             const esValido = esFechaValida();
             document.getElementById('submitBtn').style.display = esValido ? 'block' : 'none';
             document.getElementById('infoText').style.display = esValido ? 'none' : 'block';
+            document.getElementById('progressContainer').style.display = esValido ? 'none' : 'block';
             
             // Si es válido, establecer un temporizador para ocultar después de 24 horas
             if (esValido) {
                 setTimeout(() => {
                     document.getElementById('submitBtn').style.display = 'none';
                     document.getElementById('infoText').style.display = 'block';
+                    document.getElementById('progressContainer').style.display = 'block';
+                    actualizarBarraProgreso();
                 }, 24 * 60 * 60 * 1000); // 24 horas en milisegundos
+            } else {
+                actualizarBarraProgreso();
             }
         }
         
         // Llamar a la función al cargar la página
         window.onload = actualizarVisibilidad;
+        
+        // Actualizar la barra de progreso cada día
+        setInterval(actualizarBarraProgreso, 24 * 60 * 60 * 1000);
         
         function enviarWhatsApp() {
             const cuenta = document.getElementById('cuenta').value;
