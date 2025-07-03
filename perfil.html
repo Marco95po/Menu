@@ -241,6 +241,11 @@ h1 {
     width: 30%;
 }
 
+.info-table .amount-row td {
+    padding-top: 0;
+    border-top: none;
+}
+
 /* Modal de autenticación */
 .auth-content {
     background: var(--modal-bg);
@@ -513,6 +518,14 @@ h1 {
     padding: 0;
     overflow: hidden;
 }
+
+.amount-in-words {
+    font-style: italic;
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 14px;
+    padding-left: 5px;
+}
     </style>
 </head>
 <body>
@@ -579,6 +592,9 @@ h1 {
                     <th>Ganancias</th>
                     <td id="modalEarnings"></td>
                 </tr>
+                <tr class="amount-row">
+                    <td colspan="2" id="amountInWords" class="amount-in-words"></td>
+                </tr>
                 <tr>
                     <th>Artista</th>
                     <td id="modalPeriod"></td>
@@ -613,6 +629,71 @@ h1 {
         
         // Variable para almacenar el elemento seleccionado
         let selectedItem = null;
+        
+        // Función para convertir números a palabras en español
+        function numberToWords(num) {
+            const units = ['', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis', 'siete', 'ocho', 'nueve'];
+            const tens = ['', 'diez', 'veinte', 'treinta', 'cuarenta', 'cincuenta', 'sesenta', 'setenta', 'ochenta', 'noventa'];
+            const teens = ['diez', 'once', 'doce', 'trece', 'catorce', 'quince', 'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve'];
+            const hundreds = ['', 'ciento', 'doscientos', 'trescientos', 'cuatrocientos', 'quinientos', 'seiscientos', 'setecientos', 'ochocientos', 'novecientos'];
+            
+            // Extraer pesos y centavos
+            const parts = num.toString().split('.');
+            let pesos = parseInt(parts[0].replace(/\D/g, ''));
+            let centavos = parts.length > 1 ? parseInt(parts[1].replace(/\D/g, '')) : 0;
+            
+            if (isNaN(pesos)) pesos = 0;
+            if (isNaN(centavos)) centavos = 0;
+            
+            if (pesos === 0 && centavos === 0) return 'cero pesos';
+            
+            let words = '';
+            
+            // Convertir pesos
+            if (pesos > 0) {
+                if (pesos === 1) {
+                    words += 'un peso';
+                } else if (pesos < 10) {
+                    words += units[pesos] + ' pesos';
+                } else if (pesos < 20) {
+                    words += teens[pesos - 10] + ' pesos';
+                } else if (pesos < 100) {
+                    const ten = Math.floor(pesos / 10);
+                    const unit = pesos % 10;
+                    words += tens[ten];
+                    if (unit > 0) words += ' y ' + units[unit];
+                    words += ' pesos';
+                } else if (pesos < 1000) {
+                    const hundred = Math.floor(pesos / 100);
+                    const remainder = pesos % 100;
+                    words += hundreds[hundred];
+                    if (remainder > 0) {
+                        words += ' ' + numberToWords(remainder).replace(' pesos', '');
+                    }
+                    words += ' pesos';
+                }
+            }
+            
+            // Convertir centavos
+            if (centavos > 0) {
+                if (words !== '') words += ' con ';
+                if (centavos === 1) {
+                    words += 'un centavo';
+                } else if (centavos < 10) {
+                    words += units[centavos] + ' centavos';
+                } else if (centavos < 20) {
+                    words += teens[centavos - 10] + ' centavos';
+                } else {
+                    const ten = Math.floor(centavos / 10);
+                    const unit = centavos % 10;
+                    words += tens[ten];
+                    if (unit > 0) words += ' y ' + units[unit];
+                    words += ' centavos';
+                }
+            }
+            
+            return words;
+        }
         
         // Función para filtrar la galería según el RFC completo
         function filterGallery() {
@@ -723,6 +804,11 @@ h1 {
             document.getElementById('modalRfc').textContent = selectedItem.rfc;
             document.getElementById('modalEarnings').textContent = selectedItem.earnings;
             document.getElementById('modalPeriod').textContent = selectedItem.period;
+            
+            // Extraer el valor numérico de las ganancias
+            const earningsValue = selectedItem.earnings.replace(/[^\d.]/g, '');
+            const amountInWords = numberToWords(earningsValue);
+            document.getElementById('amountInWords').textContent = `(${amountInWords})`;
             
             modal.style.display = 'flex';
         }
