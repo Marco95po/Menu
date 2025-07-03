@@ -168,13 +168,6 @@
                 <label for="monto">Monto de Retiro:</label>
                 <input type="text" id="monto" name="monto" placeholder="Ejemplo: 1500.50 o 1500,50" required>
             </div>
-            
-            <!-- Barra de progreso -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar" id="progressBar">0%</div>
-                <div class="progress-text" id="progressText">Cargando disponibilidad de retiro...</div>
-            </div>
-            
             <button type="button" class="btn" id="submitBtn" style="display: none;">
                 Enviar solicitud de retiro
             </button>
@@ -184,6 +177,11 @@
             </div>
         </form>
     </div>
+    <!-- Barra de progreso -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar">0%</div>
+                <div class="progress-text" id="progressText">Cargando disponibilidad de retiro...</div>
+            </div>
 
     <script>
         // Función para verificar si hoy es el día 29 de un mes par (febrero, abril, junio, etc.)
