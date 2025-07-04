@@ -1183,94 +1183,6 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Estilos para el video al estilo Netflix */
-.video-container {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-.netflix-style-video {
-    width: 100%;
-    display: block;
-    background-color: #000;
-}
-
-.video-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-    padding: 20px;
-    color: white;
-}
-
-.video-title {
-    margin: 0 0 10px 0;
-    font-size: 10px;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-}
-
-.video-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.play-button, .info-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.play-button {
-    background-color: #e57e09;
-    color: white;
-}
-
-.info-button {
-    background-color: rgba(109, 109, 110, 0.7);
-    color: white;
-}
-
-/* Ajustes para controles del video */
-video::-webkit-media-controls {
-    display: none;
-}
-
-/* Opcional: Ocultar controles nativos y crear controles personalizados */
-.netflix-style-video {
-    cursor: pointer;
-}
-
-.youtube-button {
-    display: inline-block;
-    background-color: #FF0000;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.3s;
-}
-
-.youtube-button:hover {
-    background-color: #CC0000;
-}
-
-.youtube-button i {
-    margin-right: 8px;
-}
-
 /* Estilos para el perfil del artista */
 .artist-profile {
     display: none;
@@ -1687,22 +1599,6 @@ video::-webkit-media-controls {
                 <div class="carousel" id="trending"></div>
             </div>
             
-            <!-- Contenedor del video estilo Netflix -->
-            <div class="video-container">
-                <video class="netflix-style-video" controls poster="https://via.placeholder.com/800x450">
-                    <source src="https://www.dropbox.com/scl/fi/bbnsqnsh02d566mz6159s/Timeline-1.mov?rlkey=thzw3yo1zos2neb6unbo0391k&st=uvvpw09j&raw=1" type="video/mp4">
-                    Tu navegador no soporta el elemento de video.
-                </video>
-                <div class="video-info">
-                    <h3 class="video-title">J Vazquez-BaBy, estreno 04/07/2025</h3>
-                </div>
-            </div>
-            <div class="video-actions">
-                <button class="play-button">▶ Reproducir</button>
-                <a href="https://www.youtube.com/@KERIMMUSIC4009?sub_confirmation=1" target="_blank" class="youtube-button">
-                    <i class="fab fa-youtube"></i> Kerim Music
-                </a>
-            </div>
             <div class="cover-container">
                 <img src="" alt="Portada musical" class="vertical-cover">
             </div>
@@ -4093,18 +3989,6 @@ video::-webkit-media-controls {
             // Evento para cerrar el panel de artistas seguidos
             document.getElementById('closeFollowedArtistsButton').addEventListener('click', function() {
                 followedArtistsPanel.style.display = 'none';
-            });
-            
-            // Configurar el botón de reproducción del video
-            document.querySelector('.play-button').addEventListener('click', function() {
-                const video = document.querySelector('.netflix-style-video');
-                if (video.paused) {
-                    video.play();
-                    this.textContent = '⏸ Pausar';
-                } else {
-                    video.pause();
-                    this.textContent = '▶ Reproducir';
-                }
             });
             
             // Establecer la lista de reproducción inicial
