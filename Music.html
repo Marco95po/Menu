@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Music Live</title>
     <link rel="icon" href="https://i.postimg.cc/bNprg8kh/Screenshot-20250606-180521.jpg" type="image/x-icon">
     <link rel="shortcut icon" href="https://i.postimg.cc/bNprg8kh/Screenshot-20250606-180521.jpg" type="image/x-icon">
@@ -419,7 +419,8 @@ body {
 
 .categories-container {
     margin-top: 180px;
-    padding: 0;
+    padding: 0 15px;
+    box-sizing: border-box;
 }
 
 .category {
@@ -427,7 +428,7 @@ body {
 }
 
 .category-title {
-    font-size: 1.0rem;
+    font-size: 1.2rem;
     margin-bottom: 15px;
     color: var(--text-color);
     display: flex;
@@ -460,6 +461,7 @@ body {
     -webkit-overflow-scrolling: touch;
     padding: 10px 0;
     scrollbar-width: none;
+    gap: 10px;
 }
 
 .carousel::-webkit-scrollbar {
@@ -469,7 +471,6 @@ body {
 .song-item {
     flex: 0 0 auto;
     width: 160px;
-    margin: 0 5px;
     transition: transform 0.3s;
     position: relative;
     opacity: 0;
@@ -515,7 +516,7 @@ body {
     display: block;
     margin-top: 5px;
     color: var(--song-title-color);
-    font-size: 10px;
+    font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -965,29 +966,56 @@ body {
     outline: none;
 }
 
-/* Search Bar */
-#searchInput {
-    padding: 10px 15px;
+/* Search Bar - Estilos mejorados */
+.search-container {
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
     margin-top: 10px;
-    width: 80%;
-    max-width: 500px;
-    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+#searchInput, #podcastSearchInput {
+    padding: 12px 20px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 30px;
     border: 2px solid #ff5e01;
-    font-size: 14px;
+    font-size: 16px;
     outline: none;
     transition: all 0.3s ease;
     background-color: var(--search-bg);
     color: var(--search-text);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-#searchInput:focus {
+#searchInput:focus, #podcastSearchInput:focus {
     border-color: #ff8c00;
     box-shadow: 0 0 10px rgba(255, 94, 1, 0.5);
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-#searchInput::placeholder {
+#searchInput::placeholder, #podcastSearchInput::placeholder {
     color: #ccc;
+    opacity: 0.8;
+}
+
+/* Media queries para el buscador */
+@media (max-width: 768px) {
+    #searchInput, #podcastSearchInput {
+        padding: 12px 16px;
+        font-size: 15px;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    #searchInput, #podcastSearchInput {
+        padding: 10px 15px;
+        font-size: 14px;
+        max-width: 95%;
+    }
 }
 
 /* Audio Player (oculto) */
@@ -1054,35 +1082,48 @@ body {
     aspect-ratio: 1/1;
 }
 
-/* Si son divs con background-image */
-#trendingCategory .carousel .item {
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
-    width: 100px;
-    height: 100px;
-}
-
-.two-column-list {
+/* Lista de canciones responsiva */
+.songs-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 15px;
-    justify-items: center;
+    padding: 0 10px;
 }
 
-.two-column-list .item {
-    flex: 1 1 calc(50% - 15px);
-    box-sizing: border-box;
+@media (max-width: 600px) {
+    .songs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
 }
 
-.two-column-list .item {
-    width: calc(50% - 15px);
+@media (max-width: 400px) {
+    .songs-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+.songs-grid .song-item {
+    width: 100%;
+    margin: 0;
+}
+
+.songs-grid .song-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
 }
 
 /* Estilos para el modo de búsqueda */
 .search-results-container {
     margin-top: 180px;
     padding: 20px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .search-results-title {
@@ -1090,12 +1131,16 @@ body {
     font-size: 1.5rem;
     margin-bottom: 20px;
     text-align: center;
+    width: 100%;
 }
 
 .search-results-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 15px;
+    padding: 0 10px;
+    width: 100%;
+    justify-items: center;
 }
 
 .no-results {
@@ -1103,6 +1148,7 @@ body {
     text-align: center;
     font-size: 1.2rem;
     margin-top: 50px;
+    width: 100%;
 }
 
 /* Estilos para el modal de confirmación */
@@ -1196,8 +1242,6 @@ body {
 .vertical-cover.active {
     opacity: 1;
 }
-
-/* Media queries... (igual que antes) */
 
 /* Estilos para el perfil del artista */
 .artist-profile {
@@ -1452,56 +1496,66 @@ body {
 }
 
 /* Estilos específicos para podcasts */
-.podcast-item {
+.podcast-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.05);
-    transition: all 0.3s ease;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.podcast-item:hover {
-    background-color: rgba(255, 94, 1, 0.1);
-    transform: translateY(-3px);
+.podcast-item {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    background-color: var(--panel-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .podcast-cover {
-    width: 120px;
-    height: 120px;
-    border-radius: 10px;
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
     object-fit: cover;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 0 auto 15px;
+    display: block;
 }
 
 .podcast-title {
+    font-size: 1.5rem;
     font-weight: bold;
     color: var(--song-title-color);
-    margin-bottom: 5px;
-    text-align: center;
+    margin-bottom: 8px;
 }
 
 .podcast-author {
+    font-size: 1.1rem;
     color: var(--artist-name-color);
-    font-size: 14px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.podcast-description {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    line-height: 1.5;
 }
 
 .episode-list {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .episode-item {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 5px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 8px;
     background-color: rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.2s ease;
+    text-align: left;
 }
 
 .episode-item:hover {
@@ -1510,65 +1564,210 @@ body {
 
 .episode-title {
     font-weight: bold;
-    margin-bottom: 3px;
+    margin-bottom: 5px;
+    color: var(--text-color);
 }
 
 .episode-meta {
     display: flex;
     justify-content: space-between;
     color: var(--artist-name-color);
-    font-size: 12px;
+    font-size: 0.9rem;
 }
-.modern-btn {
-        /* Estilo base */
-        padding: 12px 24px;
-        background: linear-gradient(135deg, #ffc400, #CC0000);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .modern-btn:hover {
-        /* Efecto hover */
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        background: linear-gradient(135deg, #000000, #990000);
-    }
-    
-    .modern-btn:active {
-        /* Efecto al presionar */
-        transform: translateY(1px);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modern-btn::before {
-        /* Efecto de brillo */
-        content: "";
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-        );
-        transition: 0.5s;
-    }
-    
-    .modern-btn:hover::before {
-        left: 100%;
-    }
 
+/* Estilos para el botón de reproducción completa */
+.listen-full-btn {
+    display: none;
+    margin: 15px auto;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ff5e01, #ff8c00);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.listen-full-btn:hover {
+    background: linear-gradient(135deg, #ff8c00, #ff5e01);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos para el contenedor de vista previa */
+.preview-container {
+    position: relative;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.preview-text {
+    font-size: 0.9rem;
+    color: var(--artist-name-color);
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .podcast-cover {
+        width: 250px;
+        height: 250px;
+    }
+    
+    .podcast-title {
+        font-size: 1.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .podcast-cover {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+.modern-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ffc400, #CC0000);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.modern-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #000000, #990000);
+}
+
+.modern-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.modern-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.modern-btn:hover::before {
+    left: 100%;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .header {
+        top: 50px;
+    }
+    
+    .categories-container {
+        margin-top: 150px;
+    }
+    
+    .song-item {
+        width: 140px;
+    }
+    
+    .Texp {
+        font-size: 1.5rem;
+    }
+    
+    #floatingPlayer {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    #playlistPanel, #favoritesPanel, #followedArtistsPanel {
+        width: 90%;
+        padding: 15px;
+    }
+    
+    .menu-superior button {
+        padding: 10px 15px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header {
+        top: 40px;
+    }
+    
+    .categories-container {
+        margin-top: 140px;
+    }
+    
+    .song-item {
+        width: 120px;
+    }
+    
+    .song-title {
+        font-size: 12px;
+    }
+    
+    .artist-name {
+        font-size: 10px;
+    }
+    
+    #floatingPlayer {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    #controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    #playPauseButton {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 24px;
+    }
+    
+    .menu-superior button {
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+    
+    .menu-container {
+        top: 15px;
+        left: 15px;
+    }
+    
+    .menu-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .menu-content {
+        min-width: 180px;
+    }
+}
     </style>
 </head>
 <body>
@@ -1628,7 +1827,7 @@ body {
             
             <div class="category" id="mostPlayedCategory">
                 <h2 class="category-title"><span class="category-icon">🔥</span>Toda la musica</h2>
-                <div class="two-column-list" id="mostPlayed"></div>
+                <div class="songs-grid" id="mostPlayed"></div>
             </div>
         </div>
 
@@ -1647,7 +1846,7 @@ body {
                 <button class="listen-artist-btn" id="listenArtistBtn">Escuchar solo a este artista</button>
             </div>
             <h3 class="artist-songs-title">Canciones</h3>
-            <div class="two-column-list" id="artistSongs"></div>
+            <div class="songs-grid" id="artistSongs"></div>
             <a href="#" class="back-to-search" onclick="backToSearch()">Volver a la búsqueda</a>
         </div>
 
@@ -1679,12 +1878,7 @@ body {
         <div class="categories-container" style="margin-top: 180px;">
             <div class="category">
                 <h2 class="category-title"><span class="category-icon">🎙️</span>Podcasts destacados</h2>
-                <div class="two-column-list" id="featuredPodcasts"></div>
-            </div>
-            
-            <div class="category">
-                <h2 class="category-title"><span class="category-icon">🎧</span>Episodios recientes</h2>
-                <div class="two-column-list" id="recentEpisodes"></div>
+                <div class="podcast-container" id="featuredPodcasts"></div>
             </div>
         </div>
     </div>
@@ -1774,6 +1968,8 @@ body {
         let isDarkMode = localStorage.getItem('darkMode') !== 'false';
         let followedArtists = JSON.parse(localStorage.getItem('followedArtists')) || [];
         const colorThief = new ColorThief();
+        let previewTimeout;
+        let currentPreviewEpisodeId = null;
 
         // Elementos del DOM
         const audioPlayer = document.getElementById('audioPlayer');
@@ -1819,11 +2015,61 @@ body {
         // Datos de las canciones con archivos de audio
         const audioData = [
             {
+                id: "audio71",
+                audioSrc: "https://www.dropbox.com/scl/fi/wb218ll0ekjw7ceffi5kk/Violencia-en-las-Calles.mp3?rlkey=x1modgp2v2dmzjpnj8oykhm4t&st=s4pimyf0&raw=1",
+                cover: "https://i.postimg.cc/q7bzNzxR/Picsart-25-07-04-23-58-15-846.jpg",
+                title: "Violencia en las calles",
+                artist: "Kerim Music",
+                album: "Acustico",
+                category: ["Acustico"],
+                releaseDate: "2023-07-04" // Fecha de estreno en formato YYYY-MM-DD
+            },
+            {
+                id: "audio70",
+                audioSrc: "https://www.dropbox.com/scl/fi/7thk7psoa8g9jqd0h5ow2/Amor-de-Navidad.mp3?rlkey=y4hb9d9522dp8yvxbyd9x8re4&st=487ctgbl&raw=1",
+                cover: "https://i.postimg.cc/SRnKw1yy/Picsart-25-07-04-22-58-57-683.jpg",
+                title: "Amor de navidad",
+                artist: "Navidad",
+                album: "Navidad",
+                category: ["Reggeton"],
+                releaseDate: "2023-07-04" // Fecha de estreno en formato YYYY-MM-DD
+            },
+            {
+                id: "audio69",
+                audioSrc: "https://www.dropbox.com/scl/fi/yqrgen8jvvg8xuc9ibbwn/Vamos-al-Ni-o-Jes-s.mp3?rlkey=682i9q7nupvqg2bhs2kzzchu4&st=fsfjxlz2&raw=1",
+                cover: "https://i.postimg.cc/zfyXLg1v/Picsart-25-07-04-23-00-53-998.jpg",
+                title: "Amor del Grinch",
+                artist: "Navidad",
+                album: "Navidad",
+                category: ["Reggeton"],
+                releaseDate: "2023-07-04" // Fecha de estreno en formato YYYY-MM-DD
+            },
+            {
+                id: "audio68",
+                audioSrc: "https://www.dropbox.com/scl/fi/f4li6cxgmk6flvnekrteu/El-amor-del-Grinch.mp3?rlkey=5gbjx00g6gqtyfid58z8175ty&st=q9mnc8a0&raw=1",
+                cover: "https://i.postimg.cc/sXM6dnzK/FB-IMG-1751689800449.jpg",
+                title: "Amor del Grinch",
+                artist: "Navidad",
+                album: "Navidad",
+                category: ["Navidad"],
+                releaseDate: "2023-07-04" // Fecha de estreno en formato YYYY-MM-DD
+            },
+        {
+                id: "audio67",
+                audioSrc: "https://www.dropbox.com/scl/fi/hkzxux75i2mmgbkmldpfh/Ya-Vienen-Los-Reyes-Magos.mp3?rlkey=str0jd2reayolgfc393bl2nm1&st=9rvnryz5&raw=1",
+                cover: "https://i.postimg.cc/HxJtrVVt/FB-IMG-1751689809908.jpg",
+                title: "Ya vienen los reyes magos",
+                artist: "Navidad",
+                album: "Navidad",
+                category: ["Reggeton"],
+                releaseDate: "2023-07-04" // Fecha de estreno en formato YYYY-MM-DD
+            },
+            {
                 id: "audio66",
                 audioSrc: "https://www.dropbox.com/scl/fi/t2lfdkvy7jm57qjhiwrvg/Beyby-J-Vazquez.flac?rlkey=1zf3e463qal3k8wj1kcejsi4p&st=2udvs9w0&raw=1",
                 cover: "https://i.postimg.cc/6qJBYJ8Z/Picsart-25-06-29-20-12-08-586.jpg",
-                title: "BaBy",
-                artist: "J Vazquez",
+                title: "J Vazquez",
+                artist: "BABY",
                 album: "La Aceptacion",
                 category: ["mostPlayed"],
                 releaseDate: "2025-07-04" // Fecha de estreno en formato YYYY-MM-DD
@@ -2518,7 +2764,6 @@ body {
   category: ["mostPlayed"],
   releaseDate: "2023-07-15"
 }
-
         ];
 
         // Datos de podcasts
@@ -2527,13 +2772,13 @@ body {
                 id: "podcast1",
                 audioSrc: "https://www.dropbox.com/scl/fi/lws4vt3twa9hiyb2kg19h/Lil-Crazy-Podcast.mp3?rlkey=wnhzxs3g8mw5k9tnjltg834qw&st=esz9pv9q&raw=1",
                 cover: "https://i.postimg.cc/fTvBdc5j/Picsart-25-06-21-17-36-01-963.jpg",
-                title: "la persecucuion de una combi",
+                title: "La persecución de una combi",
                 artist: "Lil Crazy",
                 description: "Proximamente solo en Music Live",
                 episodes: [
                     {
                         id: "episode1",
-                        title: "la persecucuion de una combi",
+                        title: "La persecución de una combi",
                         duration: "45:30",
                         date: "2023-05-15"
                     },
@@ -2542,14 +2787,14 @@ body {
             {
                 id: "podcast2",
                 audioSrc: "https://www.dropbox.com/scl/fi/lnittlu3vuqmhlq0g09n6/Maker-One-Podcast-HFcompany.mp3?rlkey=vzsp92hzh163svmblh0ad2lb5&st=3nzpxtoo&raw=1",
-                cover: "https://i.postimg.cc/sxk3yFGy/7383366.jpg",
-                title: "¿Que comias? Tierra",
+                cover: "https://i.postimg.cc/xdvtjy2K/Picsart-25-07-04-22-14-23-074.jpg",
+                title: "¿Qué comías? Tierra",
                 artist: "Maker One",
-                description: "",
+                description: "Un podcast sobre experiencias de vida",
                 episodes: [
                     {
-                        id: "episode1",
-                        title: "¿Que comias? Tierra",
+                        id: "episode2",
+                        title: "¿Qué comías? Tierra",
                         duration: "45:30",
                         date: "2023-05-15"
                     },
@@ -2628,83 +2873,124 @@ body {
         // Función para renderizar podcasts
         function renderPodcasts() {
             featuredPodcasts.innerHTML = '';
-            recentEpisodes.innerHTML = '';
             
-            // Renderizar podcasts destacados
+            // Renderizar podcasts destacados con el nuevo diseño
             podcastData.forEach(podcast => {
                 const podcastElement = document.createElement("div");
-                podcastElement.className = "song-item";
+                podcastElement.className = "podcast-item";
                 podcastElement.innerHTML = `
-                    <img src="${podcast.cover}" alt="${podcast.title}" onclick="playPodcast('${podcast.id}')">
-                    <div class="song-info">
-                        <span class="song-title">${podcast.title}</span>
-                        <span class="artist-name">${podcast.artist}</span>
+                    <img src="${podcast.cover}" alt="${podcast.title}" class="podcast-cover">
+                    <div class="podcast-info">
+                        <h2 class="podcast-title">${podcast.title}</h2>
+                        <div class="podcast-author">${podcast.artist}</div>
+                        ${podcast.description ? `<div class="podcast-description">${podcast.description}</div>` : ''}
+                        
+                        <div class="episode-list">
+                            ${podcast.episodes.map(episode => `
+                                <div class="episode-item" data-episode-id="${episode.id}">
+                                    <div class="episode-title">${episode.title}</div>
+                                    <div class="episode-meta">
+                                        <span>${episode.duration}</span>
+                                        <span>${episode.date}</span>
+                                    </div>
+                                    <div class="preview-container" style="display: none;">
+                                        <div class="preview-text">Escuchando vista previa...</div>
+                                        <button class="listen-full-btn" onclick="playFullEpisode('${episode.id}')">Quieres escuchar el episodio completo?</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
                 featuredPodcasts.appendChild(podcastElement);
             });
             
-            // Renderizar episodios recientes (todos los episodios de todos los podcasts)
-            const allEpisodes = getAllPodcastEpisodes();
-            allEpisodes.forEach((episode, index) => {
-                const episodeElement = document.createElement("div");
-                episodeElement.className = "song-item";
-                episodeElement.innerHTML = `
-                    <img src="${episode.cover}" alt="${episode.title}" onclick="playPodcastEpisode('${episode.id}')">
-                    <div class="song-info">
-                        <span class="song-title">${episode.title}</span>
-                        <span class="artist-name">${episode.artist} • ${episode.duration}</span>
-                    </div>
-                `;
-                recentEpisodes.appendChild(episodeElement);
+            // Configurar eventos para los episodios
+            document.querySelectorAll('.episode-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Solo activar si no se hizo clic en el botón de reproducción completa
+                    if (!e.target.classList.contains('listen-full-btn')) {
+                        const episodeId = this.getAttribute('data-episode-id');
+                        playPodcastPreview(episodeId);
+                    }
+                });
             });
         }
 
-        // Función para reproducir un podcast
-        function playPodcast(podcastId) {
-            const podcast = podcastData.find(p => p.id === podcastId);
-            if (podcast) {
-                // Establecer la lista de reproducción actual a los episodios de este podcast
-                currentPlaylist = podcast.episodes.map(episode => ({
-                    id: episode.id,
-                    audioSrc: episode.audioSrc || podcast.audioSrc,
-                    cover: podcast.cover,
-                    title: episode.title,
-                    artist: podcast.artist,
-                    album: podcast.title,
-                    duration: episode.duration,
-                    date: episode.date
-                }));
+        // Función para reproducir vista previa de un podcast
+        function playPodcastPreview(episodeId) {
+            // Detener cualquier vista previa anterior
+            stopCurrentPreview();
+            
+            // Buscar el episodio
+            const episode = getAllPodcastEpisodes().find(e => e.id === episodeId);
+            if (!episode) return;
+            
+            // Actualizar el estado
+            currentPreviewEpisodeId = episodeId;
+            
+            // Mostrar el contenedor de vista previa
+            const episodeElement = document.querySelector(`.episode-item[data-episode-id="${episodeId}"]`);
+            const previewContainer = episodeElement.querySelector('.preview-container');
+            const previewText = episodeElement.querySelector('.preview-text');
+            const listenFullBtn = episodeElement.querySelector('.listen-full-btn');
+            
+            previewContainer.style.display = 'block';
+            listenFullBtn.style.display = 'none';
+            previewText.textContent = 'Escuchando vista previa...';
+            
+            // Configurar el reproductor de audio
+            audioPlayer.src = episode.audioSrc;
+            audioPlayer.currentTime = 0;
+            audioPlayer.play();
+            
+            // Configurar el temporizador para detener después de 50 segundos
+            previewTimeout = setTimeout(() => {
+                audioPlayer.pause();
+                previewText.textContent = 'Vista previa finalizada';
+                listenFullBtn.style.display = 'block';
+            }, 50000); // 50 segundos
+            
+            // Actualizar controles
+            isPlaying = true;
+            updateControlsVisibility();
+        }
+
+        // Función para detener la vista previa actual
+        function stopCurrentPreview() {
+            if (currentPreviewEpisodeId) {
+                clearTimeout(previewTimeout);
+                audioPlayer.pause();
                 
-                // Reproducir el primer episodio
-                currentIndex = 0;
-                loadTrack(currentIndex);
-                audioPlayer.play();
-                isPlaying = true;
-                document.getElementById('playPauseButton').textContent = '⏸';
+                // Ocultar el contenedor de vista previa
+                const currentEpisodeElement = document.querySelector(`.episode-item[data-episode-id="${currentPreviewEpisodeId}"]`);
+                if (currentEpisodeElement) {
+                    currentEpisodeElement.querySelector('.preview-container').style.display = 'none';
+                }
+                
+                currentPreviewEpisodeId = null;
+                isPlaying = false;
             }
         }
 
-        // Función para reproducir un episodio de podcast
-        function playPodcastEpisode(episodeId) {
-            // Buscar el episodio en todos los podcasts
-            for (const podcast of podcastData) {
-                const episode = podcast.episodes.find(e => e.id === episodeId);
-                if (episode) {
-                    // Establecer la lista de reproducción actual a todos los episodios
-                    currentPlaylist = getAllPodcastEpisodes();
-                    
-                    // Encontrar el índice del episodio actual
-                    currentIndex = currentPlaylist.findIndex(e => e.id === episodeId);
-                    
-                    // Cargar y reproducir el episodio
-                    loadTrack(currentIndex);
-                    audioPlayer.play();
-                    isPlaying = true;
-                    document.getElementById('playPauseButton').textContent = '⏸';
-                    break;
-                }
-            }
+        // Función para reproducir el episodio completo
+        function playFullEpisode(episodeId) {
+            stopCurrentPreview();
+            
+            // Establecer la lista de reproducción actual a todos los episodios
+            currentPlaylist = getAllPodcastEpisodes();
+            
+            // Encontrar el índice del episodio actual
+            currentIndex = currentPlaylist.findIndex(e => e.id === episodeId);
+            
+            // Cargar y reproducir el episodio
+            loadTrack(currentIndex);
+            audioPlayer.play();
+            isPlaying = true;
+            document.getElementById('playPauseButton').textContent = '⏸';
+            
+            // Mostrar el reproductor flotante
+            floatingPlayer.style.display = "block";
         }
 
         // Función para buscar podcasts
@@ -2723,7 +3009,7 @@ body {
                 // Buscar en título, artista o descripción del podcast
                 if (podcast.title.toLowerCase().includes(searchTerm) || 
                     podcast.artist.toLowerCase().includes(searchTerm) || 
-                    podcast.description.toLowerCase().includes(searchTerm)) {
+                    (podcast.description && podcast.description.toLowerCase().includes(searchTerm))) {
                     
                     // Agregar todos los episodios del podcast
                     podcast.episodes.forEach(episode => {
@@ -2764,25 +3050,66 @@ body {
         // Función para mostrar resultados de búsqueda de podcasts
         function displayPodcastSearchResults(results, searchTerm) {
             featuredPodcasts.innerHTML = '';
-            recentEpisodes.innerHTML = '';
             
             if (results.length === 0) {
-                recentEpisodes.innerHTML = '<div class="no-results">No se encontraron resultados</div>';
+                featuredPodcasts.innerHTML = '<div class="no-results">No se encontraron resultados</div>';
                 return;
             }
             
-            // Mostrar los resultados como episodios
-            results.forEach((episode, index) => {
-                const episodeElement = document.createElement("div");
-                episodeElement.className = "song-item";
-                episodeElement.innerHTML = `
-                    <img src="${episode.cover}" alt="${episode.title}" onclick="playPodcastEpisode('${episode.id}')">
-                    <div class="song-info">
-                        <span class="song-title">${episode.title}</span>
-                        <span class="artist-name">${episode.artist} • ${episode.duration}</span>
+            // Agrupar resultados por podcast
+            const podcastsMap = new Map();
+            results.forEach(episode => {
+                if (!podcastsMap.has(episode.album)) {
+                    podcastsMap.set(episode.album, {
+                        cover: episode.cover,
+                        artist: episode.artist,
+                        description: podcastData.find(p => p.title === episode.album)?.description || '',
+                        episodes: []
+                    });
+                }
+                podcastsMap.get(episode.album).episodes.push(episode);
+            });
+            
+            // Mostrar los resultados agrupados
+            podcastsMap.forEach((podcastInfo, podcastTitle) => {
+                const podcastElement = document.createElement("div");
+                podcastElement.className = "podcast-item";
+                podcastElement.innerHTML = `
+                    <img src="${podcastInfo.cover}" alt="${podcastTitle}" class="podcast-cover">
+                    <div class="podcast-info">
+                        <h2 class="podcast-title">${podcastTitle}</h2>
+                        <div class="podcast-author">${podcastInfo.artist}</div>
+                        ${podcastInfo.description ? `<div class="podcast-description">${podcastInfo.description}</div>` : ''}
+                        
+                        <div class="episode-list">
+                            ${podcastInfo.episodes.map(episode => `
+                                <div class="episode-item" data-episode-id="${episode.id}">
+                                    <div class="episode-title">${episode.title}</div>
+                                    <div class="episode-meta">
+                                        <span>${episode.duration}</span>
+                                        <span>${episode.date}</span>
+                                    </div>
+                                    <div class="preview-container" style="display: none;">
+                                        <div class="preview-text">Escuchando vista previa...</div>
+                                        <button class="listen-full-btn" onclick="playFullEpisode('${episode.id}')">Quieres escuchar el episodio completo?</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                 `;
-                recentEpisodes.appendChild(episodeElement);
+                featuredPodcasts.appendChild(podcastElement);
+            });
+            
+            // Configurar eventos para los episodios en los resultados de búsqueda
+            document.querySelectorAll('.episode-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    // Solo activar si no se hizo clic en el botón de reproducción completa
+                    if (!e.target.classList.contains('listen-full-btn')) {
+                        const episodeId = this.getAttribute('data-episode-id');
+                        playPodcastPreview(episodeId);
+                    }
+                });
             });
         }
 
