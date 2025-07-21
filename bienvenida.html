@@ -6,9 +6,9 @@
     <title>Notificación Premium</title>
     <style>
         :root {
-            --primary: #FF6D00;
-            --primary-hover: #FF9100;
-            --primary-transparent: rgba(255, 109, 0, 0.15);
+            --primary: #00B4D8;
+            --primary-hover: #48CAE4;
+            --primary-transparent: rgba(0, 180, 216, 0.15);
             --black: #0A0A0A;
             --dark: #121212;
             --darker: #080808;
@@ -16,7 +16,7 @@
             --lighter: rgba(255, 255, 255, 0.7);
             --border-radius: 20px;
             --transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --glow: 0 0 15px rgba(255, 109, 0, 0.5);
+            --glow: 0 0 15px rgba(0, 180, 216, 0.5);
         }
         
         @font-face {
@@ -162,7 +162,7 @@
             letter-spacing: 0.5px;
             transition: var(--transition);
             box-shadow: 
-                0 4px 20px rgba(255, 109, 0, 0.4),
+                0 4px 20px rgba(0, 180, 216, 0.4),
                 inset 0 1px 1px rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
@@ -187,7 +187,7 @@
         .btn-acknowledge:hover {
             transform: translateY(-2px);
             box-shadow: 
-                0 6px 25px rgba(255, 109, 0, 0.6),
+                0 6px 25px rgba(0, 180, 216, 0.6),
                 inset 0 1px 1px rgba(255, 255, 255, 0.4);
         }
         
@@ -221,15 +221,16 @@
     <div class="notification-overlay" id="notificationOverlay">
         <div class="notification-box">
             <div class="notification-header">
-                <span class="notification-icon">⟠</span>
-                <span>ADVERTENCIA DEL SISTEMA, Music Live</span>
+                <span class="notification-icon">✓</span>
+                <span>ACTUALIZACIÓN DEL SISTEMA, Music Live</span>
             </div>
             <div class="notification-content">
-                <p>La reproducción en segundo plano no está disponible en este modo</p>
-                <p>Mantén esta ventana activa para una experiencia de audio continua</p>
+                <p>¡Nueva función disponible! Ahora puedes escuchar música en segundo plano</p>
+                <p>Minimiza la aplicación y sigue disfrutando de tu música favorita</p>
+                <p>Esta función está disponible para todos los usuarios premium</p>
             </div>
             <div class="notification-footer">
-                <button class="btn-acknowledge" id="btnAcknowledge"><span>CONFIRMAR</span></button>
+                <button class="btn-acknowledge" id="btnAcknowledge"><span>ENTENDIDO</span></button>
             </div>
         </div>
     </div>
