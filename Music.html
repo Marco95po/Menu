@@ -2,2018 +2,539 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Live</title>
-    <link rel="icon" href="https://i.postimg.cc/bNprg8kh/Screenshot-20250606-180521.jpg" type="image/x-icon">
-    <link rel="shortcut icon" href="https://i.postimg.cc/bNprg8kh/Screenshot-20250606-180521.jpg" type="image/x-icon">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#ff5e01">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Music Live">
-    <link rel="apple-touch-icon" href="https://i.postimg.cc/bNprg8kh/Screenshot-20250606-180521.jpg">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-    --bg-gradient-start: #000000;
-    --bg-gradient-end: #000000;
-    --text-color: #ffffff;
-    --header-bg: rgba(0, 0, 0, 0.8);
-    --song-title-color: #ffa600;
-    --artist-name-color: #aaa;
-    --player-bg: rgba(0, 0, 0, 0.9);
-    --player-text: rgb(255, 145, 0);
-    --player-controls-bg: rgba(30, 30, 30, 0.9);
-    --panel-bg: #282828;
-    --panel-text: #ffffff;
-    --search-bg: rgba(255, 255, 255, 0.1);
-    --search-text: white;
-    --scrollbar-thumb: #000000;
-    --scrollbar-track: #333;
-    --menu-bg: #1a1a1a;
-    --menu-active-bg: linear-gradient(135deg, #070606, #ff8c00);
-    --menu-hover-bg: rgba(255, 94, 1, 0.2);
-    --menu-text: #ffffff;
-    --menu-active-text: #ffffff;
-    --menu-border-radius: 30px;
-    --menu-shadow: 0 4px 15px rgba(255, 94, 1, 0.3);
-}
-
-.light-mode {
-    --bg-gradient-start: #000000;
-    --bg-gradient-end: #ffffff;
-    --text-color: #000000;
-    --header-bg: rgba(255, 255, 255, 0.9);
-    --song-title-color: #ff6b00;
-    --artist-name-color: #666;
-    --player-bg: rgba(255, 255, 255, 0.95);
-    --player-text: #ff6b00;
-    --player-controls-bg: rgba(240, 240, 240, 0.9);
-    --panel-bg: #f5f5f5;
-    --panel-text: #333333;
-    --search-bg: rgba(0, 0, 0, 0.1);
-    --search-text: #333;
-    --scrollbar-thumb: #ff8c00;
-    --scrollbar-track: #ddd;
-    --menu-bg: #8b7474;
-    --menu-active-bg: linear-gradient(135deg, #ff8c00, #ff6b00);
-    --menu-hover-bg: rgba(255, 140, 0, 0.1);
-    --menu-text: #333333;
-    --menu-active-text: #ffffff;
-}
-
-/* Menú Hamburguesa */
-.menu-container {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1002;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-.menu-btn {
-    background-color: rgba(255, 255, 255, 0.9);
-    color: #1a1a1a;
-    padding: 12px;
-    font-size: 20px;
-    border: none;
-    cursor: pointer;
-    border-radius: 12px;
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    z-index: 1003;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-btn {
-        background-color: rgba(30, 30, 30, 0.9);
-        color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-}
-
-.menu-btn:hover {
-    background-color: rgba(240, 240, 240, 0.95);
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-    color: #0066cc;
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-btn:hover {
-        background-color: rgba(60, 60, 60, 0.95);
-        color: #4dabf7;
-    }
-}
-
-.menu-content {
-    display: none;
-    position: absolute;
-    background-color: rgba(177, 112, 16, 0.95);
-    min-width: 220px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    z-index: 1002;
-    border-radius: 14px;
-    top: 70px;
-    left: 0;
-    overflow: hidden;
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    transform-origin: top left;
-    transform: scale(0.95);
-    opacity: 0;
-    transition: all 0.2s cubic-bezier(0.33, 1, 0.68, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-content {
-        background-color: rgba(30, 30, 30, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-}
-
-.menu-container:hover .menu-content {
-    display: block;
-    transform: scale(1);
-    opacity: 1;
-}
-
-.menu-content a {
-    color: #333333;
-    padding: 14px 20px 14px 40px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    transition: all 0.25s ease;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    font-weight: 500;
-    position: relative;
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-content a {
-        color: #7c7b7b;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-}
-
-.menu-content a:last-child {
-    border-bottom: none;
-}
-
-.menu-content a:hover {
-    background-color: rgba(240, 240, 240, 0.3);
-    color: #ee9d06;
-    padding-left: 44px;
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-content a:hover {
-        background-color: rgba(60, 60, 60, 0.3);
-        color: #eb8705;
-    }
-}
-
-.menu-content a::before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    background-color: #cc6d00;
-    border-radius: 50%;
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0;
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-    .menu-content a::before {
-        background-color: #db7b0d;
-    }
-}
-
-.menu-content a:hover::before {
-    opacity: 1;
-    transform: translateY(-50%) scale(1.2);
-}
-
-.menu-content a::after {
-    font-family: 'Material Icons';
-    position: absolute;
-    right: 20px;
-    opacity: 0.5;
-    font-size: 18px;
-    transition: opacity 0.2s ease;
-}
-
-.menu-content a:hover::after {
-    opacity: 1;
-}
-
-.menu-content a {
-    transition: all 0.3s ease, opacity 0.2s ease;
-    opacity: 0;
-    transform: translateX(-10px);
-}
-
-.menu-container:hover .menu-content a {
-    opacity: 1;
-    transform: translateX(0);
-}
-
-.menu-content a:nth-child(1) { transition-delay: 0.05s; }
-.menu-content a:nth-child(2) { transition-delay: 0.1s; }
-.menu-content a:nth-child(3) { transition-delay: 0.15s; }
-.menu-content a:nth-child(4) { transition-delay: 0.2s; }
-.menu-content a:nth-child(5) { transition-delay: 0.25s; }
-
-/* Menú Superior Moderno */
-.menu-superior {
-    background-color: var(--menu-bg);
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1001;
-    padding: 8px 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.menu-superior button {
-    background-color: transparent;
-    border: none;
-    color: var(--menu-text);
-    padding: 12px 24px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 14px;
-    margin: 0 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border-radius: var(--menu-border-radius);
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
-}
-
-.menu-superior button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--menu-active-bg);
-    z-index: -1;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.3s ease;
-}
-
-.menu-superior button:hover {
-    color: var(--menu-active-text);
-    background-color: var(--menu-hover-bg);
-    transform: translateY(-2px);
-}
-
-.menu-superior button:hover::before {
-    opacity: 0.2;
-    transform: scale(1);
-}
-
-.menu-superior button.active {
-    color: var(--menu-active-text);
-    box-shadow: var(--menu-shadow);
-}
-
-.menu-superior button.active::before {
-    opacity: 1;
-    transform: scale(1);
-}
-
-.menu-superior button.active:hover {
-    transform: translateY(0);
-}
-
-.menu-superior button:focus {
-    outline: none;
-}
-
-/* Efecto de onda al hacer clic */
-.menu-superior button:active::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%, -50%);
-    transform-origin: 50% 50%;
-    animation: ripple 0.6s ease-out;
-}
-
-@keyframes ripple {
-    0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-    }
-    100% {
-        transform: scale(20, 20);
-        opacity: 0;
-    }
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(-45deg, var(--bg-gradient-start), var(--bg-gradient-end));
-    background-size: 400% 400%;
-    animation: gradientBG 15s ease infinite;
-    color: var(--text-color);
-    transition: background 0.5s ease, color 0.3s ease;
-}
-
-@keyframes gradientBG {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-.header {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    background-color: var(--header-bg);
-    z-index: 1000;
-    padding: 10px 0;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: background-color 0.3s ease;
-}
-
-.header-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
-
-.theme-toggle {
-    background: transparent;
-    border: none;
-    color: var(--text-color);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 5px;
-    margin-left: 10px;
-    transition: transform 0.3s ease;
-}
-
-.theme-toggle:hover {
-    transform: scale(1.1);
-}
-
-.Texp {
-    color: #ffc401;
-    margin: 0;
-    font-size: 2rem;
-    text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01, 0 0 15px #e6ff01;
-    animation: brillo 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes brillo {
-    from {
-        text-shadow: 0 0 5px #e6ff01, 0 0 10px #e6ff01;
-    }
-    to {
-        text-shadow: 0 0 10px #e6ff01, 0 0 20px #e6ff01, 0 0 30px #e6ff01;
-    }
-}
-
-.categories-container {
-    margin-top: 180px;
-    padding: 0 15px;
-    box-sizing: border-box;
-}
-
-.category {
-    margin-bottom: 40px;
-}
-
-.category-title {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: var(--text-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    animation: fadeIn 1.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.category-icon {
-    margin-right: 10px;
-    color: #ff5e01;
-}
-
-.carousel {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    padding: 10px 0;
-    scrollbar-width: none;
-    gap: 10px;
-}
-
-.carousel::-webkit-scrollbar {
-    display: none;
-}
-
-.song-item {
-    flex: 0 0 auto;
-    width: 160px;
-    transition: transform 0.3s;
-    position: relative;
-    opacity: 0;
-    animation: fadeIn 0.5s forwards;
-    perspective: 1000px;
-}
-
-.song-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    transform-style: preserve-3d;
-    animation: subtleFloat 6s ease-in-out infinite;
-    filter: brightness(0.98);
-}
-
-.song-item:hover img {
-    transform: scale(1.05) rotateY(10deg);
-    box-shadow: 0 8px 25px rgba(255, 94, 1, 0.5);
-    filter: brightness(1.05);
-    animation-play-state: paused;
-}
-
-@keyframes subtleFloat {
-    0%, 100% { transform: translateY(0) rotateY(0); }
-    25% { transform: translateY(-4px) rotateY(2deg); }
-    50% { transform: translateY(0) rotateY(0); }
-    75% { transform: translateY(-4px) rotateY(-2deg); }
-}
-
-.song-item img:hover {
-    box-shadow: 0 8px 16px rgba(255, 94, 1, 0.4);
-}
-
-.song-info {
-    padding: 8px 0;
-}
-
-.song-title {
-    display: block;
-    margin-top: 5px;
-    color: var(--song-title-color);
-    font-size: 14px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.artist-name {
-    display: block;
-    margin-top: 5px;
-    color: var(--artist-name-color);
-    font-size: 12px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.Nuevo {
-    display: block;
-    margin-top: 5px;
-    color: #51ff01;
-    font-size: 10px;
-    font-weight: bold;
-}
-
-.favorite-btn {
-    display: none;
-}
-
-.favorite-count {
-    display: none;
-}
-
-.play-count {
-    display: none;
-}
-
-.carousel-nav {
-    display: flex;
-    justify-content: flex-end;
-    margin-right: 20px;
-}
-
-.nav-btn {
-    background-color: rgba(255, 174, 0, 0.7);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    margin-left: 10px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
-
-.nav-btn:hover {
-    background-color: #ff5e01;
-    transform: scale(1.1);
-}
-
-/* Floating Player Styles */
-#floatingPlayer {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: var(--player-bg);
-    border: 2px solid #ff8800;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    padding: 40px;
-    z-index: 9999;
-    text-align: center;
-    width: 320px;
-    transition: background-color 0.5s ease;
-}
-
-#floatingPlayer.minimized {
-    width: 97%;
-    height: 80px;
-    padding: 10px;
-    top: auto;
-    bottom: 0;
-    left: 0;
-    transform: none;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: var(--header-bg);
-}
-
-#floatingPlayer.minimized img,
-#floatingPlayer.minimized #progressContainer,
-#floatingPlayer.minimized #timeContainer,
-#floatingPlayer.minimized #playlistPanel {
-    display: none;
-}
-
-#floatingPlayer.minimized #info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-color);
-    font-size: 14px;
-    margin-left: 10px;
-    flex: 1;
-}
-
-#floatingPlayer.minimized #controls {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    flex: 1;
-}
-
-#floatingPlayer.minimized #controls button {
-    padding: 8px;
-    background: transparent;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    margin: 0 5px;
-    width: 35px;
-    height: 35px;
-}
-
-#floatingPlayer img {
-    width: 90%;
-    height: auto;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 8px rgba(255, 145, 0, 0.5);
-    position: relative;
-}
-
-.cover-container {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-    text-align: center;
-    margin: 20px 0;
-}
-
-.favorite-icon {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 10;
-}
-
-.favorite-icon:hover {
-    background-color: rgba(0, 0, 0, 0.9);
-    transform: scale(1.1);
-}
-
-.favorite-icon.added {
-    background-color: #ff5e01;
-    color: rgb(253, 253, 253);
-    animation: bounce 0.5s ease;
-}
-
-@keyframes bounce {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.3);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-#closeButton {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    background: #ff5e01;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#minimizeButton {
-    position: absolute;
-    top: 5px;
-    right: 40px;
-    background: #ff5e01;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-#controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-top: 20px;
-    background: transparent;
-    padding: 10px;
-    border-radius: 10px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-#controls button {
-    background: transparent;
-    color: white;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    font-size: 24px;
-    border-radius: 50%;
-}
-
-#playPauseButton {
-    background: #000000 !important;
-    color: white !important;
-    border-radius: 50%;
-    width: 60px !important;
-    height: 60px !important;
-    padding: 15px !important;
-    margin: 0 15px !important;
-    font-size: 28px;
-}
-
-#playPauseButton:hover {
-    background: hsl(30, 1%, 40%) !important;
-    transform: scale(1.1) !important;
-}
-
-#progressContainer {
-    width: 100%;
-    background: #444;
-    height: 6px;
-    border-radius: 3px;
-    margin: 15px 0;
-    cursor: pointer;
-    position: relative;
-}
-
-#progressBar {
-    height: 100%;
-    background: #ffffff;
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.1s linear;
-}
-
-#timeContainer {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    color: #ffffff;
-    font-size: 12px;
-    margin-bottom: 10px;
-}
-
-#volumeControl {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-left: 15px;
-}
-
-#volumeControl input {
-    width: 80px;
-}
-
-#info {
-    margin-bottom: 10px;
-    color: var(--player-text);
-    text-align: center;
-    transition: color 0.3s ease;
-}
-
-#songTitle {
-    font-size: 1.2rem;
-    display: block;
-    margin-bottom: 5px;
-    transition: color 0.3s ease;
-}
-
-#artistName, #albumTitle {
-    font-size: 0.9rem;
-    color: var(--artist-name-color);
-    transition: color 0.3s ease;
-}
-
-/* Playlist Panel */
-#playlistPanel {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--panel-bg);
-    color: var(--panel-text);
-    border-radius: 10px;
-    padding: 20px;
-    width: 80%;
-    max-width: 600px;
-    max-height: 70vh;
-    overflow-y: auto;
-    z-index: 10000;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
-
-#playlistPanel h2 {
-    color: #ff5e01;
-    margin-top: 0;
-}
-
-#playlistPanel input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #404040;
-    color: var(--panel-text);
-    font-size: 14px;
-    outline: none;
-}
-
-#playlistPanel input[type="text"]::placeholder {
-    color: #aaa;
-}
-
-.playlist-item {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-    margin-bottom: 5px;
-}
-
-.playlist-item:hover {
-    background-color: rgba(255, 94, 1, 0.2);
-}
-
-.playlist-item.active {
-    background-color: rgba(255, 94, 1, 0.4);
-}
-
-.playlist-item img {
-    width: 50px;
-    height: 50px;
-    border-radius: 5px;
-    margin-right: 15px;
-    object-fit: cover;
-}
-
-.playlist-item-info {
-    flex: 1;
-}
-
-.playlist-item-title {
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-
-.playlist-item-artist {
-    font-size: 12px;
-    color: var(--artist-name-color);
-}
-
-.playlist-item-plays {
-    font-size: 12px;
-    color: #ff5e01;
-}
-
-/* Favorites Panel */
-#favoritesPanel {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--panel-bg);
-    border-radius: 10px;
-    padding: 20px;
-    width: 80%;
-    max-width: 600px;
-    max-height: 70vh;
-    overflow-y: auto;
-    z-index: 10000;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
-
-#closeFavoritesButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    color: #ff5e01;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-#favoritesPanel h2 {
-    color: #ff5e01;
-    margin-top: 0;
-}
-
-#favoritesSearchInput {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 5px;
-    background-color: #404040;
-    color: var(--panel-text);
-    font-size: 14px;
-    outline: none;
-}
-
-/* Search Bar - Estilos mejorados */
-.search-container {
-    width: 100%;
-    padding: 0 20px;
-    box-sizing: border-box;
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-}
-
-#searchInput, #podcastSearchInput {
-    padding: 12px 20px;
-    width: 100%;
-    max-width: 600px;
-    border-radius: 30px;
-    border: 2px solid #ff5e01;
-    font-size: 16px;
-    outline: none;
-    transition: all 0.3s ease;
-    background-color: var(--search-bg);
-    color: var(--search-text);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-#searchInput:focus, #podcastSearchInput:focus {
-    border-color: #ff8c00;
-    box-shadow: 0 0 10px rgba(255, 94, 1, 0.5);
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-#searchInput::placeholder, #podcastSearchInput::placeholder {
-    color: #ccc;
-    opacity: 0.8;
-}
-
-/* Media queries para el buscador */
-@media (max-width: 768px) {
-    #searchInput, #podcastSearchInput {
-        padding: 12px 16px;
-        font-size: 15px;
-        max-width: 90%;
-    }
-}
-
-@media (max-width: 480px) {
-    #searchInput, #podcastSearchInput {
-        padding: 10px 15px;
-        font-size: 14px;
-        max-width: 95%;
-    }
-}
-
-/* Audio Player (oculto) */
-#audioPlayer {
-    width: 100%;
-    margin-bottom: 15px;
-    display: none;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-}
-
-/* Artist filter styles */
-.artist-filter {
-    display: none !important;
-}
-
-.current-artist {
-    text-align: center;
-    margin-top: 10px;
-    color: #ff5e01;
-    font-size: 1.2rem;
-    display: none;
-}
-
-#closePlaylistButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    color: #ff5e01;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 100;
-}
-
-#closePlaylistButton:hover {
-    color: #ff8c00;
-    transform: scale(1.1);
-}
-
-#closePlaylistButton:focus {
-    outline: none;
-}
-
-#trendingCategory .carousel img {
-    border-radius: 50%;
-    object-fit: cover;
-    width: 100px;
-    height: 100px;
-    aspect-ratio: 1/1;
-}
-
-/* Lista de canciones responsiva */
-.songs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-    padding: 0 10px;
-}
-
-@media (max-width: 600px) {
-    .songs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
-}
-
-@media (max-width: 400px) {
-    .songs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-}
-
-.songs-grid .song-item {
-    width: 100%;
-    margin: 0;
-}
-
-.songs-grid .song-item img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-}
-
-/* Estilos para el modo de búsqueda */
-.search-results-container {
-    margin-top: 180px;
-    padding: 20px;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.search-results-title {
-    color: var(--text-color);
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-align: center;
-    width: 100%;
-}
-
-.search-results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 15px;
-    padding: 0 10px;
-    width: 100%;
-    justify-items: center;
-}
-
-.no-results {
-    color: var(--artist-name-color);
-    text-align: center;
-    font-size: 1.2rem;
-    margin-top: 50px;
-    width: 100%;
-}
-
-/* Estilos para el modal de confirmación */
-.confirmation-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 10001;
-    justify-content: center;
-    align-items: center;
-}
-
-.confirmation-content {
-    background-color: var(--panel-bg);
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
-
-.confirmation-content h3 {
-    color: #ff5e01;
-    margin-top: 0;
-}
-
-.confirmation-content p {
-    color: var(--panel-text);
-    margin-bottom: 20px;
-}
-
-.confirmation-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.confirmation-btn {
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    border: none;
-}
-
-.confirmation-btn.yes {
-    background-color: #ff5e01;
-    color: white;
-}
-
-.confirmation-btn.no {
-    background-color: #333;
-    color: white;
-}
-
-.confirmation-btn:hover {
-    transform: scale(1.05);
-}
-.cover-container {
-    width: 100%;
-    text-align: center;
-    margin: 20px 0;
-    padding: 0 10px;
-    box-sizing: border-box;
-    position: relative;
-    height: 20vh;
-}
-
-.vertical-cover {
-    width: auto;
-    height: auto;
-    max-height: 60vh;
-    max-width: 100%;
-    border-radius: 12px;
-    object-fit: cover;
-    object-position: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
-}
-
-.vertical-cover.active {
-    opacity: 1;
-}
-
-/* Estilos para el perfil del artista */
-.artist-profile {
-    display: none;
-    margin-top: 180px;
-    padding: 20px;
-    text-align: center;
-}
-
-.artist-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
-}
-
-.artist-avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #ff5e01;
-    box-shadow: 0 8px 16px rgba(255, 94, 1, 0.3);
-    margin-bottom: 15px;
-}
-
-.artist-name {
-    display: block;
-    margin-top: 5px;
-    color: var(--artist-name-color);
-    font-size: 10px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.artist-songs-title {
-    font-size: 1.5rem;
-    color: var(--text-color);
-    margin-bottom: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ff5e01;
-    padding-bottom: 10px;
-    display: inline-block;
-}
-
-.back-to-search {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 8px 16px;
-    background-color: #ff5e01;
-    color: white;
-    border-radius: 20px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.back-to-search:hover {
-    background-color: #ff8c00;
-    transform: translateY(-2px);
-}
-
-.artist-button {
-    position: relative;
-    padding: 10px 24px;
-    background: linear-gradient(135deg, #e96e09, #5c471a);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
-    transition: all 0.3s ease;
-    margin-top: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.artist-button:hover {
-    box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
-    transform: translateY(-2px);
-}
-
-.artist-button:active {
-    transform: translateY(0);
-}
-
-.artist-button::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.artist-button:hover::after {
-    opacity: 1;
-}
-
-.listen-artist-btn {
-    background-color: #ff5e01;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.listen-artist-btn:hover {
-    background-color: #ff8c00;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos para la sección de artistas seguidos */
-.followed-artists-container {
-    margin-top: 20px;
-}
-
-.followed-artist {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: rgba(255, 94, 1, 0.1);
-    transition: all 0.3s ease;
-}
-
-.followed-artist:hover {
-    background-color: rgba(255, 94, 1, 0.2);
-    transform: translateX(5px);
-}
-
-.followed-artist-avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 15px;
-    border: 2px solid #ff5e01;
-}
-
-.followed-artist-info {
-    flex: 1;
-}
-
-.followed-artist-name {
-    font-weight: bold;
-    color: var(--song-title-color);
-    margin-bottom: 5px;
-}
-
-.followed-artist-songs {
-    font-size: 12px;
-    color: var(--artist-name-color);
-}
-
-.unfollow-btn {
-    background-color: transparent;
-    color: #ff5e01;
-    border: 1px solid #ff5e01;
-    border-radius: 20px;
-    padding: 5px 10px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.unfollow-btn:hover {
-    background-color: #ff5e01;
-    color: white;
-}
-
-/* Panel de artistas seguidos */
-#followedArtistsPanel {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--panel-bg);
-    border-radius: 10px;
-    padding: 20px;
-    width: 80%;
-    max-width: 600px;
-    max-height: 70vh;
-    overflow-y: auto;
-    z-index: 10000;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
-
-#closeFollowedArtistsButton {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    color: #ff5e01;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-#followedArtistsPanel h2 {
-    color: #ff5e01;
-    margin-top: 0;
-}
-
-#followedArtistsList {
-    margin-top: 20px;
-}
-
-.no-followed-artists {
-    text-align: center;
-    color: var(--artist-name-color);
-    font-style: italic;
-    padding: 20px;
-}
-
-/* Estilos para ocultar controles en anuncios */
-.ad-playing #controls,
-.ad-playing #progressContainer,
-.ad-playing #timeContainer,
-.ad-playing #closeButton,
-.ad-playing #minimizeButton,
-.ad-playing .favorite-icon {
-    display: none !important;
-}
-
-.ad-playing .cover-container {
-    margin-bottom: 0;
-}
-
-/* Contenedores para Música y Podcast */
-#musicContent {
-    display: block;
-}
-
-#podcastContent {
-    display: none;
-}
-
-/* Estilos específicos para podcasts */
-.podcast-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.podcast-item {
-    width: 100%;
-    margin-bottom: 30px;
-    text-align: center;
-    background-color: var(--panel-bg);
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-.podcast-cover {
-    width: 300px;
-    height: 300px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin: 0 auto 15px;
-    display: block;
-}
-
-.podcast-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--song-title-color);
-    margin-bottom: 8px;
-}
-
-.podcast-author {
-    font-size: 1.1rem;
-    color: var(--artist-name-color);
-    margin-bottom: 15px;
-}
-
-.podcast-description {
-    color: var(--text-color);
-    margin-bottom: 20px;
-    line-height: 1.5;
-}
-
-.episode-list {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.episode-item {
-    padding: 12px 15px;
-    border-radius: 6px;
-    margin-bottom: 8px;
-    background-color: rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-}
-
-.episode-item:hover {
-    background-color: rgba(255, 94, 1, 0.2);
-}
-
-.episode-title {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: var(--text-color);
-}
-
-.episode-meta {
-    display: flex;
-    justify-content: space-between;
-    color: var(--artist-name-color);
-    font-size: 0.9rem;
-}
-
-/* Estilos para el botón de reproducción completa */
-.listen-full-btn {
-    display: none;
-    margin: 15px auto;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #ff5e01, #ff8c00);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.listen-full-btn:hover {
-    background: linear-gradient(135deg, #ff8c00, #ff5e01);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilos para el contenedor de vista previa */
-.preview-container {
-    position: relative;
-    margin-top: 15px;
-    padding: 15px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    text-align: center;
-}
-
-.preview-text {
-    font-size: 0.9rem;
-    color: var(--artist-name-color);
-    margin-bottom: 10px;
-}
-
-@media (max-width: 768px) {
-    .podcast-cover {
-        width: 250px;
-        height: 250px;
-    }
-    
-    .podcast-title {
-        font-size: 1.3rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .podcast-cover {
-        width: 200px;
-        height: 200px;
-    }
-}
-
-.modern-btn {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #ffc400, #CC0000);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.modern-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, #000000, #990000);
-}
-
-.modern-btn:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.modern-btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.2),
-        transparent
-    );
-    transition: 0.5s;
-}
-
-.modern-btn:hover::before {
-    left: 100%;
-}
-
-/* Media queries para responsividad */
-@media (max-width: 768px) {
-    .header {
-        top: 50px;
-    }
-    
-    .categories-container {
-        margin-top: 150px;
-    }
-    
-    .song-item {
-        width: 140px;
-    }
-    
-    .Texp {
-        font-size: 1.5rem;
-    }
-    
-    #floatingPlayer {
-        width: 90%;
-        padding: 20px;
-    }
-    
-    #playlistPanel, #favoritesPanel, #followedArtistsPanel {
-        width: 90%;
-        padding: 15px;
-    }
-    
-    .menu-superior button {
-        padding: 10px 15px;
-        font-size: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        top: 40px;
-    }
-    
-    .categories-container {
-        margin-top: 140px;
-    }
-    
-    .song-item {
-        width: 120px;
-    }
-    
-    .song-title {
-        font-size: 12px;
-    }
-    
-    .artist-name {
-        font-size: 10px;
-    }
-    
-    #floatingPlayer {
-        width: 95%;
-        padding: 15px;
-    }
-    
-    #controls button {
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-    }
-    
-    #playPauseButton {
-        width: 50px !important;
-        height: 50px !important;
-        font-size: 24px;
-    }
-    
-    .menu-superior button {
-        padding: 8px 12px;
-        font-size: 11px;
-    }
-    
-    .menu-container {
-        top: 15px;
-        left: 15px;
-    }
-    
-    .menu-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
-    }
-    
-    .menu-content {
-        min-width: 180px;
-    }
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #4ecca3;
+            text-shadow: 0 0 10px rgba(78, 204, 163, 0.5);
+        }
+        
+        header p {
+            color: #eeeeee;
+            font-size: 1.1rem;
+        }
+        
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .now-playing {
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .album-art {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .song-info {
+            margin-bottom: 20px;
+        }
+        
+        .song-info h2 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: #4ecca3;
+        }
+        
+        .song-info h3 {
+            font-size: 1.2rem;
+            color: #eeeeee;
+            margin-bottom: 5px;
+        }
+        
+        .song-info p {
+            color: #a0a0a0;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 15px 0;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4ecca3 0%, #2a9d8f 100%);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+        
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            color: #eeeeee;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: none;
+            border: none;
+            color: #eeeeee;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            color: #4ecca3;
+            background: rgba(78, 204, 163, 0.1);
+        }
+        
+        .btn-play {
+            background: #4ecca3;
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            width: 60px;
+            height: 60px;
+        }
+        
+        .btn-play:hover {
+            background: #3db593;
+            transform: scale(1.05);
+        }
+        
+        .btn-active {
+            color: #4ecca3;
+            background: rgba(78, 204, 163, 0.2);
+        }
+        
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+        
+        .volume-slider {
+            width: 100px;
+            -webkit-appearance: none;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #4ecca3;
+            cursor: pointer;
+        }
+        
+        .catalog {
+            margin-top: 20px;
+        }
+        
+        .catalog h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #4ecca3;
+            text-align: center;
+        }
+        
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            padding: 10px 0;
+        }
+        
+        .carousel-container {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 5px;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .carousel-container::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Edge */
+        }
+        
+        .carousel-item {
+            flex: 0 0 auto;
+            width: 180px;
+            background: rgba(30, 30, 50, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .carousel-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .carousel-item.active {
+            border: 2px solid #4ecca3;
+        }
+        
+        .carousel-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .carousel-info {
+            padding: 12px;
+        }
+        
+        .carousel-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .carousel-info p {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .carousel-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #eeeeee;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-btn:hover {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+        
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .category-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #eeeeee;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn.active, .category-btn:hover {
+            background: #4ecca3;
+            color: #1a1a2e;
+        }
+        
+        /* Buscador para móviles */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .search-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #eeeeee;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border-radius: 25px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        
+        .search-box::placeholder {
+            color: #a0a0a0;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 50, 0.95);
+            border-radius: 0 0 10px 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-result-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-result-item:hover {
+            background: rgba(78, 204, 163, 0.2);
+        }
+        
+        .search-result-item img {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        
+        .search-result-info {
+            flex: 1;
+        }
+        
+        .search-result-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .search-result-info p {
+            font-size: 0.8rem;
+            color: #a0a0a0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        @media (min-width: 768px) {
+            .player-container {
+                flex-direction: row;
+            }
+            
+            .now-playing {
+                flex: 1;
+            }
+            
+            .catalog {
+                flex: 2;
+                margin-top: 0;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .album-art {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .carousel-item {
+                width: 150px;
+            }
+            
+            .carousel-img {
+                height: 130px;
+            }
+            
+            .search-container {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <!-- Menú Hamburguesa -->
-    <div class="menu-container">
-    <button class="menu-btn">☰</button>
-    <div class="menu-content">
-    <a href="#" onclick="toggleFollowedArtistsPanel()">Siguiendo</a>
-    <a href="#" onclick="toggleFavoritesPanel()">Favoritos</a>
-    <a href="#" onclick="redirectToArtistMusic()">Artista Music</a>
-    <a href="#" onclick="redirectToIndex()">Información</a>
-    <a href="compartirredes.html">Compartir Apps</a>
-    <a href="perfil.html">Perfil</a>
-</div>
-</div>
-</div>
-</div>
-
-    <!-- Menú Superior -->
-    <div class="menu-superior">
-        <button id="musicButton" class="active" onclick="showContent('music')">Música</button>
-        <button id="podcastButton" onclick="showContent('podcast')">Podcast</button>
-    </div>
-
-    <!-- Contenido de Música -->
-    <div id="musicContent">
-        <div class="header">
-            <div class="header-content">
-                <h1 class="Texp">Music Live</h1>
-                <button class="theme-toggle" id="themeToggle">🌓</button>
-            </div>
+    <div class="container">
+        <header>
+            <h1>Music Live</h1>
+            <p></p>
+            
+            <!-- Buscador para móviles -->
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Buscar canciones, artistas o álbumes..." oninput="searchSongs()">
+                <input type="text" class="search-box" id="searchBox" placeholder="Buscar canciones...">
+                <button class="search-toggle" id="searchToggle">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="search-results" id="searchResults"></div>
             </div>
-            <div class="artist-filter" id="artistFilter"></div>
-            <div class="current-artist" id="currentArtist"></div>
-        </div>
-        <!-- Contenedor principal de categorías -->
-        <div class="categories-container" id="categoriesContainer">
-            <div class="cover-container">
-    <img src="https://i.postimg.cc/gc33VcmB/Picsart-25-07-03-19-45-32-216.jpg" class="vertical-cover active" alt="Imagen 1">
-    <img src="https://i.postimg.cc/kG8pF0fP/Picsart-25-07-03-19-54-12-589.jpg" class="vertical-cover" alt="Imagen 2">
-    <img src="https://i.postimg.cc/Vv56HF2R/Picsart-25-07-03-19-45-58-881.jpg" class="vertical-cover" alt="Imagen 3">
-    <img src="https://i.postimg.cc/2yh4rD8S/Picsart-25-07-22-17-05-37-645.jpg" class="vertical-cover" alt="Imagen 4">
-        </div>
-            <div class="category" id="trendingCategory">
-                <h2 class="category-title"><span class="category-icon">📈</span>Tendencias</h2>
-                <div class="carousel" id="trending"></div>
+        </header>
+        
+        <div class="player-container">
+            <div class="now-playing">
+                <div class="album-art">
+                    <img id="currentCover" src="https://i.postimg.cc/1tB3h7DN/Picsart-25-07-22-17-53-50-604.jpg" alt="Portada">
+                </div>
+                
+                <div class="song-info">
+                    <h2 id="currentTitle">Mentiras de Fe</h2>
+                    <h3 id="currentArtist">Lumia Ai</h3>
+                    <p id="currentAlbum">Álbum: Sin álbum</p>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress"></div>
+                </div>
+                
+                <div class="time-info">
+                    <span id="currentTime">0:00</span>
+                    <span id="duration">0:00</span>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn" id="shuffleBtn" title="Modo aleatorio">
+                        <i class="fas fa-random"></i>
+                    </button>
+                    <button class="btn" id="prevBtn" title="Anterior">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="btn btn-play" id="playBtn" title="Reproducir">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="btn" id="nextBtn" title="Siguiente">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    <button class="btn" id="repeatBtn" title="Repetir">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                </div>
+                
+                <div class="volume-container">
+                    <i class="fas fa-volume-up"></i>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.7">
+                </div>
             </div>
             
-            <!-- Nueva sección de artistas seguidos -->
-            <div class="category" id="followedArtistsCategory" style="display: none;">
-                <h2 class="category-title"><span class="category-icon">👥</span>Artistas que sigues</h2>
-                <div class="two-column-list" id="followedArtists"></div>
-            </div>
-            
-            <div class="category" id="mostPlayedCategory">
-                <h2 class="category-title"><span class="category-icon">🔥</span>Toda la musica</h2>
-                <div class="songs-grid" id="mostPlayed"></div>
-            </div>
-        </div>
-
-        <!-- Contenedor para resultados de búsqueda (oculto inicialmente) -->
-        <div class="search-results-container" id="searchResultsContainer" style="display: none;">
-            <h2 class="search-results-title" id="searchResultsTitle">Resultados de búsqueda</h2>
-            <div class="search-results-grid" id="searchResultsGrid"></div>
-            <div class="no-results" id="noResultsMessage" style="display: none;">No se encontraron resultados</div>
-        </div>
-
-        <div class="artist-profile" id="artistProfile" style="display: none;">
-            <div class="artist-header">
-                <img id="artistAvatar" src="" alt="Artista" class="artist-avatar">
-                <h2 id="artistProfileName" class="artist-name">Nombre del Artista</h2>
-                <button class="artist-button" id="followArtistBtn">Seguir</button>
-                <button class="listen-artist-btn" id="listenArtistBtn">Escuchar solo a este artista</button>
-            </div>
-            <h3 class="artist-songs-title">Canciones</h3>
-            <div class="songs-grid" id="artistSongs"></div>
-            <a href="#" class="back-to-search" onclick="backToSearch()">Volver a la búsqueda</a>
-        </div>
-
-        <!-- Modal de confirmación -->
-        <div class="confirmation-modal" id="confirmationModal">
-            <div class="confirmation-content">
-                <h3 id="confirmationTitle">¿Deseas escuchar solo música de este artista?</h3>
-                <p id="confirmationMessage">Se reproducirán solo las canciones de <span id="filterName"></span></p>
-                <div class="confirmation-buttons">
-                    <button class="confirmation-btn yes" onclick="confirmFilter(true)">Sí</button>
-                    <button class="confirmation-btn no" onclick="confirmFilter(false)">No</button>
+            <div class="catalog">
+                <h2>Catálogo de Canciones</h2>
+                
+                <div class="category-filter">
+                    <button class="category-btn active" data-category="all">Todas</button>
+                    <button class="category-btn" data-category="mostPlayed">Más Escuchadas</button>
+                    <button class="category-btn" data-category="trending">Tendencia</button>
+                    <button class="category-btn" data-category="Corrido Tumbado">Corrido Tumbado</button>
+                    <button class="category-btn" data-category="Acustico">Acústico</button>
+                    <button class="category-btn" data-category="Reggeton">Reggaetón</button>
+                    <button class="category-btn" data-category="Navidad">Navidad</button>
+                </div>
+                
+                <div class="carousel">
+                    <div class="carousel-container" id="carouselContainer">
+                        <!-- Los elementos del carrusel se generarán con JavaScript -->
+                    </div>
+                    
+                    <div class="carousel-nav">
+                        <button class="carousel-btn" id="carouselPrev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn" id="carouselNext">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Contenido de Podcast -->
-    <div id="podcastContent">
-        <div class="header">
-            <div class="header-content">
-                <h1 class="Texp">Podcast Live</h1>
-                <button class="theme-toggle" id="podcastThemeToggle">🌓</button>
-            </div>
-            <div class="search-container">
-                <input type="text" id="podcastSearchInput" placeholder="Buscar podcasts..." oninput="searchPodcasts()">
-            </div>
-        </div>
-
-        <div class="categories-container" style="margin-top: 180px;">
-            <div class="category">
-                <h2 class="category-title"><span class="category-icon">🎙️</span>Podcasts destacados</h2>
-                <div class="podcast-container" id="featuredPodcasts"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Audio Player (oculto) -->
-    <audio id="audioPlayer" preload="auto"></audio>
-
-    <!-- Floating Player -->
-    <div id="floatingPlayer">
-        <button id="closeButton" onclick="closePlayer()">×</button>
-        <button id="minimizeButton" onclick="toggleMinimize()">_</button>
-        
-        <!-- Contenedor para la imagen del álbum con el icono de favoritos -->
-        <div class="cover-container">
-            <img id="coverImage" src="" alt="Portada" crossorigin="anonymous">
-            <div class="favorite-icon" id="floatingFavoriteIcon" onclick="toggleFavoriteFromPlayer(event)">♡</div>
-        </div>
-        
-        <div id="info">
-            <strong id="songTitle">Título</strong><br>
-            <small id="artistName">Artista</small><br>
-            <small id="albumTitle">Álbum</small><br>
-        </div>
-
-        <!-- En el HTML, agrega el contenedor de progreso -->
-        <div id="progressContainer" onclick="setProgress(event)">
-            <div id="progressBar"></div>
-        </div>
-        <div id="timeContainer">
-            <span id="currentTime">0:00</span><span id="totalTime">0:00</span>
-        </div>
-
-        <div id="controls">
-    <button onclick="prevTrack()">⏮</button>
-    <button onclick="togglePlaylist()">📋</button>
-    <button id="playPauseButton" onclick="togglePlay()">▶</button>
-    <button onclick="toggleShuffle()">🔀</button>
-    <button onclick="nextTrack()">⏭</button>
-</div>
-<div>
-    <button class="modern-btn" onclick="goToYouTube()">⇄ Comparitr</button>
-</div>
-    </div>
-
-    <!-- Playlist Panel -->
-    <div id="playlistPanel">
-        <h2>Lista de Reproducción</h2>
-        <input type="text" id="playlistSearchInput" placeholder="Buscar en playlist..." oninput="searchPlaylist()">
-        <div id="playlistItems"></div>
-        <button id="closePlaylistButton">×</button>
-    </div>
-
-    <!-- Favorites Panel -->
-    <div id="favoritesPanel">
-        <button id="closeFavoritesButton" onclick="toggleFavoritesPanel()">×</button>
-        <h2>Mis Favoritos</h2>
-        <input type="text" id="favoritesSearchInput" placeholder="Buscar en favoritos..." oninput="searchFavorites()">
-        <div id="favoritesItems"></div>
-    </div>
-
-    <!-- Panel de artistas seguidos -->
-    <div id="followedArtistsPanel">
-        <button id="closeFollowedArtistsButton" onclick="toggleFollowedArtistsPanel()">×</button>
-        <h2>Artistas que sigues</h2>
-        <div id="followedArtistsList"></div>
-    </div>
-
-    <!-- Color Thief Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
-    <!-- Font Awesome para el ícono de YouTube -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <audio id="audioPlayer"></audio>
 
     <script>
-        // Variables globales
-        let currentIndex = 0;
-        let isPlaying = false;
-        let isShuffle = false;
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let favoriteCounts = JSON.parse(localStorage.getItem('favoriteCounts')) || {};
-        let playCounts = JSON.parse(localStorage.getItem('playCounts')) || {};
-        let recentPlays = JSON.parse(localStorage.getItem('recentPlays')) || [];
-        let currentPlaylist = [];
-        let progressInterval;
-        let currentArtistFilter = null;
-        let currentAlbumFilter = null;
-        let pendingFilter = null;
-        let isDarkMode = localStorage.getItem('darkMode') !== 'false';
-        let followedArtists = JSON.parse(localStorage.getItem('followedArtists')) || [];
-        const colorThief = new ColorThief();
-        let previewTimeout;
-        let currentPreviewEpisodeId = null;
-
-        // Elementos del DOM
-        const audioPlayer = document.getElementById('audioPlayer');
-        const mostPlayedContainer = document.getElementById('mostPlayed');
-        const trendingContainer = document.getElementById('trending');
-        const followedArtistsContainer = document.getElementById('followedArtists');
-        const playlistPanel = document.getElementById('playlistPanel');
-        const playlistItems = document.getElementById('playlistItems');
-        const favoritesPanel = document.getElementById('favoritesPanel');
-        const favoritesItems = document.getElementById('favoritesItems');
-        const floatingPlayer = document.getElementById('floatingPlayer');
-        const coverImage = document.getElementById('coverImage');
-        const artistFilterContainer = document.getElementById('artistFilter');
-        const currentArtistDisplay = document.getElementById('currentArtist');
-        const categoriesContainer = document.getElementById('categoriesContainer');
-        const searchResultsContainer = document.getElementById('searchResultsContainer');
-        const searchResultsGrid = document.getElementById('searchResultsGrid');
-        const noResultsMessage = document.getElementById('noResultsMessage');
-        const searchResultsTitle = document.getElementById('searchResultsTitle');
-        const confirmationModal = document.getElementById('confirmationModal');
-        const confirmationTitle = document.getElementById('confirmationTitle');
-        const confirmationMessage = document.getElementById('confirmationMessage');
-        const filterNameSpan = document.getElementById('filterName');
-        const themeToggle = document.getElementById('themeToggle');
-        const podcastThemeToggle = document.getElementById('podcastThemeToggle');
-        const floatingFavoriteIcon = document.getElementById('floatingFavoriteIcon');
-        const artistProfile = document.getElementById('artistProfile');
-        const artistAvatar = document.getElementById('artistAvatar');
-        const artistProfileName = document.getElementById('artistProfileName');
-        const artistSongs = document.getElementById('artistSongs');
-        const listenArtistBtn = document.getElementById('listenArtistBtn');
-        const followArtistBtn = document.getElementById('followArtistBtn');
-        const followedArtistsPanel = document.getElementById('followedArtistsPanel');
-        const followedArtistsList = document.getElementById('followedArtistsList');
-        const followedArtistsCategory = document.getElementById('followedArtistsCategory');
-        const musicContent = document.getElementById('musicContent');
-        const podcastContent = document.getElementById('podcastContent');
-        const musicButton = document.getElementById('musicButton');
-        const podcastButton = document.getElementById('podcastButton');
-        const featuredPodcasts = document.getElementById('featuredPodcasts');
-        const recentEpisodes = document.getElementById('recentEpisodes');
-
-        // Datos de las canciones con archivos de audio
-        const audioData = [
+        // Datos de las canciones
+        const songs = [
             {
                 id: "audio77",
                 audioSrc: "https://www.dropbox.com/scl/fi/tubelowm61niihyv7jrpm/Mentiras-de-Fe.mp3?rlkey=wgefzt207h1j54dg3jbpzru73&st=ojezbe7i&raw=1",
@@ -2910,1138 +1431,321 @@ body {
             }
         }
 
-        // Función para obtener todos los episodios de podcasts
-        function getAllPodcastEpisodes() {
-            let allEpisodes = [];
-            podcastData.forEach(podcast => {
-                podcast.episodes.forEach(episode => {
-                    allEpisodes.push({
-                        id: episode.id,
-                        audioSrc: episode.audioSrc || podcast.audioSrc,
-                        cover: podcast.cover,
-                        title: episode.title,
-                        artist: podcast.artist,
-                        album: podcast.title,
-                        duration: episode.duration,
-                        date: episode.date
-                    });
+        // Variables globales
+        let currentSongIndex = 0;
+        let isPlaying = false;
+        let isShuffle = false;
+        let repeatMode = 0; // 0: no repeat, 1: repeat all, 2: repeat one
+        let currentVolume = 0.7;
+        let currentCategory = 'all';
+        let filteredSongs = [...songs];
+
+        // Elementos del DOM
+        const audioPlayer = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const repeatBtn = document.getElementById('repeatBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const progressContainer = document.querySelector('.progress-container');
+        const progress = document.querySelector('.progress');
+        const currentTimeElement = document.getElementById('currentTime');
+        const durationElement = document.getElementById('duration');
+        const currentTitle = document.getElementById('currentTitle');
+        const currentArtist = document.getElementById('currentArtist');
+        const currentAlbum = document.getElementById('currentAlbum');
+        const currentCover = document.getElementById('currentCover');
+        const carouselContainer = document.getElementById('carouselContainer');
+        const carouselPrev = document.getElementById('carouselPrev');
+        const carouselNext = document.getElementById('carouselNext');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const searchBox = document.getElementById('searchBox');
+        const searchResults = document.getElementById('searchResults');
+        const searchToggle = document.getElementById('searchToggle');
+
+        // Inicializar el reproductor
+        function initPlayer() {
+            // Iniciar con una canción aleatoria
+            currentSongIndex = Math.floor(Math.random() * songs.length);
+            loadSong(currentSongIndex);
+            renderCarousel();
+            updateCategoryFilter();
+            
+            // Establecer volumen inicial
+            audioPlayer.volume = currentVolume;
+            volumeSlider.value = currentVolume;
+            
+            // Event listeners
+            playBtn.addEventListener('click', togglePlay);
+            prevBtn.addEventListener('click', playPrevSong);
+            nextBtn.addEventListener('click', playNextSong);
+            shuffleBtn.addEventListener('click', toggleShuffle);
+            repeatBtn.addEventListener('click', toggleRepeat);
+            volumeSlider.addEventListener('input', updateVolume);
+            audioPlayer.addEventListener('timeupdate', updateProgress);
+            audioPlayer.addEventListener('ended', handleSongEnd);
+            progressContainer.addEventListener('click', setProgress);
+            carouselPrev.addEventListener('click', scrollCarouselPrev);
+            carouselNext.addEventListener('click', scrollCarouselNext);
+            
+            // Filtros de categoría
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const category = button.dataset.category;
+                    setCategoryFilter(category);
                 });
             });
-            return allEpisodes;
-        }
-
-        // Función para renderizar podcasts
-        function renderPodcasts() {
-            featuredPodcasts.innerHTML = '';
             
-            // Renderizar podcasts destacados con el nuevo diseño
-            podcastData.forEach(podcast => {
-                const podcastElement = document.createElement("div");
-                podcastElement.className = "podcast-item";
-                podcastElement.innerHTML = `
-                    <img src="${podcast.cover}" alt="${podcast.title}" class="podcast-cover">
-                    <div class="podcast-info">
-                        <h2 class="podcast-title">${podcast.title}</h2>
-                        <div class="podcast-author">${podcast.artist}</div>
-                        ${podcast.description ? `<div class="podcast-description">${podcast.description}</div>` : ''}
-                        
-                        <div class="episode-list">
-                            ${podcast.episodes.map(episode => `
-                                <div class="episode-item" data-episode-id="${episode.id}">
-                                    <div class="episode-title">${episode.title}</div>
-                                    <div class="episode-meta">
-                                        <span>${episode.duration}</span>
-                                        <span>${episode.date}</span>
-                                    </div>
-                                    <div class="preview-container" style="display: none;">
-                                        <div class="preview-text">Escuchando vista previa...</div>
-                                        <button class="listen-full-btn" onclick="playFullEpisode('${episode.id}')">Quieres escuchar el episodio completo?</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-                featuredPodcasts.appendChild(podcastElement);
-            });
+            // Buscador
+            searchBox.addEventListener('input', handleSearch);
+            searchToggle.addEventListener('click', toggleSearch);
             
-            // Configurar eventos para los episodios
-            document.querySelectorAll('.episode-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    // Solo activar si no se hizo clic en el botón de reproducción completa
-                    if (!e.target.classList.contains('listen-full-btn')) {
-                        const episodeId = this.getAttribute('data-episode-id');
-                        playPodcastPreview(episodeId);
-                    }
-                });
-            });
-        }
-
-        // Función para reproducir vista previa de un podcast
-        function playPodcastPreview(episodeId) {
-            // Detener cualquier vista previa anterior
-            stopCurrentPreview();
-            
-            // Buscar el episodio
-            const episode = getAllPodcastEpisodes().find(e => e.id === episodeId);
-            if (!episode) return;
-            
-            // Actualizar el estado
-            currentPreviewEpisodeId = episodeId;
-            
-            // Mostrar el contenedor de vista previa
-            const episodeElement = document.querySelector(`.episode-item[data-episode-id="${episodeId}"]`);
-            const previewContainer = episodeElement.querySelector('.preview-container');
-            const previewText = episodeElement.querySelector('.preview-text');
-            const listenFullBtn = episodeElement.querySelector('.listen-full-btn');
-            
-            previewContainer.style.display = 'block';
-            listenFullBtn.style.display = 'none';
-            previewText.textContent = 'Escuchando vista previa...';
-            
-            // Configurar el reproductor de audio
-            audioPlayer.src = episode.audioSrc;
-            audioPlayer.currentTime = 0;
-            audioPlayer.play();
-            
-            // Configurar el temporizador para detener después de 50 segundos
-            previewTimeout = setTimeout(() => {
-                audioPlayer.pause();
-                previewText.textContent = 'Vista previa finalizada';
-                listenFullBtn.style.display = 'block';
-            }, 50000); // 50 segundos
-            
-            // Actualizar controles
-            isPlaying = true;
-            updateControlsVisibility();
-        }
-
-        // Función para detener la vista previa actual
-        function stopCurrentPreview() {
-            if (currentPreviewEpisodeId) {
-                clearTimeout(previewTimeout);
-                audioPlayer.pause();
-                
-                // Ocultar el contenedor de vista previa
-                const currentEpisodeElement = document.querySelector(`.episode-item[data-episode-id="${currentPreviewEpisodeId}"]`);
-                if (currentEpisodeElement) {
-                    currentEpisodeElement.querySelector('.preview-container').style.display = 'none';
-                }
-                
-                currentPreviewEpisodeId = null;
-                isPlaying = false;
-            }
-        }
-
-        // Función para reproducir el episodio completo
-        function playFullEpisode(episodeId) {
-            stopCurrentPreview();
-            
-            // Establecer la lista de reproducción actual a todos los episodios
-            currentPlaylist = getAllPodcastEpisodes();
-            
-            // Encontrar el índice del episodio actual
-            currentIndex = currentPlaylist.findIndex(e => e.id === episodeId);
-            
-            // Cargar y reproducir el episodio
-            loadTrack(currentIndex);
-            audioPlayer.play();
-            isPlaying = true;
-            document.getElementById('playPauseButton').textContent = '⏸';
-            
-            // Mostrar el reproductor flotante
-            floatingPlayer.style.display = "block";
-        }
-
-        // Función para buscar podcasts
-        function searchPodcasts() {
-            const searchTerm = document.getElementById('podcastSearchInput').value.toLowerCase().trim();
-            
-            // Si el campo de búsqueda está vacío, mostrar los podcasts normales
-            if (searchTerm === '') {
-                renderPodcasts();
-                return;
-            }
-            
-            // Filtrar podcasts y episodios que coincidan con el término de búsqueda
-            const results = [];
-            podcastData.forEach(podcast => {
-                // Buscar en título, artista o descripción del podcast
-                if (podcast.title.toLowerCase().includes(searchTerm) || 
-                    podcast.artist.toLowerCase().includes(searchTerm) || 
-                    (podcast.description && podcast.description.toLowerCase().includes(searchTerm))) {
-                    
-                    // Agregar todos los episodios del podcast
-                    podcast.episodes.forEach(episode => {
-                        results.push({
-                            id: episode.id,
-                            audioSrc: episode.audioSrc || podcast.audioSrc,
-                            cover: podcast.cover,
-                            title: episode.title,
-                            artist: podcast.artist,
-                            album: podcast.title,
-                            duration: episode.duration,
-                            date: episode.date
-                        });
-                    });
-                } else {
-                    // Buscar en episodios individuales
-                    podcast.episodes.forEach(episode => {
-                        if (episode.title.toLowerCase().includes(searchTerm)) {
-                            results.push({
-                                id: episode.id,
-                                audioSrc: episode.audioSrc || podcast.audioSrc,
-                                cover: podcast.cover,
-                                title: episode.title,
-                                artist: podcast.artist,
-                                album: podcast.title,
-                                duration: episode.duration,
-                                date: episode.date
-                            });
-                        }
-                    });
+            // Cerrar resultados al hacer clic fuera
+            document.addEventListener('click', (e) => {
+                if (!searchBox.contains(e.target) && !searchResults.contains(e.target) && 
+                    !searchToggle.contains(e.target)) {
+                    searchResults.style.display = 'none';
                 }
             });
-            
-            // Mostrar resultados
-            displayPodcastSearchResults(results, searchTerm);
         }
 
-        // Función para mostrar resultados de búsqueda de podcasts
-        function displayPodcastSearchResults(results, searchTerm) {
-            featuredPodcasts.innerHTML = '';
+        // Cargar canción
+        function loadSong(index) {
+            if (filteredSongs.length === 0) return;
             
-            if (results.length === 0) {
-                featuredPodcasts.innerHTML = '<div class="no-results">No se encontraron resultados</div>';
-                return;
-            }
-            
-            // Agrupar resultados por podcast
-            const podcastsMap = new Map();
-            results.forEach(episode => {
-                if (!podcastsMap.has(episode.album)) {
-                    podcastsMap.set(episode.album, {
-                        cover: episode.cover,
-                        artist: episode.artist,
-                        description: podcastData.find(p => p.title === episode.album)?.description || '',
-                        episodes: []
-                    });
-                }
-                podcastsMap.get(episode.album).episodes.push(episode);
-            });
-            
-            // Mostrar los resultados agrupados
-            podcastsMap.forEach((podcastInfo, podcastTitle) => {
-                const podcastElement = document.createElement("div");
-                podcastElement.className = "podcast-item";
-                podcastElement.innerHTML = `
-                    <img src="${podcastInfo.cover}" alt="${podcastTitle}" class="podcast-cover">
-                    <div class="podcast-info">
-                        <h2 class="podcast-title">${podcastTitle}</h2>
-                        <div class="podcast-author">${podcastInfo.artist}</div>
-                        ${podcastInfo.description ? `<div class="podcast-description">${podcastInfo.description}</div>` : ''}
-                        
-                        <div class="episode-list">
-                            ${podcastInfo.episodes.map(episode => `
-                                <div class="episode-item" data-episode-id="${episode.id}">
-                                    <div class="episode-title">${episode.title}</div>
-                                    <div class="episode-meta">
-                                        <span>${episode.duration}</span>
-                                        <span>${episode.date}</span>
-                                    </div>
-                                    <div class="preview-container" style="display: none;">
-                                        <div class="preview-text">Escuchando vista previa...</div>
-                                        <button class="listen-full-btn" onclick="playFullEpisode('${episode.id}')">Quieres escuchar el episodio completo?</button>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-                featuredPodcasts.appendChild(podcastElement);
-            });
-            
-            // Configurar eventos para los episodios en los resultados de búsqueda
-            document.querySelectorAll('.episode-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    // Solo activar si no se hizo clic en el botón de reproducción completa
-                    if (!e.target.classList.contains('listen-full-btn')) {
-                        const episodeId = this.getAttribute('data-episode-id');
-                        playPodcastPreview(episodeId);
-                    }
-                });
-            });
-        }
-
-        // Función para verificar si la canción actual es un anuncio
-        function isCurrentSongAd() {
-            const currentSong = currentPlaylist[currentIndex];
-            return currentSong && currentSong.id.startsWith("audioAnuncio");
-        }
-
-        // Función para actualizar la visibilidad de los controles según el tipo de canción
-        function updateControlsVisibility() {
-            if (isCurrentSongAd()) {
-                floatingPlayer.classList.add('ad-playing');
-            } else {
-                floatingPlayer.classList.remove('ad-playing');
-            }
-        }
-
-        // Función para mostrar/ocultar el panel de artistas seguidos
-        function toggleFollowedArtistsPanel() {
-            if (followedArtistsPanel.style.display === "block") {
-                followedArtistsPanel.style.display = "none";
-            } else {
-                followedArtistsPanel.style.display = "block";
-                renderFollowedArtistsList();
-            }
-        }
-
-        // Función para renderizar la lista de artistas seguidos
-        function renderFollowedArtistsList() {
-            followedArtistsList.innerHTML = '';
-            
-            if (followedArtists.length === 0) {
-                followedArtistsList.innerHTML = '<div class="no-followed-artists">No sigues a ningún artista todavía</div>';
-                return;
-            }
-            
-            followedArtists.forEach(artist => {
-                // Buscar una canción del artista para obtener la imagen
-                const artistSong = getReleasedSongs().find(song => song.artist === artist);
-                
-                const artistElement = document.createElement('div');
-                artistElement.className = 'followed-artist';
-                artistElement.innerHTML = `
-                    <img src="${artistSong ? artistSong.cover : 'https://via.placeholder.com/60'}" class="followed-artist-avatar" alt="${artist}">
-                    <div class="followed-artist-info">
-                        <div class="followed-artist-name">${artist}</div>
-                        <div class="followed-artist-songs">${getArtistSongCount(artist)} canciones</div>
-                    </div>
-                    <button class="unfollow-btn" onclick="unfollowArtist('${artist}', event)">Dejar de seguir</button>
-                `;
-                
-                // Agregar evento para ver el perfil del artista
-                artistElement.addEventListener('click', function(e) {
-                    // Evitar que el evento se active si se hizo clic en el botón de dejar de seguir
-                    if (!e.target.classList.contains('unfollow-btn')) {
-                        showArtistProfile(artist);
-                        followedArtistsPanel.style.display = "none";
-                    }
-                });
-                
-                followedArtistsList.appendChild(artistElement);
-            });
-        }
-
-        // Función para obtener el número de canciones de un artista
-        function getArtistSongCount(artistName) {
-            return getReleasedSongs().filter(song => song.artist === artistName).length;
-        }
-
-        // Función para seguir/dejar de seguir un artista
-        function toggleFollowArtist(artistName) {
-            const index = followedArtists.indexOf(artistName);
-            if (index === -1) {
-                // Seguir al artista
-                followedArtists.push(artistName);
-                followArtistBtn.textContent = "Siguiendo ✓";
-                followArtistBtn.style.backgroundColor = "#4CAF50";
-            } else {
-                // Dejar de seguir al artista
-                followedArtists.splice(index, 1);
-                followArtistBtn.textContent = "Seguir";
-                followArtistBtn.style.backgroundColor = "";
-            }
-            
-            // Guardar en localStorage
-            localStorage.setItem('followedArtists', JSON.stringify(followedArtists));
-            
-            // Actualizar la lista de artistas seguidos
-            renderFollowedArtistsList();
-            updateFollowedArtistsSection();
-        }
-
-        // Función para dejar de seguir un artista desde la lista
-        function unfollowArtist(artistName, event) {
-            event.stopPropagation(); // Evitar que el evento se propague al elemento padre
-            
-            const index = followedArtists.indexOf(artistName);
-            if (index !== -1) {
-                followedArtists.splice(index, 1);
-                localStorage.setItem('followedArtists', JSON.stringify(followedArtists));
-                renderFollowedArtistsList();
-                updateFollowedArtistsSection();
-                
-                // Si estamos en el perfil del artista, actualizar el botón
-                if (artistProfileName.textContent === artistName) {
-                    followArtistBtn.textContent = "Seguir";
-                    followArtistBtn.style.backgroundColor = "";
-                }
-            }
-        }
-
-        // Función para actualizar la sección de artistas seguidos
-        function updateFollowedArtistsSection() {
-            if (followedArtists.length > 0) {
-                followedArtistsCategory.style.display = 'block';
-                
-                // Obtener información de los artistas seguidos
-                const followedArtistsData = followedArtists.map(artist => {
-                    const artistSong = getReleasedSongs().find(song => song.artist === artist);
-                    return {
-                        name: artist,
-                        cover: artistSong ? artistSong.cover : 'https://via.placeholder.com/160',
-                        songCount: getArtistSongCount(artist)
-                    };
-                });
-                
-                // Renderizar los artistas seguidos
-                renderFollowedArtistsInCategory(followedArtistsContainer, followedArtistsData);
-            } else {
-                followedArtistsCategory.style.display = 'none';
-            }
-        }
-
-        // Función para renderizar artistas seguidos en la categoría
-        function renderFollowedArtistsInCategory(container, artists) {
-            container.innerHTML = "";
-            
-            artists.forEach((artist, index) => {
-                const artistElement = document.createElement("div");
-                artistElement.className = "song-item";
-                artistElement.style.animationDelay = `${index * 0.1}s`;
-                artistElement.innerHTML = `
-                    <img src="${artist.cover}" alt="${artist.name}" onclick="showArtistProfile('${artist.name}')">
-                    <div class="song-info">
-                        <span class="song-title">${artist.name}</span>
-                        <span class="artist-name">${artist.songCount} canciones</span>
-                    </div>
-                `;
-                container.appendChild(artistElement);
-            });
-        }
-
-        // Función para mostrar el perfil del artista
-        function showArtistProfile(artistName) {
-            // Ocultar todos los contenedores
-            categoriesContainer.style.display = 'none';
-            searchResultsContainer.style.display = 'none';
-            
-            // Mostrar el perfil del artista
-            artistProfile.style.display = 'block';
-            
-            // Establecer la información del artista
-            artistProfileName.textContent = artistName;
-            
-            // Buscar la primera canción del artista para obtener la imagen del avatar
-            const artistSong = getReleasedSongs().find(song => song.artist === artistName);
-            if (artistSong) {
-                artistAvatar.src = artistSong.cover;
-            }
-            
-            // Actualizar el botón de seguir
-            const isFollowing = followedArtists.includes(artistName);
-            followArtistBtn.textContent = isFollowing ? "Siguiendo ✓" : "Seguir";
-            followArtistBtn.style.backgroundColor = isFollowing ? "#4CAF50" : "";
-            
-            // Configurar el evento de clic para seguir/dejar de seguir
-            followArtistBtn.onclick = function(e) {
-                e.stopPropagation();
-                toggleFollowArtist(artistName);
-            };
-            
-            // Filtrar las canciones del artista
-            const artistSongsList = getReleasedSongs().filter(song => song.artist === artistName);
-            
-            // Renderizar las canciones del artista
-            renderSongsInCategory(artistSongs, artistSongsList, "artist");
-            
-            // Configurar el botón de escuchar solo a este artista
-            listenArtistBtn.onclick = function() {
-                filterByArtist(artistName);
-            };
-        }
-
-        // Función para volver a la búsqueda desde el perfil del artista
-        function backToSearch() {
-            artistProfile.style.display = 'none';
-            searchResultsContainer.style.display = 'block';
-            
-            // Restablecer la lista de reproducción a todas las canciones
-            currentPlaylist = getReleasedSongs();
-        }
-
-        // Función para filtrar por artista
-        function filterByArtist(artistName) {
-            currentArtistFilter = artistName;
-            currentAlbumFilter = null;
-            
-            // Mostrar el nombre del artista actual
-            currentArtistDisplay.textContent = `Mostrando: ${artistName}`;
-            currentArtistDisplay.style.display = 'block';
-            
-            // Actualizar los botones de filtro de artista
-            updateArtistFilterButtons();
-            
-            // Ocultar todas las categorías excepto "Toda la música"
-            document.querySelectorAll('.category').forEach(category => {
-                if (category.id !== 'mostPlayedCategory') {
-                    category.style.display = 'none';
-                }
-            });
-            
-            // Filtrar las canciones en "Toda la música" para mostrar solo las del artista
-            const mostPlayedSongs = [...getReleasedSongs()]
-                .filter(song => song.artist.toLowerCase() === artistName.toLowerCase())
-                .sort(() => Math.random() - 0.5);
-            
-            renderSongsInCategory(mostPlayedContainer, mostPlayedSongs, "plays");
-            
-            // Establecer la lista de reproducción actual solo con canciones del artista
-            currentPlaylist = mostPlayedSongs;
-            
-            // Si hay canciones, reproducir la primera
-            if (currentPlaylist.length > 0) {
-                currentIndex = 0;
-                loadTrack(currentIndex);
-                audioPlayer.play();
-                isPlaying = true;
-                document.getElementById('playPauseButton').textContent = '⏸';
-            }
-        }
-
-        // Función para cambiar entre modo claro y oscuro
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            localStorage.setItem('darkMode', isDarkMode);
-            applyTheme();
-        }
-
-        // Función para aplicar el tema seleccionado
-        function applyTheme() {
-            if (isDarkMode) {
-                document.body.classList.remove('light-mode');
-                themeToggle.textContent = '🌓';
-                podcastThemeToggle.textContent = '🌓';
-            } else {
-                document.body.classList.add('light-mode');
-                themeToggle.textContent = '🌞';
-                podcastThemeToggle.textContent = '🌞';
-            }
-        }
-
-        // Función para agregar/eliminar favoritos desde el reproductor flotante
-        function toggleFavoriteFromPlayer(event) {
-            event.stopPropagation();
-            const currentSong = currentPlaylist[currentIndex];
-            if (currentSong) {
-                toggleFavorite(currentSong.id, event);
-                updateFloatingFavoriteIcon(currentSong.id);
-            }
-        }
-
-        // Función para actualizar el icono de favoritos en el reproductor flotante
-        function updateFloatingFavoriteIcon(songId) {
-            if (favorites.includes(songId)) {
-                floatingFavoriteIcon.classList.add('added');
-            } else {
-                floatingFavoriteIcon.classList.remove('added');
-            }
-        }
-
-        // Registro del Service Worker para PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').then(registration => {
-                    console.log('ServiceWorker registration successful');
-                }).catch(err => {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-
-        // Media Session API para controles en pantalla bloqueada
-        function setupMediaSession() {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.setActionHandler('play', function() {
-                    audioPlayer.play();
-                    isPlaying = true;
-                    document.getElementById('playPauseButton').textContent = '⏸';
-                });
-
-                navigator.mediaSession.setActionHandler('pause', function() {
-                    audioPlayer.pause();
-                    isPlaying = false;
-                    document.getElementById('playPauseButton').textContent = '▶';
-                });
-
-                navigator.mediaSession.setActionHandler('previoustrack', function() {
-                    prevTrack();
-                });
-
-                navigator.mediaSession.setActionHandler('nexttrack', function() {
-                    nextTrack();
-                });
-
-                navigator.mediaSession.setActionHandler('seekbackward', function() {
-                    audioPlayer.currentTime = Math.max(0, audioPlayer.currentTime - 10);
-                });
-
-                navigator.mediaSession.setActionHandler('seekforward', function() {
-                    audioPlayer.currentTime = Math.min(audioPlayer.duration, audioPlayer.currentTime + 10);
-                });
-
-                navigator.mediaSession.setActionHandler('seekto', function(details) {
-                    if (details.fastSeek && 'fastSeek' in audioPlayer) {
-                        audioPlayer.fastSeek(details.seekTime);
-                    } else {
-                        audioPlayer.currentTime = details.seekTime;
-                    }
-                });
-            }
-        }
-
-        // Función para actualizar los metadatos de Media Session
-        function updateMediaMetadata(song) {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: song.title,
-                    artist: song.artist,
-                    album: song.album || '',
-                    artwork: [
-                        { src: song.cover, sizes: '96x96', type: 'image/jpg' },
-                        { src: song.cover, sizes: '128x128', type: 'image/jpg' },
-                        { src: song.cover, sizes: '192x192', type: 'image/jpg' },
-                        { src: song.cover, sizes: '256x256', type: 'image/jpg' },
-                        { src: song.cover, sizes: '384x384', type: 'image/jpg' },
-                        { src: song.cover, sizes: '512x512', type: 'image/jpg' }
-                ]
-                });
-            }
-        }
-
-        // Función para actualizar el color de fondo basado en la portada
-        function updateBackgroundColorFromCover() {
-            if (!coverImage.complete) {
-                coverImage.addEventListener('load', function() {
-                    extractAndSetColor();
-                });
-            } else {
-                extractAndSetColor();
-            }
-        }
-
-        // Función para extraer y establecer el color
-        function extractAndSetColor() {
-            try {
-                // Obtener el color dominante de la imagen
-                const dominantColor = colorThief.getColor(coverImage);
-                const [r, g, b] = dominantColor;
-                
-                // Convertir RGB a HSL para ajustar la luminosidad
-                const hsl = rgbToHsl(r, g, b);
-                
-                // Ajustar la luminosidad para el fondo (más oscuro)
-                hsl[2] = Math.max(10, hsl[2] * 0.3);
-                
-                // Convertir de nuevo a RGB
-                const adjustedRgb = hslToRgb(hsl[0], hsl[1], hsl[2]);
-                
-                // Aplicar el color al reproductor con transparencia
-                floatingPlayer.style.backgroundColor = `rgba(${adjustedRgb[0]}, ${adjustedRgb[1]}, ${adjustedRgb[2]}, 0.85)`;
-                
-                // Ajustar el color del texto para mejor contraste
-                const textColor = getContrastColor(adjustedRgb);
-                document.getElementById('info').style.color = textColor;
-                document.getElementById('songTitle').style.color = textColor;
-                document.getElementById('artistName').style.color = textColor;
-                document.getElementById('albumTitle').style.color = textColor;
-            } catch (e) {
-                console.error("Error al extraer color de la portada:", e);
-                // Color de respaldo
-                floatingPlayer.style.backgroundColor = isDarkMode ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.95)';
-                document.getElementById('info').style.color = isDarkMode ? 'rgb(255, 145, 0)' : '#ff6b00';
-                document.getElementById('songTitle').style.color = isDarkMode ? 'rgb(255, 145, 0)' : '#ff6b00';
-                document.getElementById('artistName').style.color = isDarkMode ? '#ccc' : '#666';
-                document.getElementById('albumTitle').style.color = isDarkMode ? '#ccc' : '#666';
-            }
-        }
-
-        // Función para convertir RGB a HSL
-        function rgbToHsl(r, g, b) {
-            r /= 255, g /= 255, b /= 255;
-            const max = Math.max(r, g, b), min = Math.min(r, g, b);
-            let h, s, l = (max + min) / 2;
-
-            if (max === min) {
-                h = s = 0; // achromatic
-            } else {
-                const d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch (max) {
-                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                    case g: h = (b - r) / d + 2; break;
-                    case b: h = (r - g) / d + 4; break;
-                }
-                h /= 6;
-            }
-
-            return [h * 360, s * 100, l * 100];
-        }
-
-        // Función para convertir HSL a RGB
-        function hslToRgb(h, s, l) {
-            h /= 360;
-            s /= 100;
-            l /= 100;
-            let r, g, b;
-
-            if (s === 0) {
-                r = g = b = l; // achromatic
-            } else {
-                const hue2rgb = (p, q, t) => {
-                    if (t < 0) t += 1;
-                    if (t > 1) t -= 1;
-                    if (t < 1/6) return p + (q - p) * 6 * t;
-                    if (t < 1/2) return q;
-                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                    return p;
-                };
-
-                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                const p = 2 * l - q;
-                r = hue2rgb(p, q, h + 1/3);
-                g = hue2rgb(p, q, h);
-                b = hue2rgb(p, q, h - 1/3);
-            }
-
-            return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-        }
-
-        // Función para determinar el color de texto con mejor contraste
-        function getContrastColor(rgb) {
-            // Calcular luminosidad relativa (fórmula WCAG)
-            const luminance = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
-            return luminance > 0.5 ? '#333' : '#fff';
-        }
-
-        // Event listeners para el reproductor de audio
-        audioPlayer.addEventListener('play', () => {
-            isPlaying = true;
-            document.getElementById('playPauseButton').textContent = '⏸';
-            startProgressTimer();
-            
-            // Incrementar el contador de reproducciones cuando comienza a reproducirse
-            const currentSong = currentPlaylist[currentIndex];
-            if (currentSong) {
-                incrementPlayCount(currentSong.id);
-            }
-            
-            // Actualizar visibilidad de controles
-            updateControlsVisibility();
-        });
-
-        audioPlayer.addEventListener('pause', () => {
-            isPlaying = false;
-            document.getElementById('playPauseButton').textContent = '▶';
-            clearInterval(progressInterval);
-        });
-
-        audioPlayer.addEventListener('ended', () => {
-            // Reproducir automáticamente la siguiente canción
-            if (currentPlaylist.length > 0) {
-                if (isShuffle) {
-                    // Si está en modo aleatorio, seleccionar una canción aleatoria diferente a la actual
-                    let newIndex;
-                    do {
-                        newIndex = Math.floor(Math.random() * currentPlaylist.length);
-                    } while (newIndex === currentIndex && currentPlaylist.length > 1);
-                    currentIndex = newIndex;
-                } else {
-                    // Si no está en modo aleatorio, ir a la siguiente canción
-                    currentIndex = (currentIndex + 1) % currentPlaylist.length;
-                }
-                
-                loadTrack(currentIndex);
-                audioPlayer.play();
-            }
-        });
-
-        audioPlayer.addEventListener('timeupdate', updateProgress);
-
-        audioPlayer.addEventListener('loadedmetadata', () => {
-            updateProgress();
-        });
-
-        // Función para iniciar el temporizador de progreso
-        function startProgressTimer() {
-            clearInterval(progressInterval);
-            progressInterval = setInterval(updateProgress, 100);
-        }
-
-        // Función para actualizar la barra de progreso
-        function updateProgress() {
-            if (!audioPlayer) return;
-            
-            const currentTime = audioPlayer.currentTime;
-            const duration = audioPlayer.duration || 0;
-            
-            // Calcular el porcentaje de progreso
-            const percentage = (currentTime / duration) * 100;
-            
-            // Actualizar la barra de progreso
-            document.getElementById('progressBar').style.width = `${percentage}%`;
-            
-            // Actualizar los tiempos
-            updateTimes(currentTime, duration);
-        }
-
-        // Función para formatear y mostrar los tiempos
-        function updateTimes(currentTime, duration) {
-            const formatTime = (time) => {
-                const minutes = Math.floor(time / 60);
-                const seconds = Math.floor(time % 60);
-                return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            };
-            
-            document.getElementById('currentTime').textContent = formatTime(currentTime);
-            document.getElementById('totalTime').textContent = formatTime(duration);
-        }
-
-        // Función para establecer la posición de reproducción
-        function setProgress(event) {
-            if (!audioPlayer) return;
-            
-            const progressContainer = event.currentTarget;
-            const rect = progressContainer.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const progressWidth = rect.width;
-            
-            const newTime = (clickX / progressWidth) * audioPlayer.duration;
-            audioPlayer.currentTime = newTime;
-            
-            updateProgress();
-        }
-
-        // Función para cargar una canción
-        function loadTrack(index) {
-            const song = currentPlaylist[index];
-            if (!song) return;
-
-            // Mostrar el reproductor flotante
-            document.getElementById('floatingPlayer').style.display = "block";
-            
-            // Actualizar la información de la canción
-            document.getElementById('songTitle').textContent = song.title;
-            document.getElementById('artistName').textContent = song.artist;
-            document.getElementById('albumTitle').textContent = song.album || '';
-            document.getElementById('coverImage').src = song.cover;
-            
-            // Actualizar el icono de favoritos
-            updateFloatingFavoriteIcon(song.id);
-            
-            // Actualizar el color de fondo basado en la portada
-            updateBackgroundColorFromCover();
-            // Actualizar metadatos para pantalla bloqueada
-            updateMediaMetadata(song);
-            
-            // Cargar el audio
+            const song = filteredSongs[index];
             audioPlayer.src = song.audioSrc;
-            audioPlayer.load();
+            currentTitle.textContent = song.title;
+            currentArtist.textContent = song.artist;
+            currentAlbum.textContent = song.album ? `Álbum: ${song.album}` : 'Álbum: Sin álbum';
+            currentCover.src = song.cover;
             
-            // Actualizar la lista de reproducción para resaltar la canción actual
-            updatePlaylistHighlight();
-            
-            // Actualizar visibilidad de controles según si es anuncio o no
-            updateControlsVisibility();
-        }
-
-        // Función para reproducir una canción específica
-        function playAudio(id) {
-            // Establecer la lista de reproducción actual según los filtros activos
-            if (currentArtistFilter) {
-                currentPlaylist = getReleasedSongs().filter(song => song.artist.toLowerCase() === currentArtistFilter.toLowerCase());
-            } else if (currentAlbumFilter) {
-                currentPlaylist = getReleasedSongs().filter(song => song.album && song.album.toLowerCase() === currentAlbumFilter.toLowerCase());
-            } else {
-                currentPlaylist = getReleasedSongs();
-            }
-            
-            const index = currentPlaylist.findIndex(song => song.id === id);
-            if (index !== -1) {
-                currentIndex = index;
-                loadTrack(currentIndex);
-                audioPlayer.play();
-                isPlaying = true;
-                document.getElementById('playPauseButton').textContent = '⏸';
-            }
-        }
-
-        // Función para reproducir una canción desde favoritos
-        function playAudioFromFavorites(id) {
-            // Establecer la lista de reproducción actual solo con canciones favoritas
-            currentPlaylist = getReleasedSongs().filter(song => favorites.includes(song.id));
-            const index = currentPlaylist.findIndex(song => song.id === id);
-            if (index !== -1) {
-                currentIndex = index;
-                loadTrack(currentIndex);
-                audioPlayer.play();
-                isPlaying = true;
-                document.getElementById('playPauseButton').textContent = '⏸';
-            }
-        }
-
-        // Función para pausar/reproducir
-        function togglePlay() {
-            if (isPlaying) {
-                audioPlayer.pause();
-            } else {
-                audioPlayer.play();
-            }
-        }
-
-        // Función para la siguiente canción
-        function nextTrack() {
-            if (currentPlaylist.length === 0) return;
-            
-            if (isShuffle) {
-                // Si está en modo aleatorio, seleccionar una canción aleatoria diferente a la actual
-                let newIndex;
-                do {
-                    newIndex = Math.floor(Math.random() * currentPlaylist.length);
-                } while (newIndex === currentIndex && currentPlaylist.length > 1);
-                currentIndex = newIndex;
-            } else {
-                // Si no está en modo aleatorio, ir a la siguiente canción
-                currentIndex = (currentIndex + 1) % currentPlaylist.length;
-            }
-            
-            loadTrack(currentIndex);
-            if (isPlaying) audioPlayer.play();
-        }
-
-        // Función para la canción anterior
-        function prevTrack() {
-            if (audioPlayer.currentTime > 3) {
-                audioPlayer.currentTime = 0;
-            } else {
-                currentIndex = (currentIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
-                loadTrack(currentIndex);
-                if (isPlaying) audioPlayer.play();
-            }
-        }
-
-        // Función para activar/desactivar el modo aleatorio
-        function toggleShuffle() {
-            isShuffle = !isShuffle;
-            const shuffleButton = document.querySelector('#controls button:nth-child(4)');
-            shuffleButton.style.backgroundColor = isShuffle ? '#ff5e01' : '#333';
-        }
-
-        // Función para cerrar el reproductor
-        function closePlayer() {
-            audioPlayer.pause();
-            document.getElementById('floatingPlayer').style.display = "none";
-            isPlaying = false;
-            document.getElementById('playPauseButton').textContent = '▶';
-            clearInterval(progressInterval);
-        }
-
-        // Función para minimizar/restaurar el reproductor
-        function toggleMinimize() {
-            document.getElementById('floatingPlayer').classList.toggle('minimized');
-        }
-
-        // Función para mostrar/ocultar la lista de reproducción
-        function togglePlaylist() {
-            if (playlistPanel.style.display === "block") {
-                playlistPanel.style.display = "none";
-            } else {
-                playlistPanel.style.display = "block";
-                renderPlaylist();
-            }
-        }
-
-        // Función para renderizar la lista de reproducción
-        function renderPlaylist() {
-            playlistItems.innerHTML = "";
-            currentPlaylist.forEach((song, index) => {
-                const playCount = playCounts[song.id] || 0;
-                const item = document.createElement("div");
-                item.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
-                item.onclick = () => {
-                    currentIndex = index;
-                    loadTrack(currentIndex);
-                    audioPlayer.play();
-                    isPlaying = true;
-                    document.getElementById('playPauseButton').textContent = '⏸';
-                    playlistPanel.style.display = "none";
-                };
-                
-                item.innerHTML = `
-                    <img src="${song.cover}" alt="${song.title}">
-                    <div class="playlist-item-info">
-                        <div class="playlist-item-title">${song.title}</div>
-                        <div class="playlist-item-artist">${song.artist}</div>
-                    </div>
-                `;
-                playlistItems.appendChild(item);
-            });
-        }
-
-        // Función para actualizar el resaltado en la lista de reproducción
-        function updatePlaylistHighlight() {
-            const items = document.querySelectorAll('.playlist-item');
-            items.forEach((item, index) => {
-                if (index === currentIndex) {
+            // Actualizar elementos activos en el carrusel
+            document.querySelectorAll('.carousel-item').forEach((item, idx) => {
+                if (idx === index) {
                     item.classList.add('active');
                 } else {
                     item.classList.remove('active');
                 }
             });
+            
+            // Cargar metadatos de la canción para obtener la duración
+            audioPlayer.addEventListener('loadedmetadata', () => {
+                durationElement.textContent = formatTime(audioPlayer.duration);
+            });
+            
+            // Reproducir automáticamente
+            playSong();
         }
 
-        // Función para buscar en la lista de reproducción
-        function searchPlaylist() {
-            const searchTerm = document.getElementById('playlistSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.playlist-item');
+        // Reproducir o pausar
+        function togglePlay() {
+            if (filteredSongs.length === 0) return;
+            
+            if (isPlaying) {
+                pauseSong();
+            } else {
+                playSong();
+            }
+        }
 
-            items.forEach(item => {
-                const title = item.querySelector('.playlist-item-title').textContent.toLowerCase();
-                const artist = item.querySelector('.playlist-item-artist').textContent.toLowerCase();
-                if (title.includes(searchTerm) || artist.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
+        function playSong() {
+            isPlaying = true;
+            audioPlayer.play();
+            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+            playBtn.title = "Pausar";
+        }
+
+        function pauseSong() {
+            isPlaying = false;
+            audioPlayer.pause();
+            playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            playBtn.title = "Reproducir";
+        }
+
+        // Canción anterior
+        function playPrevSong() {
+            if (filteredSongs.length === 0) return;
+            
+            currentSongIndex--;
+            if (currentSongIndex < 0) {
+                currentSongIndex = filteredSongs.length - 1;
+            }
+            loadSong(currentSongIndex);
+        }
+
+        // Siguiente canción
+        function playNextSong() {
+            if (filteredSongs.length === 0) return;
+            
+            if (isShuffle) {
+                playRandomSong();
+            } else {
+                currentSongIndex++;
+                if (currentSongIndex >= filteredSongs.length) {
+                    currentSongIndex = 0;
                 }
+            }
+            loadSong(currentSongIndex);
+        }
+
+        // Reproducir canción aleatoria
+        function playRandomSong() {
+            if (filteredSongs.length === 0) return;
+            
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * filteredSongs.length);
+            } while (newIndex === currentSongIndex && filteredSongs.length > 1);
+            
+            currentSongIndex = newIndex;
+        }
+
+        // Manejar el final de la canción
+        function handleSongEnd() {
+            if (repeatMode === 2) {
+                // Repetir una sola canción
+                audioPlayer.currentTime = 0;
+                playSong();
+            } else {
+                // Repetir toda la lista o modo aleatorio o pasar a la siguiente
+                playNextSong();
+            }
+        }
+
+        // Alternar modo aleatorio
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            shuffleBtn.classList.toggle('btn-active', isShuffle);
+            shuffleBtn.title = isShuffle ? "Desactivar modo aleatorio" : "Activar modo aleatorio";
+        }
+
+        // Alternar modo de repetición
+        function toggleRepeat() {
+            repeatMode = (repeatMode + 1) % 3;
+            
+            switch (repeatMode) {
+                case 0:
+                    repeatBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                    repeatBtn.title = "Repetir";
+                    repeatBtn.classList.remove('btn-active');
+                    break;
+                case 1:
+                    repeatBtn.innerHTML = '<i class="fas fa-redo"></i>';
+                    repeatBtn.title = "Repetir toda la lista";
+                    repeatBtn.classList.add('btn-active');
+                    break;
+                case 2:
+                    repeatBtn.innerHTML = '<i class="fas fa-redo"></i>1';
+                    repeatBtn.title = "Repetir una canción";
+                    repeatBtn.classList.add('btn-active');
+                    break;
+            }
+        }
+
+        // Actualizar volumen
+        function updateVolume() {
+            currentVolume = volumeSlider.value;
+            audioPlayer.volume = currentVolume;
+        }
+
+        // Actualizar barra de progreso
+        function updateProgress() {
+            if (audioPlayer.duration) {
+                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progress.style.width = `${progressPercent}%`;
+                currentTimeElement.textContent = formatTime(audioPlayer.currentTime);
+            }
+        }
+
+        // Establecer progreso al hacer clic en la barra
+        function setProgress(e) {
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            audioPlayer.currentTime = (clickX / width) * duration;
+        }
+
+        // Formatear tiempo (mm:ss)
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
+        }
+
+        // Renderizar carrusel de canciones
+        function renderCarousel() {
+            carouselContainer.innerHTML = '';
+            
+            filteredSongs.forEach((song, index) => {
+                const item = document.createElement('div');
+                item.className = `carousel-item ${index === currentSongIndex ? 'active' : ''}`;
+                item.dataset.index = index;
+                
+                item.innerHTML = `
+                    <img src="${song.cover}" alt="${song.title}" class="carousel-img">
+                    <div class="carousel-info">
+                        <h4>${song.title}</h4>
+                        <p>${song.artist}</p>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => {
+                    currentSongIndex = index;
+                    loadSong(currentSongIndex);
+                });
+                
+                carouselContainer.appendChild(item);
             });
         }
 
-        // Función para buscar canciones, artistas o álbumes
-        function searchSongs() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+        // Navegación del carrusel
+        function scrollCarouselPrev() {
+            carouselContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        }
+
+        function scrollCarouselNext() {
+            carouselContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+
+        // Establecer filtro de categoría
+        function setCategoryFilter(category) {
+            currentCategory = category;
+            updateCategoryFilter();
             
-            // Si el campo de búsqueda está vacío, mostrar las categorías normales
-            if (searchTerm === '') {
-                categoriesContainer.style.display = 'block';
-                searchResultsContainer.style.display = 'none';
-                artistProfile.style.display = 'none';
-                clearArtistFilter();
-                clearAlbumFilter();
-                return;
-            }
-            
-            // Ocultar categorías normales y mostrar contenedor de resultados
-            categoriesContainer.style.display = 'none';
-            searchResultsContainer.style.display = 'block';
-            artistProfile.style.display = 'none';
-            
-            // Filtrar canciones que coincidan con el término de búsqueda
-            const results = getReleasedSongs().filter(song => {
-                return (
-                    song.title.toLowerCase().includes(searchTerm) ||
-                    song.artist.toLowerCase().includes(searchTerm) ||
-                    (song.album && song.album.toLowerCase().includes(searchTerm))
+            if (category === 'all') {
+                filteredSongs = [...songs];
+            } else {
+                filteredSongs = songs.filter(song => 
+                    song.category && song.category.includes(category)
                 );
-            });
-            
-            // Verificar si hay una coincidencia exacta con un artista
-            const exactArtistMatch = getReleasedSongs().find(song => song.artist.toLowerCase() === searchTerm);
-            
-            if (exactArtistMatch) {
-                // Mostrar el perfil del artista en lugar de los resultados normales
-                showArtistProfile(exactArtistMatch.artist);
-                return;
             }
             
-            // Mostrar resultados normales si no hay coincidencia exacta con artista
-            displaySearchResults(results, searchTerm);
+            // Reiniciar índice de canción actual
+            currentSongIndex = 0;
             
-            // Verificar si el término de búsqueda coincide exactamente con un álbum
-            const exactAlbumMatch = getReleasedSongs().find(song => song.album && song.album.toLowerCase() === searchTerm);
+            // Volver a renderizar el carrusel
+            renderCarousel();
             
-            // Si hay una coincidencia exacta con un álbum, mostrar el modal de confirmación
-            if (exactAlbumMatch && exactAlbumMatch.album.toLowerCase() === searchTerm) {
-                showConfirmationModal('album', exactAlbumMatch.album);
+            // Si hay canciones en la categoría, cargar la primera
+            if (filteredSongs.length > 0) {
+                loadSong(currentSongIndex);
+            } else {
+                // No hay canciones en esta categoría
+                currentTitle.textContent = "No hay canciones";
+                currentArtist.textContent = "";
+                currentAlbum.textContent = "";
+                currentCover.src = "https://i.postimg.cc/1tB3h7DN/Picsart-25-07-22-17-53-50-604.jpg";
+                audioPlayer.src = "";
+                pauseSong();
             }
         }
 
-        // Función para mostrar el modal de confirmación
-        function showConfirmationModal(type, name) {
-            if (type === 'artist') {
-                confirmationTitle.textContent = '¿Deseas escuchar solo música de este artista?';
-                confirmationMessage.textContent = `Se reproducirán solo las canciones de ${name}`;
-            } else if (type === 'album') {
-                confirmationTitle.textContent = '¿Deseas escuchar solo música de este álbum?';
-                confirmationMessage.textContent = `Se reproducirán solo las canciones del álbum ${name}`;
-            }
-            
-            filterNameSpan.textContent = name;
-            pendingFilter = { type, name };
-            confirmationModal.style.display = 'flex';
-        }
-
-        // Función para manejar la respuesta del modal de confirmación
-        function confirmFilter(confirm) {
-            confirmationModal.style.display = 'none';
-            
-            if (confirm && pendingFilter) {
-                if (pendingFilter.type === 'artist') {
-                    filterByArtist(pendingFilter.name);
-                } else if (pendingFilter.type === 'album') {
-                    filterByAlbum(pendingFilter.name);
-                }
-            }
-            
-            pendingFilter = null;
-        }
-
-        // Función para filtrar por álbum
-        function filterByAlbum(albumName) {
-            currentAlbumFilter = albumName;
-            currentArtistFilter = null;
-            
-            // Mostrar el nombre del álbum actual
-            currentArtistDisplay.textContent = `Mostrando: ${albumName}`;
-            currentArtistDisplay.style.display = 'block';
-            
-            // Ocultar todas las categorías excepto "Toda la música"
-            document.querySelectorAll('.category').forEach(category => {
-                if (category.id !== 'mostPlayedCategory') {
-                    category.style.display = 'none';
-                }
-            });
-            
-            // Filtrar las canciones en "Toda la música" para mostrar solo las del álbum
-            const mostPlayedSongs = [...getReleasedSongs()]
-                .filter(song => song.album && song.album.toLowerCase() === albumName.toLowerCase())
-                .sort(() => Math.random() - 0.5);
-            
-            renderSongsInCategory(mostPlayedContainer, mostPlayedSongs, "plays");
-        }
-
-        // Función para limpiar el filtro de artista
-        function clearArtistFilter() {
-            currentArtistFilter = null;
-            currentArtistDisplay.style.display = 'none';
-            updateArtistFilterButtons();
-            updateCategoriesBasedOnPlays();
-        }
-
-        // Función para limpiar el filtro de álbum
-        function clearAlbumFilter() {
-            currentAlbumFilter = null;
-            currentArtistDisplay.style.display = 'none';
-            updateCategoriesBasedOnPlays();
-        }
-
-        // Función para actualizar los botones de filtro de artista
-        function updateArtistFilterButtons() {
-            const buttons = document.querySelectorAll('.artist-filter-btn');
-            buttons.forEach(button => {
-                if (button.textContent.toLowerCase() === (currentArtistFilter || '').toLowerCase()) {
+        // Actualizar botones de categoría activos
+        function updateCategoryFilter() {
+            categoryButtons.forEach(button => {
+                if (button.dataset.category === currentCategory) {
                     button.classList.add('active');
                 } else {
                     button.classList.remove('active');
@@ -4049,419 +1753,72 @@ body {
             });
         }
 
-        // Función para inicializar los botones de filtro de artista
-        function initializeArtistFilters() {
-            artistFilterContainer.innerHTML = '';
+        // Buscar canciones
+        function handleSearch() {
+            const query = searchBox.value.toLowerCase().trim();
             
-            // Obtener todos los artistas únicos
-            const allArtists = [...new Set(getReleasedSongs().map(song => song.artist))];
-            
-            // Crear botón para limpiar filtros
-            const clearButton = document.createElement('button');
-            clearButton.className = `artist-filter-btn ${!currentArtistFilter ? 'active' : ''}`;
-            clearButton.textContent = 'Todos';
-            clearButton.onclick = () => clearArtistFilter();
-            artistFilterContainer.appendChild(clearButton);
-            
-            // Crear botones para cada artista
-            allArtists.forEach(artist => {
-                const button = document.createElement('button');
-                button.className = `artist-filter-btn ${currentArtistFilter === artist ? 'active' : ''}`;
-                button.textContent = artist;
-                button.onclick = () => filterByArtist(artist);
-                artistFilterContainer.appendChild(button);
-            });
-            
-            // Mostrar la barra de filtros
-            artistFilterContainer.style.display = 'flex';
-        }
-
-        // Función para agregar/eliminar favoritos
-        function toggleFavorite(id, event) {
-            // Detener la propagación del evento para evitar que se active el playAudio
-            if (event) event.stopPropagation();
-            
-            const index = favorites.indexOf(id);
-            if (index === -1) {
-                favorites.push(id);
-                favoriteCounts[id] = (favoriteCounts[id] || 0) + 1;
-            } else {
-                favorites.splice(index, 1);
-                favoriteCounts[id] = Math.max((favoriteCounts[id] || 1) - 1, 0);
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            localStorage.setItem('favoriteCounts', JSON.stringify(favoriteCounts));
-            updateFavoriteButtons();
-            renderFavorites();
-            updateFavoriteCount(id);
-        }
-
-        // Función para actualizar los botones de favoritos
-        function updateFavoriteButtons() {
-            const buttons = document.querySelectorAll('.favorite-btn');
-            buttons.forEach(button => {
-                const onclickAttr = button.getAttribute('onclick');
-                if (!onclickAttr) return;
-                
-                const id = onclickAttr.match(/'(.*?)'/)[1];
-                if (favorites.includes(id)) {
-                    button.classList.add('added');
-                    button.innerHTML = '❤️ En Favoritos';
-                } else {
-                    button.classList.remove('added');
-                    button.innerHTML = '❤️ Favorito';
-                }
-            });
-        }
-
-        // Función para actualizar el contador de favoritos
-        function updateFavoriteCount(id) {
-            const countElement = document.getElementById(`count-${id}`);
-            if (countElement) {
-                countElement.textContent = `${favoriteCounts[id] || 0} favoritos`;
-            }
-        }
-
-        // Función para mostrar/ocultar el panel de favoritos
-        function toggleFavoritesPanel() {
-            if (favoritesPanel.style.display === "block") {
-                favoritesPanel.style.display = "none";
-            } else {
-                favoritesPanel.style.display = "block";
-                renderFavorites();
-            }
-        }
-
-        // Función para renderizar los favoritos
-        function renderFavorites() {
-            favoritesItems.innerHTML = "";
-            if (favorites.length === 0) {
-                favoritesItems.innerHTML = '<p style="text-align: center; color: var(--artist-name-color);">No tienes canciones favoritas aún</p>';
+            if (query === '') {
+                searchResults.style.display = 'none';
                 return;
             }
-
-            const favoriteSongs = getReleasedSongs().filter(song => favorites.includes(song.id));
-            favoriteSongs.forEach((song, index) => {
-                const playCount = playCounts[song.id] || 0;
-                const item = document.createElement("div");
-                item.className = `playlist-item ${song.id === currentPlaylist[currentIndex]?.id ? 'active' : ''}`;
-                item.onclick = () => {
-                    // Cambiar la lista de reproducción actual solo a favoritos
-                    currentPlaylist = favoriteSongs;
-                    currentIndex = currentPlaylist.findIndex(s => s.id === song.id);
-                    loadTrack(currentIndex);
-                    audioPlayer.play();
-                    isPlaying = true;
-                    document.getElementById('playPauseButton').textContent = '⏸';
-                    favoritesPanel.style.display = "none";
-                };
-                
-                item.innerHTML = `
-                    <img src="${song.cover}" alt="${song.title}">
-                    <div class="playlist-item-info">
-                        <div class="playlist-item-title">${song.title}</div>
-                        <div class="playlist-item-artist">${song.artist}</div>
-                    </div>
-                `;
-                favoritesItems.appendChild(item);
-            });
+            
+            const results = songs.filter(song => 
+                song.title.toLowerCase().includes(query) || 
+                song.artist.toLowerCase().includes(query)
+            );
+            
+            displaySearchResults(results);
         }
 
-        // Función para buscar en favoritos
-        function searchFavorites() {
-            const searchTerm = document.getElementById('favoritesSearchInput').value.toLowerCase();
-            const items = document.querySelectorAll('#favoritesItems .playlist-item');
-
-            items.forEach(item => {
-                const title = item.querySelector('.playlist-item-title').textContent.toLowerCase();
-                const artist = item.querySelector('.playlist-item-artist').textContent.toLowerCase();
-                if (title.includes(searchTerm) || artist.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        // Función para incrementar el contador de reproducciones
-        function incrementPlayCount(id) {
-            playCounts[id] = (playCounts[id] || 0) + 1;
-            localStorage.setItem('playCounts', JSON.stringify(playCounts));
-            
-            // Actualizar el registro de reproducciones recientes
-            const now = new Date();
-            recentPlays.push({ id, timestamp: now.getTime() });
-            // Mantener solo las últimas 100 reproducciones
-            if (recentPlays.length > 100) {
-                recentPlays.shift();
-            }
-            localStorage.setItem('recentPlays', JSON.stringify(recentPlays));
-            
-            // Actualizar las categorías basadas en reproducciones
-            updateCategoriesBasedOnPlays();
-        }
-
-        // Función para actualizar las categorías basadas en reproducciones
-        function updateCategoriesBasedOnPlays() {
-            // 1. Toda la música (orden aleatorio)
-            const shuffledSongs = [...getReleasedSongs()].sort(() => Math.random() - 0.5);
-            renderSongsInCategory(mostPlayedContainer, shuffledSongs, "plays");
-
-            // 2. Tendencias (basado en reproducciones recientes)
-            const trendingSongs = calculateTrendingSongs();
-            renderSongsInCategory(trendingContainer, trendingSongs, "trending");
-            
-            // 3. Actualizar sección de artistas seguidos
-            updateFollowedArtistsSection();
-        }
-
-        // Función para calcular canciones en tendencia
-        function calculateTrendingSongs() {
-            // Agrupar reproducciones por canción en las últimas 24 horas
-            const twentyFourHoursAgo = new Date().getTime() - (24 * 60 * 60 * 1000);
-            const recentPlaysLast24h = recentPlays.filter(play => play.timestamp > twentyFourHoursAgo);
-            
-            const playCountsLast24h = {};
-            recentPlaysLast24h.forEach(play => {
-                playCountsLast24h[play.id] = (playCountsLast24h[play.id] || 0) + 1;
-            });
-            
-            // Ordenar por reproducciones en las últimas 24 horas
-            const trending = [...getReleasedSongs()].sort((a, b) => {
-                return (playCountsLast24h[b.id] || 0) - (playCountsLast24h[a.id] || 0);
-            }).slice(0, 8); // Tomar las 8 más escuchadas recientemente
-            
-            return trending;
-        }
-
-        // Función para renderizar canciones en una categoría
-        function renderSongsInCategory(container, songs, categoryType) {
-            // Limpiar el contenedor
-            container.innerHTML = "";
-            
-            // Añadir las canciones
-            songs.forEach((song, index) => {
-                // Verificar si la canción es nueva (lanzada en los últimos 30 días)
-                const isNew = song.releaseDate && isSongNew(song.releaseDate);
-                
-                const songItem = document.createElement("div");
-                songItem.className = "song-item";
-                songItem.style.animationDelay = `${index * 0.1}s`;
-                songItem.innerHTML = `
-                    <img src="${song.cover}" alt="${song.title}" onclick="playAudio('${song.id}')">
-                    <div class="song-info">
-                        ${isNew ? '<span class="Nuevo">NUEVO</span>' : ''}
-                        <span class="song-title">${song.title}</span>
-                        <span class="artist-name">${song.artist}</span>
-                        ${song.album ? `<span class="album-name" style="display:block;color:#888;font-size:11px;">${song.album}</span>` : ''}
-                    </div>
-                `;
-                container.appendChild(songItem);
-            });
-        }
-
-        // Función para verificar si una canción es nueva (lanzada en los últimos 30 días)
-        function isSongNew(releaseDate) {
-            try {
-                const releaseParts = releaseDate.split('-');
-                if (releaseParts.length !== 3) return false;
-                
-                const releaseDateObj = new Date(
-                    parseInt(releaseParts[0]), // año
-                    parseInt(releaseParts[1]) - 1, // mes (0-based)
-                    parseInt(releaseParts[2]) // día
-                );
-                
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                
-                return releaseDateObj > thirtyDaysAgo;
-            } catch (e) {
-                console.error("Error al verificar si la canción es nueva:", e);
-                return false;
-            }
-        }
-
-        // Función para mostrar los resultados de búsqueda
-        function displaySearchResults(results, searchTerm) {
-            searchResultsGrid.innerHTML = '';
+        // Mostrar resultados de búsqueda
+        function displaySearchResults(results) {
+            searchResults.innerHTML = '';
             
             if (results.length === 0) {
-                noResultsMessage.style.display = 'block';
-                searchResultsTitle.textContent = `No se encontraron resultados para "${searchTerm}"`;
+                searchResults.innerHTML = '<div class="search-result-item">No se encontraron resultados</div>';
             } else {
-                noResultsMessage.style.display = 'none';
-                searchResultsTitle.textContent = `Resultados para "${searchTerm}"`;
-                
-                results.forEach((song, index) => {
-                    const isNew = song.releaseDate && isSongNew(song.releaseDate);
-                    
-                    const songItem = document.createElement("div");
-                    songItem.className = "song-item";
-                    songItem.style.animationDelay = `${index * 0.1}s`;
-                    songItem.innerHTML = `
-                        <img src="${song.cover}" alt="${song.title}" onclick="playAudio('${song.id}')">
-                        <div class="song-info">
-                            ${isNew ? '<span class="Nuevo">NUEVO</span>' : ''}
-                            <span class="song-title">${song.title}</span>
-                            <span class="artist-name">${song.artist}</span>
-                            ${song.album ? `<span class="album-name" style="display:block;color:#888;font-size:11px;">${song.album}</span>` : ''}
+                results.forEach(song => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.innerHTML = `
+                        <img src="${song.cover}" alt="${song.title}">
+                        <div class="search-result-info">
+                            <h4>${song.title}</h4>
+                            <p>${song.artist}</p>
                         </div>
                     `;
-                    searchResultsGrid.appendChild(songItem);
-                });
-            }
-        }
-
-        // Inicialización
-        window.onload = function() {
-            // Aplicar el tema guardado
-            applyTheme();
-            
-            // Configurar el botón de cambio de tema
-            themeToggle.addEventListener('click', toggleDarkMode);
-            podcastThemeToggle.addEventListener('click', toggleDarkMode);
-            
-            // Configurar Media Session API
-            setupMediaSession();
-            
-            // Inicializar contadores de reproducción si no existen
-            if (!localStorage.getItem('playCounts')) {
-                // Asignar algunas reproducciones iniciales para demostración
-                const initialPlayCounts = {};
-                getReleasedSongs().forEach(song => {
-                    initialPlayCounts[song.id] = Math.floor(Math.random() * 100);
-                });
-                localStorage.setItem('playCounts', JSON.stringify(initialPlayCounts));
-                playCounts = initialPlayCounts;
-            }
-
-            // Inicializar reproducciones recientes si no existen
-            if (!localStorage.getItem('recentPlays')) {
-                // Crear algunas reproducciones recientes para demostración
-                const initialRecentPlays = [];
-                const now = new Date().getTime();
-                getReleasedSongs().forEach(song => {
-                    const randomHoursAgo = Math.floor(Math.random() * 24);
-                    initialRecentPlays.push({
-                        id: song.id,
-                        timestamp: now - (randomHoursAgo * 60 * 60 * 1000)
+                    
+                    resultItem.addEventListener('click', () => {
+                        // Encontrar el índice de la canción en filteredSongs
+                        const songIndex = filteredSongs.findIndex(s => s.id === song.id);
+                        if (songIndex !== -1) {
+                            currentSongIndex = songIndex;
+                            loadSong(currentSongIndex);
+                        }
+                        searchResults.style.display = 'none';
+                        searchBox.value = '';
                     });
+                    
+                    searchResults.appendChild(resultItem);
                 });
-                localStorage.setItem('recentPlays', JSON.stringify(initialRecentPlays));
-                recentPlays = initialRecentPlays;
-            }
-
-            // Inicializar favoritos si no existen
-            if (!localStorage.getItem('favorites')) {
-                localStorage.setItem('favorites', JSON.stringify([]));
-                favorites = [];
-            }
-
-            // Inicializar contadores de favoritos si no existen
-            if (!localStorage.getItem('favoriteCounts')) {
-                localStorage.setItem('favoriteCounts', JSON.stringify({}));
-                favoriteCounts = {};
             }
             
-            // Inicializar artistas seguidos si no existen
-            if (!localStorage.getItem('followedArtists')) {
-                localStorage.setItem('followedArtists', JSON.stringify([]));
-                followedArtists = [];
-            }
-
-            // Inicializar los filtros de artista
-            initializeArtistFilters();
-
-            // Actualizar las categorías
-            updateCategoriesBasedOnPlays();
-
-            // Evento para cerrar la lista de reproducción
-            document.getElementById('closePlaylistButton').addEventListener('click', function() {
-                playlistPanel.style.display = 'none';
-            });
-            
-            // Evento para cerrar el modal de confirmación haciendo clic fuera
-            confirmationModal.addEventListener('click', function(e) {
-                if (e.target === confirmationModal) {
-                    confirmationModal.style.display = 'none';
-                    pendingFilter = null;
-                }
-            });
-            
-            // Evento para cerrar el panel de artistas seguidos
-            document.getElementById('closeFollowedArtistsButton').addEventListener('click', function() {
-                followedArtistsPanel.style.display = 'none';
-            });
-            
-            // Establecer la lista de reproducción inicial
-            currentPlaylist = getReleasedSongs();
-            
-            // Mostrar contenido de música por defecto
-            showContent('music');
-        };
-        
-        // Función para redirigir a la página de información
-        function redirectToIndex() {
-            window.location.href = "informaciondeapp.html";
+            searchResults.style.display = 'block';
         }
-        
-        // Función para redirigir a la página de artistas
-        function redirectToArtistMusic() {
-            window.location.href = "artistamusic.html";
-        }
-        
-        // Función para redirigir a la página de compartir
-        function redirectToShare() {
-            window.location.href = "compartirredes.html";
-        }
-        
-        // Función para ir a YouTube
-        function goToYouTube() {
-            window.location.href = 'compartirredes.html';
-        }
-        
-        // Configurar el audio para seguir reproduciendo en segundo plano
-        audioPlayer.setAttribute('playsinline', '');
-        audioPlayer.setAttribute('webkit-playsinline', '');
-        
-        // Evitar que el audio se detenga
-        document.addEventListener('visibilitychange', function() {
-          if (document.hidden) {
-            // App en segundo plano - intentar mantener el audio activo
-            if (isPlaying) {
-              audioPlayer.play().catch(e => console.log("Error al reproducir en segundo plano:", e));
-            }
-          }
-        });
 
-        // Forzar la reproducción cuando la app vuelva a primer plano
-        document.addEventListener('resume', function() {
-          if (isPlaying) {
-            audioPlayer.play();
-          }
-        }, false);
-        document.addEventListener('DOMContentLoaded', function() {
-    const images = document.querySelectorAll('.vertical-cover');
-    let currentIndex = 0;
-    
-    function showNextImage() {
-        // Oculta la imagen actual
-        images[currentIndex].classList.remove('active');
-        
-        // Avanza al siguiente índice
-        currentIndex = (currentIndex + 1) % images.length;
-        
-        // Muestra la nueva imagen
-        images[currentIndex].classList.add('active');
-    }
-    
-    // Muestra la primera imagen
-    images[0].classList.add('active');
-    
-    // Cambia de imagen cada 4 segundos
-    setInterval(showNextImage, 4000);
-});
+        // Alternar visibilidad del buscador
+        function toggleSearch() {
+            if (searchBox.style.display === 'none' || searchBox.style.display === '') {
+                searchBox.style.display = 'block';
+                searchBox.focus();
+            } else {
+                searchBox.style.display = 'none';
+                searchResults.style.display = 'none';
+            }
+        }
+
+        // Inicializar el reproductor cuando se carga la página
+        window.addEventListener('DOMContentLoaded', initPlayer);
     </script>
 </body>
 </html>
